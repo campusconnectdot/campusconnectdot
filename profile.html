@@ -588,8 +588,11 @@
         async function saveProfile(e) {
             e.preventDefault();
             const { data: { user } } = await supabaseClient.auth.getUser();
-            if (!user) { window.location.href = 'index.html'; return; }
-
+            if (!user) {
+                alert('You must be logged in to save your profile.');
+                window.location.href = 'index.html';
+                return;
+            }
             let finalAvatarUrl = currentAvatarUrl;
             if (uploadedFile) {
                 const fileExt = uploadedFile.name.split('.').pop();
