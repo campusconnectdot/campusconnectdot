@@ -445,7 +445,7 @@
 
         let currentAvatarUrl = '';
         let uploadedFile = null;
-        let isUsernameUnique = false;
+        
         let savedProfileData = {};
 
         window.addEventListener('DOMContentLoaded', async () => {
@@ -551,7 +551,7 @@
 
             if (!usernameInput) {
                 statusDiv.textContent = '';
-                isUsernameUnique = false;
+               
                 return;
             }
 
@@ -567,11 +567,11 @@
                 if (data) {
                     statusDiv.textContent = '❌ Username is already taken';
                     statusDiv.className = 'username-status status-taken';
-                    isUsernameUnique = false;
+                    
                 } else {
                     statusDiv.textContent = '✓ Username is available';
                     statusDiv.className = 'username-status status-available';
-                    isUsernameUnique = true;
+                    
                 }
             }, 300);
         }
@@ -638,11 +638,11 @@
             e.preventDefault();
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (!user) { window.location.href = 'index.html'; return; }
-
+/*
             if (!isUsernameUnique) {
                 alert('Please choose a unique username that is not already taken.');
                 return;
-            }
+            }*/
 
             let finalAvatarUrl = currentAvatarUrl;
             if (uploadedFile) {
