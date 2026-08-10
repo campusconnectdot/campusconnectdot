@@ -368,8 +368,12 @@
         const SUPABASE_URL = 'https://kksarduvycfebklmhxfb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
         
-        // Safe client creation avoiding redeclaration crashes
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let supabaseClient;
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (err) {
+            console.error("Supabase initialization error:", err);
+        }
 
         function switchView(targetId) {
             const sections = document.querySelectorAll('.auth-section');
@@ -386,11 +390,12 @@
             const password = document.getElementById('signupPassword').value;
             const fullname = document.getElementById('signupFullname').value;
 
-            const { data, error } = await supabase.auth.signUp({
+            const { data, error } = await supabaseClient.auth.signUp({
                 email: email,
                 password: password,
                 options: {
-                    data: { full_name: fullname }
+                    data: { full_name: fullname },
+                    emailRedirectTo: 'https://campusconnectdot.github.io/campusconnectdot/'
                 }
             });
 
@@ -407,7 +412,7 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
 
-            const { data, error } = await supabase.auth.signInWithPassword({
+            const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password
             });
@@ -423,7 +428,9 @@
             e.preventDefault();
             const email = document.getElementById('forgotEmail').value;
 
-            const { error } = await supabase.auth.resetPasswordForEmail(email);
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://campusconnectdot.github.io/campusconnectdot/'
+            });
 
             if (error) {
                 alert(error.message);
