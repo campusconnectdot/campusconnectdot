@@ -638,37 +638,12 @@
             e.preventDefault();
             const { data: { user } } = await supabaseClient.auth.getUser();
             if (!user) { window.location.href = 'index.html'; return; }
-        
-            const usernameInput = document.getElementById('accUsername').value.trim().toLowerCase();
-            
-            if (!usernameInput) {
-                alert('Please enter a username.');
-                return;
-            }
-        
-            // CLEAR ANY PENDING DEBOUNCE TIMER & FORCE AN IMMEDIATE CHECK
-            clearTimeout(usernameTimer);
-        
-            const { data: existingUser, error: checkError } = await supabaseClient
-                .from('profiles')
-                .select('id')
-                .eq('username', usernameInput)
-                .maybeSingle();
-        
-            if (checkError) {
-                alert('Error checking username: ' + checkError.message);
-                return;
-            }
-        
-            // If username is taken by a DIFFERENT user, block it
-            if (existingUser && existingUser.id !== user.id) {
-                document.getElementById('usernameStatus').textContent = '❌ Username is already taken';
-                document.getElementById('usernameStatus').className = 'username-status status-taken';
+
+            if (!isUsernameUnique) {
                 alert('Please choose a unique username that is not already taken.');
                 return;
             }
-        
-            // Otherwise, it's valid! Proceed with saving...
+
             let finalAvatarUrl = currentAvatarUrl;
             if (uploadedFile) {
                 const fileExt = uploadedFile.name.split('.').pop();
@@ -676,29 +651,29 @@
                 const { error: uploadError } = await supabaseClient.storage
                     .from('avatars')
                     .upload(fileName, uploadedFile, { upsert: true });
-        
+
                 if (!uploadError) {
                     const { data: publicURLData } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
                     finalAvatarUrl = publicURLData.publicUrl;
                 }
             }
-        
+
             const lastName = document.getElementById('accLastName').value.trim();
             const firstName = document.getElementById('accFirstName').value.trim();
             const middleName = document.getElementById('accMiddleName').value.trim();
             const fullLegalName = `${lastName}, ${firstName} ${middleName}`.trim();
-        
+
             const street = document.getElementById('accStreet').value.trim();
             const city = document.getElementById('accCity').value.trim();
             const state = document.getElementById('accState').value.trim();
             const zip = document.getElementById('accZip').value.trim();
             const country = document.getElementById('accCountry').value.trim();
             const fullAddress = `${street}, ${city}, ${state} - ${zip}, ${country}`;
-        
+
             savedProfileData = {
                 id: user.id,
                 email: user.email,
-                username: usernameInput,
+                username: document.getElementById('accUsername').value.trim().toLowerCase(),
                 legal_name: fullLegalName,
                 full_name: fullLegalName,
                 aadhaar_number: document.getElementById('accAadhaar').value,
@@ -726,9 +701,9 @@
                 donate_kofi: document.getElementById('donateKofi').value,
                 featured_website: document.getElementById('featuredWebsite').value
             };
-        
+
             const { error } = await supabaseClient.from('profiles').upsert(savedProfileData);
-        
+
             if (error) {
                 alert(error.message);
             } else {
