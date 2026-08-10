@@ -368,12 +368,16 @@
         const SUPABASE_URL = 'https://kksarduvycfebklmhxfb.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
         
+        // Safe client creation avoiding redeclaration crashes
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         function switchView(targetId) {
             const sections = document.querySelectorAll('.auth-section');
             sections.forEach(sec => sec.classList.remove('active'));
-            document.getElementById(targetId).classList.add('active');
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.classList.add('active');
+            }
         }
 
         async function handleSignup(e) {
