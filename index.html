@@ -395,7 +395,8 @@
                 password: password,
                 options: {
                     data: { full_name: fullname },
-                    emailRedirectTo: 'https://campusconnectdot.github.io/campusconnectdot/'
+                    // Update this link to point to profile.html
+                    emailRedirectTo: 'https://campusconnectdot.github.io/campusconnectdot/profile.html' 
                 }
             });
 
@@ -411,16 +412,17 @@
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
-
+        
             const { data, error } = await supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password
             });
-
+        
             if (error) {
                 alert(error.message);
             } else {
-                alert('Logged in successfully!');
+                // Redirect to profile.html instead of just showing an alert
+                window.location.href = 'profile.html';
             }
         }
 
