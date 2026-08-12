@@ -1787,19 +1787,15 @@
 
 
 <script>
-
 /* =========================================================
    SUPABASE
 ========================================================= */
 
-/*
-   IMPORTANT:
-   Keep the same values from your existing dashboard.html.
-*/
+const SUPABASE_URL =
+    'https://kksarduvycfebklmhxfb.supabase.co';
 
-const SUPABASE_URL = 'https://kksarduvycfebklmhxfb.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
-
+const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
 
 const supabaseClient =
     window.supabase.createClient(
@@ -1813,6 +1809,68 @@ const supabaseClient =
 ========================================================= */
 
 let currentUser = null;
+
+
+/* =========================================================
+   DEBUG MESSAGE
+========================================================= */
+
+function showDebug(title, message) {
+
+    document.body.innerHTML = `
+        <div style="
+            min-height:100vh;
+            background:#0d1117;
+            color:#f0f6fc;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+        ">
+
+            <div style="
+                width:100%;
+                max-width:700px;
+                background:#161b22;
+                border:1px solid #30363d;
+                border-radius:8px;
+                padding:25px;
+            ">
+
+                <h2 style="
+                    margin:0 0 15px;
+                    color:#f0f6fc;
+                ">
+                    ${title}
+                </h2>
+
+                <pre style="
+                    white-space:pre-wrap;
+                    word-break:break-word;
+                    color:#ff7b72;
+                    background:#0d1117;
+                    padding:15px;
+                    border-radius:6px;
+                    border:1px solid #30363d;
+                ">${message}</pre>
+
+                <p style="
+                    margin-top:15px;
+                    color:#8b949e;
+                    font-size:13px;
+                    line-height:1.6;
+                ">
+                    This diagnostic message is temporary.
+                    It is being shown instead of redirecting you
+                    to the login page so we can identify the problem.
+                </p>
+
+            </div>
+
+        </div>
+    `;
+}
 
 
 /* =========================================================
@@ -1848,9 +1906,7 @@ function initials(name) {
 
 
 function goTo(page) {
-
     window.location.href = page;
-
 }
 
 
@@ -1860,7 +1916,17 @@ function goTo(page) {
 
 async function loadDashboard() {
 
+    console.log('================================');
+    console.log('DASHBOARD START');
+    console.log('================================');
+
     try {
+
+        /* -----------------------------------------
+           CHECK AUTHENTICATION
+        ----------------------------------------- */
+
+        console.log('Checking Supabase session...');
 
         const {
             data: {
@@ -1871,16 +1937,74 @@ async function loadDashboard() {
             await supabaseClient.auth.getUser();
 
 
-        if (authError || !user) {
+        console.log('Supabase user:', user);
+        console.log('Auth error:', authError);
 
-            window.location.href =
-                'index.html';
+
+        if (authError) {
+
+            console.error(
+                'AUTH ERROR:',
+                authError
+            );
+
+            showDebug(
+                'Supabase Authentication Error',
+                authError.message ||
+                JSON.stringify(authError, null, 2)
+            );
 
             return;
         }
 
 
+        if (!user) {
+
+            console.error(
+                'NO AUTHENTICATED USER'
+            );
+
+            showDebug(
+                'No Supabase Session Found',
+                `dashboard.html loaded successfully,
+but Supabase cannot find your logged-in session.
+
+This means the problem is with the authentication
+session between index.html and dashboard.html.
+
+Current URL:
+${window.location.href}`
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           USER EXISTS
+        ----------------------------------------- */
+
         currentUser = user;
+
+        console.log(
+            'AUTHENTICATED USER:',
+            user.id
+        );
+
+        console.log(
+            'EMAIL:',
+            user.email
+        );
+
+
+        /* -----------------------------------------
+           LOAD PROFILE
+        ----------------------------------------- */
+
+        console.log(
+            'Loading profile for user:',
+            user.id
+        );
 
 
         const {
@@ -1894,14 +2018,101 @@ async function loadDashboard() {
                 .single();
 
 
-        if (error || !data || !data.account_type) {
+        console.log(
+            'Profile data:',
+            data
+        );
 
-            window.location.href =
-                'profile.html';
+        console.log(
+            'Profile error:',
+            error
+        );
+
+
+        if (error) {
+
+            console.error(
+                'PROFILE QUERY ERROR:',
+                error
+            );
+
+            showDebug(
+                'Profile Database Error',
+                `Supabase authentication worked.
+
+User:
+${user.email}
+
+User ID:
+${user.id}
+
+But the profiles table could not be read.
+
+Error:
+${error.message}
+
+Error code:
+${error.code || 'N/A'}
+
+Details:
+${error.details || 'N/A'}
+
+Hint:
+${error.hint || 'N/A'}`
+            );
 
             return;
         }
 
+
+        if (!data) {
+
+            showDebug(
+                'No Profile Found',
+                `The user is successfully logged in.
+
+User:
+${user.email}
+
+User ID:
+${user.id}
+
+However, there is no matching row in
+the profiles table.`
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           ACCOUNT TYPE
+        ----------------------------------------- */
+
+        if (!data.account_type) {
+
+            showDebug(
+                'Profile Is Incomplete',
+                `Your profile exists, but account_type
+is empty.
+
+User:
+${user.email}
+
+User ID:
+${user.id}
+
+Profile:
+${JSON.stringify(data, null, 2)}`
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           PROFILE DATA
+        ----------------------------------------- */
 
         const name =
             data.full_name || 'Student';
@@ -1921,7 +2132,9 @@ async function loadDashboard() {
             'No bio added yet.';
 
 
-        /* Welcome */
+        /* -----------------------------------------
+           WELCOME
+        ----------------------------------------- */
 
         setText(
             'welcomeTitle',
@@ -1929,7 +2142,9 @@ async function loadDashboard() {
         );
 
 
-        /* Header */
+        /* -----------------------------------------
+           HEADER
+        ----------------------------------------- */
 
         setText(
             'headerAvatar',
@@ -1937,12 +2152,15 @@ async function loadDashboard() {
         );
 
 
-        /* Profile menu */
+        /* -----------------------------------------
+           PROFILE MENU
+        ----------------------------------------- */
 
         setText(
             'menuName',
             name
         );
+
 
         setText(
             'menuEmail',
@@ -1950,22 +2168,27 @@ async function loadDashboard() {
         );
 
 
-        /* Main profile */
+        /* -----------------------------------------
+           MAIN PROFILE
+        ----------------------------------------- */
 
         setText(
             'mainAvatar',
             initials(name)
         );
 
+
         setText(
             'profileName',
             name
         );
 
+
         setText(
             'profileRole',
             role
         );
+
 
         setText(
             'profileBio',
@@ -1973,17 +2196,21 @@ async function loadDashboard() {
         );
 
 
-        /* Stats */
+        /* -----------------------------------------
+           STATS
+        ----------------------------------------- */
 
         setText(
             'statAccount',
             role
         );
 
+
         setText(
             'statDegree',
             degree
         );
+
 
         setText(
             'statEmployment',
@@ -1991,28 +2218,45 @@ async function loadDashboard() {
         );
 
 
-        /* Details */
+        /* -----------------------------------------
+           DETAILS
+        ----------------------------------------- */
 
         setText(
             'detailDegree',
             degree
         );
 
+
         setText(
             'detailEmployment',
             employment
         );
+
 
         setText(
             'detailAccount',
             role
         );
 
+
         setText(
             'detailEmail',
             user.email
         );
 
+
+        console.log(
+            '================================'
+        );
+
+        console.log(
+            'DASHBOARD LOADED SUCCESSFULLY'
+        );
+
+        console.log(
+            '================================'
+        );
 
     } catch (error) {
 
@@ -2021,8 +2265,12 @@ async function loadDashboard() {
             error
         );
 
+        showDebug(
+            'Dashboard JavaScript Error',
+            error.message ||
+            JSON.stringify(error, null, 2)
+        );
     }
-
 }
 
 
@@ -2041,52 +2289,55 @@ const profileMenu =
     );
 
 
-profileButton.addEventListener(
-    'click',
-    function(event) {
+if (profileButton && profileMenu) {
 
-        event.stopPropagation();
+    profileButton.addEventListener(
+        'click',
+        function(event) {
 
-        const isOpen =
-            profileMenu.classList.toggle(
-                'open'
+            event.stopPropagation();
+
+            const isOpen =
+                profileMenu.classList.toggle(
+                    'open'
+                );
+
+            profileButton.classList.toggle(
+                'active',
+                isOpen
             );
 
-        profileButton.classList.toggle(
-            'active',
-            isOpen
-        );
-
-        profileButton.setAttribute(
-            'aria-expanded',
-            isOpen
-        );
-
-    }
-);
-
-
-document.addEventListener(
-    'click',
-    function(event) {
-
-        if (
-            !profileMenu.contains(event.target) &&
-            !profileButton.contains(event.target)
-        ) {
-
-            profileMenu.classList.remove(
-                'open'
+            profileButton.setAttribute(
+                'aria-expanded',
+                isOpen
             );
+        }
+    );
 
-            profileButton.classList.remove(
-                'active'
-            );
+
+    document.addEventListener(
+        'click',
+        function(event) {
+
+            if (
+                !profileMenu.contains(event.target) &&
+                !profileButton.contains(event.target)
+            ) {
+
+                profileMenu.classList.remove(
+                    'open'
+                );
+
+                profileButton.classList.remove(
+                    'active'
+                );
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 /* =========================================================
@@ -2116,50 +2367,56 @@ const closeDrawer =
 
 function openDrawer() {
 
-    sideDrawer.classList.add(
-        'open'
-    );
+    if (sideDrawer) {
+        sideDrawer.classList.add('open');
+    }
 
-    drawerOverlay.classList.add(
-        'open'
-    );
+    if (drawerOverlay) {
+        drawerOverlay.classList.add('open');
+    }
 
     document.body.style.overflow =
         'hidden';
-
 }
 
 
 function closeNavigation() {
 
-    sideDrawer.classList.remove(
-        'open'
-    );
+    if (sideDrawer) {
+        sideDrawer.classList.remove('open');
+    }
 
-    drawerOverlay.classList.remove(
-        'open'
-    );
+    if (drawerOverlay) {
+        drawerOverlay.classList.remove('open');
+    }
 
     document.body.style.overflow =
         '';
-
 }
 
 
-menuButton.addEventListener(
-    'click',
-    openDrawer
-);
+if (menuButton) {
+    menuButton.addEventListener(
+        'click',
+        openDrawer
+    );
+}
 
-closeDrawer.addEventListener(
-    'click',
-    closeNavigation
-);
 
-drawerOverlay.addEventListener(
-    'click',
-    closeNavigation
-);
+if (closeDrawer) {
+    closeDrawer.addEventListener(
+        'click',
+        closeNavigation
+    );
+}
+
+
+if (drawerOverlay) {
+    drawerOverlay.addEventListener(
+        'click',
+        closeNavigation
+    );
+}
 
 
 /* =========================================================
@@ -2176,44 +2433,54 @@ const searchResults =
         'searchResults'
     );
 
-
 let searchTimer = null;
 
 
-searchInput.addEventListener(
-    'input',
-    function() {
+if (searchInput && searchResults) {
 
-        clearTimeout(searchTimer);
+    searchInput.addEventListener(
+        'input',
+        function() {
 
-        const query =
-            this.value.trim();
-
-
-        if (query.length < 2) {
-
-            searchResults.classList.remove(
-                'open'
+            clearTimeout(
+                searchTimer
             );
 
-            searchResults.innerHTML =
-                '';
+            const query =
+                this.value.trim();
 
-            return;
+
+            if (query.length < 2) {
+
+                searchResults.classList.remove(
+                    'open'
+                );
+
+                searchResults.innerHTML =
+                    '';
+
+                return;
+            }
+
+
+            searchTimer =
+                setTimeout(
+                    () => searchStudents(query),
+                    350
+                );
+
         }
+    );
 
-
-        searchTimer =
-            setTimeout(
-                () => searchStudents(query),
-                350
-            );
-
-    }
-);
+}
 
 
 async function searchStudents(query) {
+
+    if (!searchResults) {
+        return;
+    }
+
 
     searchResults.classList.add(
         'open'
@@ -2228,16 +2495,6 @@ async function searchStudents(query) {
 
 
     try {
-
-        /*
-           Searches the existing profiles table.
-
-           This assumes these columns already exist:
-           full_name
-           degree
-           current_employment
-           account_type
-        */
 
         const safeQuery =
             query.replace(
@@ -2268,6 +2525,7 @@ async function searchStudents(query) {
                 error
             );
 
+
             searchResults.innerHTML = `
                 <div class="no-results">
                     Search is currently unavailable.
@@ -2282,7 +2540,8 @@ async function searchStudents(query) {
 
             searchResults.innerHTML = `
                 <div class="no-results">
-                    No students found for "${escapeHtml(query)}"
+                    No students found for
+                    "${escapeHtml(query)}"
                 </div>
             `;
 
@@ -2318,15 +2577,19 @@ async function searchStudents(query) {
                         </div>
 
                         <div class="result-meta">
+
                             ${escapeHtml(
                                 student.degree ||
                                 'Degree not specified'
                             )}
+
                             ·
+
                             ${escapeHtml(
                                 student.account_type ||
                                 'Student'
                             )}
+
                         </div>
 
                     </div>
@@ -2351,18 +2614,17 @@ async function searchStudents(query) {
 
 function openStudent(id) {
 
-    /*
-       For now this stores the selected student
-       and opens a future student profile page.
-
-       Create student.html later when you are
-       ready for public student profiles.
-    */
-
     sessionStorage.setItem(
         'selectedStudentId',
         id
     );
+
+
+    /*
+       IMPORTANT:
+       student.html must exist before this
+       button is used.
+    */
 
     window.location.href =
         'student.html';
@@ -2373,11 +2635,26 @@ function openStudent(id) {
 function escapeHtml(value) {
 
     return String(value)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
+        .replaceAll(
+            '&',
+            '&amp;'
+        )
+        .replaceAll(
+            '<',
+            '&lt;'
+        )
+        .replaceAll(
+            '>',
+            '&gt;'
+        )
+        .replaceAll(
+            '"',
+            '&quot;'
+        )
+        .replaceAll(
+            "'",
+            '&#039;'
+        );
 
 }
 
@@ -2386,7 +2663,14 @@ function focusSearch() {
 
     closeNavigation();
 
+
+    if (!searchInput) {
+        return;
+    }
+
+
     searchInput.focus();
+
 
     searchInput.scrollIntoView({
         behavior: 'smooth',
@@ -2402,37 +2686,54 @@ function focusSearch() {
 
 async function logout() {
 
-    const {
-        error
-    } =
-        await supabaseClient.auth.signOut();
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.signOut();
 
 
-    if (error) {
+        if (error) {
+
+            console.error(
+                'Logout error:',
+                error
+            );
+
+            return;
+        }
+
+
+        window.location.href =
+            'index.html';
+
+    } catch (error) {
 
         console.error(
-            'Logout error:',
+            'Logout exception:',
             error
         );
 
-        return;
     }
-
-
-    window.location.href =
-        'index.html';
 
 }
 
 
-document
-    .getElementById(
+const logoutMenuButton =
+    document.getElementById(
         'logoutMenuButton'
-    )
-    .addEventListener(
+    );
+
+
+if (logoutMenuButton) {
+
+    logoutMenuButton.addEventListener(
         'click',
         logout
     );
+
+}
 
 
 /* =========================================================
