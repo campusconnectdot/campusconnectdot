@@ -13,596 +13,632 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #f6f8fa;
-            --surface: #ffffff;
-            --border: #d8dee4;
-            --border-light: #eaeef2;
-            --text: #1f2328;
-            --muted: #656d76;
-            --blue: #0969da;
-            --blue-light: #ddf4ff;
-            --green: #1a7f37;
-            --green-light: #dafbe1;
-            --danger: #cf222e;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            min-height: 100vh;
-            background: var(--bg);
-            color: var(--text);
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Helvetica,
-                Arial,
-                sans-serif;
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .header {
-            height: 64px;
-            background: #ffffff;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 28px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .brand-mark {
-            width: 32px;
-            height: 32px;
-            border-radius: 7px;
-            background: #24292f;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .brand-text {
-            font-size: 15px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .user-name {
-            font-size: 14px;
-            color: var(--muted);
-            margin-right: 4px;
-        }
-
-        .header-btn {
-            border: 1px solid var(--border);
-            background: white;
-            color: var(--text);
-            height: 34px;
-            padding: 0 13px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: 0.15s ease;
-        }
-
-        .header-btn:hover {
-            background: #f3f4f6;
-            border-color: #afb8c1;
-        }
-
-        .header-btn.signout {
-            color: var(--danger);
-        }
-
-        .header-btn.signout:hover {
-            background: #fff1f2;
-            border-color: #ff8182;
-        }
-
-        /* =========================
-           MAIN
-        ========================= */
-
-        .main {
-            width: min(100% - 40px, 1050px);
-            margin: 0 auto;
-            padding: 48px 0 70px;
-        }
-
-        .welcome {
-            margin-bottom: 30px;
-        }
-
-        .welcome h1 {
-            font-size: 26px;
-            line-height: 1.25;
-            font-weight: 600;
-            letter-spacing: -0.4px;
-            margin-bottom: 7px;
-        }
-
-        .welcome p {
-            font-size: 14px;
-            color: var(--muted);
-        }
-
-        /* =========================
-           TWO MAIN SELECTIONS
-        ========================= */
-
-        .selection-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
-
-        .selection-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            min-height: 190px;
-            padding: 24px;
-            cursor: pointer;
-            transition:
-                border-color 0.15s ease,
-                box-shadow 0.15s ease,
-                transform 0.15s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .selection-card:hover {
-            border-color: #afb8c1;
-            box-shadow: 0 3px 10px rgba(31, 35, 40, 0.08);
-            transform: translateY(-1px);
-        }
-
-        .card-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-        }
-
-        .card-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .profile-icon {
-            background: var(--blue-light);
-            color: var(--blue);
-        }
-
-        .alumni-icon {
-            background: var(--green-light);
-            color: var(--green);
-        }
-
-        .arrow {
-            font-size: 20px;
-            color: #8c959f;
-        }
-
-        .selection-card h2 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 7px;
-        }
-
-        .selection-card p {
-            font-size: 13px;
-            line-height: 1.55;
-            color: var(--muted);
-            max-width: 350px;
-        }
-
-        .card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .card-link {
-            color: var(--blue);
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .alumni-link {
-            color: var(--green);
-        }
-
-        /* =========================
-           PROFILE SECTION
-        ========================= */
-
-        .section {
-            margin-top: 24px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            overflow: hidden;
-        }
-
-        .section-header {
-            min-height: 58px;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .section-subtitle {
-            font-size: 12px;
-            color: var(--muted);
-            margin-top: 3px;
-        }
-
-        .edit-btn {
-            border: 1px solid var(--border);
-            background: white;
-            color: var(--blue);
-            padding: 7px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .edit-btn:hover {
             background: #f6f8fa;
-            border-color: #afb8c1;
-        }
-
-        .profile-content {
-            padding: 22px 20px;
-        }
-
-        .profile-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0;
-        }
-
-        .profile-item {
-            padding: 13px 16px 13px 0;
-            border-bottom: 1px solid var(--border-light);
-            min-width: 0;
-        }
-
-        .profile-item:nth-child(even) {
-            padding-left: 16px;
-            border-left: 1px solid var(--border-light);
-        }
-
-        .profile-item:nth-last-child(-n+2) {
-            border-bottom: none;
-        }
-
-        .profile-label {
-            display: block;
-            color: var(--muted);
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .profile-value {
-            font-size: 14px;
-            color: var(--text);
-            word-break: break-word;
-        }
-
-        .profile-bio {
-            grid-column: 1 / -1;
-            padding-right: 0;
-            border-left: none !important;
-        }
-
-        /* =========================
-           ALUMNI DIRECTORY
-        ========================= */
-
-        .directory {
-            display: none;
-        }
-
-        .directory.show {
-            display: block;
-        }
-
-        .directory-tools {
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border);
+            color: #1f2328;
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            gap: 12px;
+            padding: 24px;
         }
 
-        .directory-count {
-            font-size: 13px;
-            color: var(--muted);
+        /* =====================================================
+           MAIN DASHBOARD BOX
+        ===================================================== */
+
+        .dashboard-box {
+            width: 100%;
+            max-width: 760px;
+            background: #ffffff;
+            border: 1px solid #d8dee4;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(31, 35, 40, 0.06);
         }
 
-        .search-box {
-            width: 250px;
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .topbar {
+            height: 58px;
+            padding: 0 18px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            border-bottom: 1px solid #eaeef2;
+            background: #ffffff;
+        }
+
+        .profile-button {
+            width: 34px;
             height: 34px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 0 10px;
-            outline: none;
-            font-size: 13px;
-            background: white;
-        }
-
-        .search-box:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.12);
-        }
-
-        .alumni-list {
+            border-radius: 50%;
+            border: 1px solid #d0d7de;
+            background: #f6f8fa;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s ease;
             padding: 0;
         }
 
-        .alumni-row {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
-            gap: 15px;
-            align-items: center;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border-light);
+        .profile-button:hover {
+            border-color: #0969da;
+            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.10);
         }
 
-        .alumni-row:last-child {
+        .profile-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .default-avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #57606a;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* =====================================================
+           DASHBOARD VIEW
+        ===================================================== */
+
+        .view {
+            padding: 28px;
+        }
+
+        .welcome {
+            margin-bottom: 26px;
+        }
+
+        .welcome h1 {
+            font-size: 23px;
+            font-weight: 600;
+            color: #1f2328;
+            margin-bottom: 6px;
+        }
+
+        .welcome p {
+            color: #656d76;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           TWO MAIN OPTIONS
+        ===================================================== */
+
+        .explore-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1f2328;
+        }
+
+        .explore-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .explore-card {
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            padding: 18px;
+            min-height: 145px;
+            background: #ffffff;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.15s ease;
+            position: relative;
+        }
+
+        .explore-card:hover {
+            border-color: #0969da;
+            box-shadow: 0 2px 8px rgba(31, 35, 40, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 13px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .profile-card .card-icon {
+            background: #ddf4ff;
+            color: #0969da;
+        }
+
+        .alumni-card .card-icon {
+            background: #dafbe1;
+            color: #1a7f37;
+        }
+
+        .explore-card h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2328;
+            margin-bottom: 5px;
+        }
+
+        .explore-card p {
+            color: #656d76;
+            font-size: 13px;
+            line-height: 1.45;
+            max-width: 250px;
+        }
+
+        .arrow {
+            position: absolute;
+            right: 17px;
+            bottom: 16px;
+            font-size: 19px;
+            color: #57606a;
+        }
+
+        .profile-card:hover .arrow {
+            color: #0969da;
+        }
+
+        .alumni-card:hover .arrow {
+            color: #1a7f37;
+        }
+
+        /* =====================================================
+           RECENT ACTIVITY
+        ===================================================== */
+
+        .activity {
+            margin-top: 28px;
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .activity-header h2 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .activity-header span {
+            font-size: 12px;
+            color: #656d76;
+        }
+
+        .activity-box {
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .activity-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 100px;
+            align-items: center;
+            min-height: 48px;
+            padding: 0 14px;
+            border-bottom: 1px solid #eaeef2;
+            font-size: 13px;
+        }
+
+        .activity-row:last-child {
             border-bottom: none;
         }
 
-        .alumni-row.header-row {
-            background: #f6f8fa;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--muted);
-            padding-top: 11px;
-            padding-bottom: 11px;
-        }
-
-        .person {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 0;
-        }
-
-        .avatar {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-            border: 1px solid var(--border);
-            background: #f0f2f4;
-        }
-
-        .avatar-placeholder {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #ddf4ff;
-            color: var(--blue);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .person-name {
-            font-size: 13px;
+        .activity-name {
+            color: #1f2328;
             font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
-        .table-text {
-            font-size: 13px;
-            color: var(--muted);
-            word-break: break-word;
+        .activity-degree {
+            color: #656d76;
         }
 
         .status {
-            display: inline-flex;
-            align-items: center;
-            width: fit-content;
-            padding: 3px 8px;
-            border-radius: 20px;
-            background: var(--green-light);
-            color: var(--green);
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 45px 20px;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 35px 20px;
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        .footer {
-            border-top: 1px solid var(--border);
-            padding: 24px 20px;
-            color: var(--muted);
+            justify-self: start;
             font-size: 12px;
-            text-align: center;
-            background: white;
+            border-radius: 20px;
+            padding: 3px 8px;
         }
 
-        .footer-links {
+        .status.student {
+            background: #ddf4ff;
+            color: #0969da;
+        }
+
+        .status.alumni {
+            background: #dafbe1;
+            color: #1a7f37;
+        }
+
+        /* =====================================================
+           BOTTOM ACTIONS
+        ===================================================== */
+
+        .bottom-actions {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid #eaeef2;
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .secondary-button,
+        .danger-button {
+            border-radius: 6px;
+            padding: 7px 13px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #ffffff;
+        }
+
+        .secondary-button {
+            border: 1px solid #d0d7de;
+            color: #1f2328;
+        }
+
+        .secondary-button:hover {
+            background: #f6f8fa;
+        }
+
+        .danger-button {
+            border: 1px solid #d0d7de;
+            color: #cf222e;
+        }
+
+        .danger-button:hover {
+            background: #fff1f2;
+            border-color: #cf222e;
+        }
+
+        /* =====================================================
+           PROFILE / SETTINGS VIEW
+        ===================================================== */
+
+        .settings-view {
+            display: none;
+        }
+
+        .settings-header {
+            display: flex;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 18px;
+            gap: 10px;
+            margin-bottom: 26px;
+        }
+
+        .back-button {
+            border: 1px solid #d0d7de;
+            background: #ffffff;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            color: #1f2328;
+            font-size: 17px;
+        }
+
+        .back-button:hover {
+            background: #f6f8fa;
+        }
+
+        .settings-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* =====================================================
+           PROFILE PREVIEW
+        ===================================================== */
+
+        .profile-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid #eaeef2;
+            margin-bottom: 22px;
+        }
+
+        .large-avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .large-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .large-avatar-fallback {
+            color: #57606a;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .profile-preview h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .profile-preview p {
+            font-size: 13px;
+            color: #656d76;
+        }
+
+        /* =====================================================
+           PROFILE INFORMATION
+        ===================================================== */
+
+        .profile-information {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .info-item {
+            padding: 14px;
+            border-bottom: 1px solid #eaeef2;
+        }
+
+        .info-item:nth-child(odd) {
+            border-right: 1px solid #eaeef2;
+        }
+
+        .info-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        .info-label {
+            display: block;
+            font-size: 11px;
+            color: #656d76;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .info-value {
+            font-size: 13px;
+            color: #1f2328;
+            word-break: break-word;
+        }
+
+        /* =====================================================
+           SETTINGS OPTIONS
+        ===================================================== */
+
+        .settings-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #656d76;
             margin-bottom: 8px;
         }
 
-        .footer a {
-            color: var(--muted);
-            text-decoration: none;
+        .settings-list {
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .footer a:hover {
-            color: var(--text);
-            text-decoration: underline;
+        .settings-item {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #eaeef2;
+            background: #ffffff;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            cursor: pointer;
         }
 
-        /* =========================
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:hover {
+            background: #f6f8fa;
+        }
+
+        .settings-item strong {
+            display: block;
+            font-size: 13px;
+            color: #1f2328;
+            margin-bottom: 2px;
+        }
+
+        .settings-item span {
+            font-size: 12px;
+            color: #656d76;
+        }
+
+        .settings-arrow {
+            color: #8c959f;
+            font-size: 17px;
+        }
+
+        /* =====================================================
+           ACCOUNT / INTERFACE SUBVIEW
+        ===================================================== */
+
+        .subview {
+            display: none;
+        }
+
+        .subview h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .subview-row {
+            padding: 15px 0;
+            border-bottom: 1px solid #eaeef2;
+        }
+
+        .subview-row:last-child {
+            border-bottom: none;
+        }
+
+        .subview-label {
+            font-size: 12px;
+            color: #656d76;
+            margin-bottom: 5px;
+        }
+
+        .subview-value {
+            font-size: 14px;
+            color: #1f2328;
+        }
+
+        .verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #1a7f37;
+            font-size: 12px;
+            margin-left: 7px;
+        }
+
+        .edit-profile-button {
+            margin-top: 20px;
+            border: 1px solid #d0d7de;
+            background: #ffffff;
+            color: #1f2328;
+            border-radius: 6px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .edit-profile-button:hover {
+            background: #f6f8fa;
+        }
+
+        /* =====================================================
+           INTERFACE OPTIONS
+        ===================================================== */
+
+        .interface-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #eaeef2;
+        }
+
+        .interface-option:last-child {
+            border-bottom: none;
+        }
+
+        .interface-option strong {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .interface-option span {
+            color: #656d76;
+            font-size: 12px;
+        }
+
+        /* =====================================================
            MOBILE
-        ========================= */
+        ===================================================== */
 
-        @media (max-width: 700px) {
-
-            .header {
-                height: auto;
-                min-height: 60px;
-                padding: 12px 16px;
-                gap: 10px;
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;
+                padding-top: 18px;
             }
 
-            .brand-text {
-                font-size: 14px;
+            .dashboard-box {
+                max-width: 100%;
             }
 
-            .user-name {
-                display: none;
+            .view {
+                padding: 20px;
             }
 
-            .header-right {
-                gap: 6px;
-            }
-
-            .header-btn {
-                padding: 0 9px;
-            }
-
-            .main {
-                width: min(100% - 28px, 1050px);
-                padding-top: 30px;
-            }
-
-            .welcome h1 {
-                font-size: 22px;
-            }
-
-            .selection-grid {
+            .explore-grid {
                 grid-template-columns: 1fr;
             }
 
-            .selection-card {
-                min-height: 170px;
+            .activity-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                padding: 10px 14px;
             }
 
-            .profile-grid {
+            .status {
+                margin-top: 2px;
+            }
+
+            .profile-information {
                 grid-template-columns: 1fr;
             }
 
-            .profile-item {
-                padding-left: 0 !important;
-                padding-right: 0;
-                border-left: none !important;
-                border-bottom: 1px solid var(--border-light) !important;
+            .info-item:nth-child(odd) {
+                border-right: none;
             }
 
-            .profile-item:last-child {
-                border-bottom: none !important;
+            .info-item:nth-last-child(-n+2) {
+                border-bottom: 1px solid #eaeef2;
             }
 
-            .profile-bio {
-                grid-column: auto;
+            .info-item:last-child {
+                border-bottom: none;
             }
 
-            .directory-tools {
-                align-items: stretch;
-                flex-direction: column;
+            .bottom-actions {
+                justify-content: stretch;
             }
 
-            .search-box {
-                width: 100%;
-            }
-
-            .alumni-row.header-row {
-                display: none;
-            }
-
-            .alumni-row {
-                grid-template-columns: 1fr;
-                gap: 7px;
-                padding: 16px 20px;
-            }
-
-            .table-text::before {
-                content: attr(data-label);
-                display: block;
-                font-size: 10px;
-                color: #8c959f;
-                margin-bottom: 2px;
-                text-transform: uppercase;
-                letter-spacing: 0.3px;
+            .secondary-button,
+            .danger-button {
+                flex: 1;
             }
         }
     </style>
@@ -610,260 +646,597 @@
 
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
+<div class="dashboard-box">
 
-<header class="header">
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
 
-    <div class="brand">
-        <div class="brand-mark">SG</div>
-        <div class="brand-text">Student Guidance Portal</div>
-    </div>
-
-    <div class="header-right">
-        <span class="user-name" id="headerUserName">Loading...</span>
+    <div class="topbar">
 
         <button
-            class="header-btn"
-            onclick="editProfile()">
-            Settings
+            class="profile-button"
+            onclick="openProfilePanel()"
+            aria-label="Open profile"
+            title="Profile"
+        >
+            <img id="headerAvatar" alt="Profile">
+
+            <div id="headerAvatarFallback" class="default-avatar">
+                U
+            </div>
         </button>
 
-        <button
-            class="header-btn signout"
-            onclick="handleLogout()">
-            Sign out
-        </button>
-    </div>
-
-</header>
-
-
-<!-- =========================
-     MAIN
-========================= -->
-
-<main class="main">
-
-    <div class="welcome">
-        <h1>Welcome back, <span id="welcomeName">...</span></h1>
-        <p>Your student guidance dashboard</p>
     </div>
 
 
-    <!-- TWO MAIN OPTIONS -->
+    <!-- =====================================================
+         MAIN DASHBOARD
+    ====================================================== -->
 
-    <div class="selection-grid">
+    <div id="dashboardView" class="view">
 
-        <!-- MY PROFILE -->
+        <div class="welcome">
+            <h1 id="welcomeName">Welcome to your Dashboard</h1>
+            <p>
+                Your student guidance space for profiles, alumni connections
+                and academic resources.
+            </p>
+        </div>
 
-        <div
-            class="selection-card"
-            onclick="showProfile()">
 
-            <div>
-                <div class="card-top">
+        <div class="explore-title">
+            Explore
+        </div>
 
-                    <div class="card-icon profile-icon">
-                        ◉
-                    </div>
 
-                    <div class="arrow">
-                        →
-                    </div>
+        <div class="explore-grid">
 
+            <!-- MY PROFILE -->
+
+            <button
+                class="explore-card profile-card"
+                onclick="openProfilePanel()"
+            >
+
+                <div class="card-icon">
+                    👤
                 </div>
 
                 <h2>My Profile</h2>
 
                 <p>
-                    View the academic and personal information
-                    you have saved in your profile.
+                    View your complete academic and personal profile.
                 </p>
-            </div>
 
-            <div class="card-footer">
-                <span class="card-link">
-                    View profile →
-                </span>
-            </div>
+                <span class="arrow">→</span>
 
-        </div>
+            </button>
 
 
-        <!-- ALUMNI -->
+            <!-- ALUMNI -->
 
-        <div
-            class="selection-card"
-            onclick="showAlumni()">
+            <button
+                class="explore-card alumni-card"
+                onclick="openAlumni()"
+            >
 
-            <div>
-                <div class="card-top">
-
-                    <div class="card-icon alumni-icon">
-                        ◉
-                    </div>
-
-                    <div class="arrow">
-                        →
-                    </div>
-
+                <div class="card-icon">
+                    👥
                 </div>
 
                 <h2>Alumni</h2>
 
                 <p>
-                    Explore alumni profiles and discover
-                    people with experience and professional backgrounds.
+                    Connect with experienced alumni and explore their profiles.
                 </p>
-            </div>
 
-            <div class="card-footer">
-                <span class="card-link alumni-link">
-                    Explore alumni →
-                </span>
-            </div>
+                <span class="arrow">→</span>
 
-        </div>
-
-    </div>
-
-
-    <!-- =========================
-         MY PROFILE
-    ========================= -->
-
-    <section
-        class="section"
-        id="profileSection">
-
-        <div class="section-header">
-
-            <div>
-                <div class="section-title">
-                    My Profile
-                </div>
-
-                <div class="section-subtitle">
-                    Information saved in your account
-                </div>
-            </div>
-
-            <button
-                class="edit-btn"
-                onclick="editProfile()">
-                Edit Profile
             </button>
 
         </div>
 
 
-        <div class="profile-content">
+        <!-- =================================================
+             RECENT ACTIVITY
+        ================================================== -->
 
-            <div
-                class="profile-grid"
-                id="profileDetails">
+        <div class="activity">
 
-                <div class="loading">
-                    Loading profile...
+            <div class="activity-header">
+                <h2>Recent Activity</h2>
+                <span id="activityStatus">Latest profiles</span>
+            </div>
+
+            <div class="activity-box">
+
+                <div class="activity-row">
+                    <span class="activity-name">Student / Alumni</span>
+                    <span class="activity-degree">Degree</span>
+                    <span>Status</span>
+                </div>
+
+                <div id="activityRows">
+
+                    <div class="activity-row">
+                        <span class="activity-name">Loading...</span>
+                        <span class="activity-degree">—</span>
+                        <span>—</span>
+                    </div>
+
                 </div>
 
             </div>
 
         </div>
 
-    </section>
+
+        <!-- =================================================
+             DASHBOARD ACTIONS
+        ================================================== -->
+
+        <div class="bottom-actions">
+
+            <button
+                class="secondary-button"
+                onclick="openProfilePanel()"
+            >
+                Settings
+            </button>
+
+            <button
+                class="danger-button"
+                onclick="handleLogout()"
+            >
+                Sign out
+            </button>
+
+        </div>
+
+    </div>
 
 
-    <!-- =========================
-         ALUMNI DIRECTORY
-    ========================= -->
+    <!-- =====================================================
+         PROFILE / SETTINGS PANEL
+    ====================================================== -->
 
-    <section
-        class="section directory"
-        id="alumniSection">
+    <div id="profileView" class="view settings-view">
 
-        <div class="section-header">
+        <div class="settings-header">
+
+            <button
+                class="back-button"
+                onclick="showDashboard()"
+                aria-label="Go back"
+            >
+                ←
+            </button>
+
+            <h1>Profile</h1>
+
+        </div>
+
+
+        <!-- PROFILE PREVIEW -->
+
+        <div class="profile-preview">
+
+            <div class="large-avatar">
+
+                <img id="profileAvatar" alt="Profile">
+
+                <div
+                    id="profileAvatarFallback"
+                    class="large-avatar-fallback"
+                >
+                    U
+                </div>
+
+            </div>
 
             <div>
-                <div class="section-title">
-                    Alumni
-                </div>
 
-                <div class="section-subtitle">
-                    Browse alumni registered on the portal
-                </div>
+                <h2 id="profileName">
+                    Loading...
+                </h2>
+
+                <p id="profileRole">
+                    —
+                </p>
+
             </div>
 
         </div>
 
 
-        <div class="directory-tools">
+        <!-- PROFILE INFORMATION -->
 
-            <span
-                class="directory-count"
-                id="alumniCount">
-                Loading alumni...
+        <div class="profile-information">
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Full name
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoName"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Account type
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoAccountType"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Email
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoEmail"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Degree
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoDegree"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Employment
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoEmployment"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Department
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoDepartment"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Bio
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoBio"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Email status
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoVerification"
+                >
+                    —
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SETTINGS -->
+
+        <div class="settings-section-title">
+            Settings
+        </div>
+
+
+        <div class="settings-list">
+
+            <button
+                class="settings-item"
+                onclick="editProfile()"
+            >
+
+                <div>
+                    <strong>Edit profile</strong>
+                    <span>
+                        Change your saved profile information
+                    </span>
+                </div>
+
+                <span class="settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <button
+                class="settings-item"
+                onclick="openAccountSettings()"
+            >
+
+                <div>
+                    <strong>Account</strong>
+                    <span>
+                        Email and account information
+                    </span>
+                </div>
+
+                <span class="settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <button
+                class="settings-item"
+                onclick="openInterfaceSettings()"
+            >
+
+                <div>
+                    <strong>Interface</strong>
+                    <span>
+                        Simple display preferences
+                    </span>
+                </div>
+
+                <span class="settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACCOUNT SUBVIEW
+    ====================================================== -->
+
+    <div id="accountView" class="view subview">
+
+        <div class="settings-header">
+
+            <button
+                class="back-button"
+                onclick="openProfilePanel()"
+            >
+                ←
+            </button>
+
+            <h1>Account</h1>
+
+        </div>
+
+
+        <h2>Account information</h2>
+
+
+        <div class="subview-row">
+
+            <div class="subview-label">
+                Email
+            </div>
+
+            <div class="subview-value">
+                <span id="accountEmail">
+                    —
+                </span>
+
+                <span
+                    id="verifiedBadge"
+                    class="verified"
+                >
+                    ✓ Verified
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="subview-row">
+
+            <div class="subview-label">
+                Account type
+            </div>
+
+            <div
+                class="subview-value"
+                id="accountType"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="subview-row">
+
+            <div class="subview-label">
+                User ID
+            </div>
+
+            <div
+                class="subview-value"
+                id="accountUserId"
+                style="font-size:12px;color:#656d76;"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <button
+            class="edit-profile-button"
+            onclick="editProfile()"
+        >
+            Edit profile
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         INTERFACE SUBVIEW
+    ====================================================== -->
+
+    <div id="interfaceView" class="view subview">
+
+        <div class="settings-header">
+
+            <button
+                class="back-button"
+                onclick="openProfilePanel()"
+            >
+                ←
+            </button>
+
+            <h1>Interface</h1>
+
+        </div>
+
+
+        <h2>Interface preferences</h2>
+
+
+        <div class="interface-option">
+
+            <div>
+
+                <strong>Appearance</strong>
+
+                <br>
+
+                <span>
+                    Your dashboard currently uses the default light interface.
+                </span>
+
+            </div>
+
+            <span>
+                Light
             </span>
 
-            <input
-                type="text"
-                id="alumniSearch"
-                class="search-box"
-                placeholder="Search alumni..."
-                oninput="filterAlumni()">
+        </div>
+
+
+        <div class="interface-option">
+
+            <div>
+
+                <strong>Layout</strong>
+
+                <br>
+
+                <span>
+                    Simple dashboard layout
+                </span>
+
+            </div>
+
+            <span>
+                Default
+            </span>
 
         </div>
 
 
-        <div class="alumni-list">
+        <div class="interface-option">
 
-            <div class="alumni-row header-row">
-                <div>Name</div>
-                <div>Degree</div>
-                <div>Employment</div>
-                <div>Status</div>
+            <div>
+
+                <strong>Profile display</strong>
+
+                <br>
+
+                <span>
+                    Show your saved profile information
+                </span>
+
             </div>
 
-            <div id="alumniList">
-                <div class="loading">
-                    Loading alumni...
-                </div>
-            </div>
+            <span>
+                On
+            </span>
 
         </div>
 
-    </section>
-
-</main>
-
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer class="footer">
-
-    <div class="footer-links">
-        <a href="#">About</a>
-        <a href="#">Privacy</a>
-        <a href="#">Help</a>
-        <a href="profile.html">Profile Settings</a>
     </div>
 
-    <div>
-        © 2026 Student Guidance Portal
-    </div>
-
-</footer>
+</div>
 
 
 <script>
 
-    /* =====================================================
+    /* =========================================================
        SUPABASE
-    ===================================================== */
+    ========================================================== */
 
     const SUPABASE_URL =
         'https://kksarduvycfebklmhxfb.supabase.co';
@@ -880,656 +1253,613 @@
 
     let currentUser = null;
     let currentProfile = null;
-    let allAlumni = [];
 
 
-    /* =====================================================
-       ESCAPE HTML
-       Prevents profile text from being interpreted as HTML
-    ===================================================== */
+    /* =========================================================
+       SAFE TEXT
+    ========================================================== */
 
-    function escapeHTML(value) {
+    function safe(value) {
 
-        if (value === null || value === undefined) {
-            return '';
+        if (
+            value === null ||
+            value === undefined ||
+            value === ''
+        ) {
+            return 'N/A';
         }
 
-        return String(value)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
+        return String(value);
+
     }
 
 
-    /* =====================================================
-       GET INITIALS
-    ===================================================== */
-
-    function getInitials(name) {
-
-        if (!name) {
-            return '?';
-        }
-
-        const parts = name.trim().split(/\s+/);
-
-        if (parts.length === 1) {
-            return parts[0].substring(0, 2).toUpperCase();
-        }
-
-        return (
-            parts[0].charAt(0) +
-            parts[parts.length - 1].charAt(0)
-        ).toUpperCase();
-    }
-
-
-    /* =====================================================
+    /* =========================================================
        LOAD DASHBOARD
-    ===================================================== */
+    ========================================================== */
 
     async function loadDashboard() {
 
         try {
 
-            /*
-             * getSession() is used first.
-             * This is more reliable for a normal
-             * GitHub Pages dashboard load.
-             */
+            const userResponse =
+                await supabaseClient.auth.getUser();
 
-            const {
-                data: sessionData,
-                error: sessionError
-            } = await supabaseClient.auth.getSession();
+            const user =
+                userResponse.data.user;
 
-            if (sessionError) {
-                console.error(sessionError);
+            if (!user) {
+
                 window.location.href = 'index.html';
-                return;
-            }
 
-            const session = sessionData.session;
-
-            if (!session || !session.user) {
-                window.location.href = 'index.html';
-                return;
-            }
-
-            currentUser = session.user;
-
-
-            /*
-             * Load profile belonging to logged-in user
-             */
-
-            const {
-                data: profile,
-                error: profileError
-            } = await supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq('id', currentUser.id)
-                .maybeSingle();
-
-
-            /*
-             * If there is no profile yet,
-             * send the user to profile.html.
-             */
-
-            if (
-                profileError ||
-                !profile
-            ) {
-
-                console.log(
-                    'Profile not found:',
-                    profileError
-                );
-
-                window.location.href = 'profile.html';
                 return;
             }
 
 
-            currentProfile = profile;
+            currentUser = user;
 
-
-            /*
-             * Display user name
-             */
-
-            const name =
-                profile.full_name ||
-                currentUser.user_metadata?.full_name ||
-                'User';
-
-
-            document.getElementById(
-                'welcomeName'
-            ).textContent = name;
-
-
-            document.getElementById(
-                'headerUserName'
-            ).textContent = name;
-
-
-            /*
-             * Display complete profile
-             */
-
-            displayProfile(profile);
-
-
-        } catch (error) {
-
-            console.error(
-                'Dashboard error:',
-                error
-            );
-
-            /*
-             * Do not immediately redirect because
-             * of an ordinary JavaScript/database error.
-             */
-
-            document.getElementById(
-                'profileDetails'
-            ).innerHTML = `
-                <div class="empty">
-                    Unable to load your profile.
-                    Please refresh the page.
-                </div>
-            `;
-        }
-    }
-
-
-    /* =====================================================
-       DISPLAY PROFILE
-    ===================================================== */
-
-    function displayProfile(profile) {
-
-        const container =
-            document.getElementById(
-                'profileDetails'
-            );
-
-
-        const fields = [
-
-            {
-                label: 'Full Name',
-                value: profile.full_name
-            },
-
-            {
-                label: 'Email',
-                value:
-                    profile.email ||
-                    currentUser?.email
-            },
-
-            {
-                label: 'Account Type',
-                value: profile.account_type
-            },
-
-            {
-                label: 'Degree',
-                value: profile.degree
-            },
-
-            {
-                label: 'Current Employment',
-                value: profile.current_employment
-            },
-
-            {
-                label: 'Department',
-                value: profile.department
-            },
-
-            {
-                label: 'Phone',
-                value: profile.phone
-            },
-
-            {
-                label: 'Location',
-                value: profile.location
-            },
-
-            {
-                label: 'Graduation Year',
-                value: profile.graduation_year
-            },
-
-            {
-                label: 'Bio',
-                value: profile.bio,
-                bio: true
-            }
-
-        ];
-
-
-        let html = '';
-
-
-        fields.forEach(field => {
-
-            /*
-             * Only show fields that actually exist
-             * in the database/profile.
-             */
-
-            if (
-                field.value !== null &&
-                field.value !== undefined &&
-                String(field.value).trim() !== ''
-            ) {
-
-                html += `
-                    <div class="profile-item ${field.bio ? 'profile-bio' : ''}">
-
-                        <span class="profile-label">
-                            ${escapeHTML(field.label)}
-                        </span>
-
-                        <div class="profile-value">
-                            ${escapeHTML(field.value)}
-                        </div>
-
-                    </div>
-                `;
-            }
-
-        });
-
-
-        if (!html) {
-
-            html = `
-                <div class="empty">
-                    No profile information has been saved yet.
-                </div>
-            `;
-        }
-
-
-        container.innerHTML = html;
-    }
-
-
-    /* =====================================================
-       SHOW PROFILE
-    ===================================================== */
-
-    function showProfile() {
-
-        const profileSection =
-            document.getElementById(
-                'profileSection'
-            );
-
-        const alumniSection =
-            document.getElementById(
-                'alumniSection'
-            );
-
-
-        alumniSection.classList.remove(
-            'show'
-        );
-
-
-        profileSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
-
-
-    /* =====================================================
-       SHOW ALUMNI
-    ===================================================== */
-
-    async function showAlumni() {
-
-        const alumniSection =
-            document.getElementById(
-                'alumniSection'
-            );
-
-
-        alumniSection.classList.add(
-            'show'
-        );
-
-
-        alumniSection.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-
-
-        /*
-         * Load only the first time.
-         */
-
-        if (allAlumni.length === 0) {
-            await loadAlumni();
-        }
-    }
-
-
-    /* =====================================================
-       LOAD ALUMNI
-    ===================================================== */
-
-    async function loadAlumni() {
-
-        const list =
-            document.getElementById(
-                'alumniList'
-            );
-
-
-        list.innerHTML = `
-            <div class="loading">
-                Loading alumni...
-            </div>
-        `;
-
-
-        try {
-
-            /*
-             * IMPORTANT:
-             *
-             * This specifically asks Supabase for
-             * account_type = alumni.
-             *
-             * Therefore the current student is NOT
-             * displayed in this section.
-             */
 
             const {
                 data,
                 error
             } = await supabaseClient
+
                 .from('profiles')
+
                 .select('*')
-                .ilike(
-                    'account_type',
-                    'alumni'
-                )
-                .order(
-                    'full_name',
-                    {
-                        ascending: true
-                    }
-                );
+
+                .eq('id', user.id)
+
+                .single();
 
 
-            if (error) {
+            if (
+                error ||
+                !data ||
+                !data.account_type
+            ) {
 
-                console.error(
-                    'Alumni query error:',
-                    error
-                );
-
-                list.innerHTML = `
-                    <div class="empty">
-                        Unable to load alumni.
-                    </div>
-                `;
+                window.location.href =
+                    'profile.html';
 
                 return;
             }
 
 
-            allAlumni = data || [];
+            currentProfile = data;
 
 
-            document.getElementById(
-                'alumniCount'
-            ).textContent =
-                `${allAlumni.length} alumni`;
+            populateProfile(data, user);
 
+            populateActivity(data);
 
-            renderAlumni(allAlumni);
-
-
-        } catch (error) {
-
-            console.error(error);
-
-            list.innerHTML = `
-                <div class="empty">
-                    Unable to load alumni.
-                </div>
-            `;
         }
-    }
 
+        catch (error) {
 
-    /* =====================================================
-       RENDER ALUMNI
-    ===================================================== */
-
-    function renderAlumni(alumni) {
-
-        const list =
-            document.getElementById(
-                'alumniList'
+            console.error(
+                'Dashboard loading error:',
+                error
             );
-
-
-        if (!alumni || alumni.length === 0) {
-
-            list.innerHTML = `
-                <div class="empty">
-                    No alumni profiles found yet.
-                </div>
-            `;
-
-            return;
-        }
-
-
-        let html = '';
-
-
-        alumni.forEach(person => {
-
-            const name =
-                person.full_name ||
-                'Unnamed Alumni';
-
-
-            const initials =
-                getInitials(name);
-
 
             /*
-             * If your profile table later contains
-             * avatar_url / profile_image / image_url,
-             * this will automatically use it.
+             * Do not immediately redirect here.
+             * This prevents temporary Supabase/network
+             * problems from throwing the user back to login.
              */
 
-            const avatar =
-                person.avatar_url ||
-                person.profile_image ||
-                person.image_url ||
-                '';
+            document.getElementById(
+                'welcomeName'
+            ).textContent =
+                'Welcome to your Dashboard';
 
-
-            let avatarHTML;
-
-
-            if (avatar) {
-
-                avatarHTML = `
-                    <img
-                        class="avatar"
-                        src="${escapeHTML(avatar)}"
-                        alt="${escapeHTML(name)}"
-                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                    >
-
-                    <div
-                        class="avatar-placeholder"
-                        style="display:none;">
-                        ${escapeHTML(initials)}
-                    </div>
-                `;
-
-            } else {
-
-                avatarHTML = `
-                    <div class="avatar-placeholder">
-                        ${escapeHTML(initials)}
-                    </div>
-                `;
-            }
-
-
-            html += `
-
-                <div class="alumni-row">
-
-                    <div class="person">
-
-                        ${avatarHTML}
-
-                        <span class="person-name">
-                            ${escapeHTML(name)}
-                        </span>
-
-                    </div>
-
-
-                    <div
-                        class="table-text"
-                        data-label="Degree">
-
-                        ${escapeHTML(
-                            person.degree || 'Not provided'
-                        )}
-
-                    </div>
-
-
-                    <div
-                        class="table-text"
-                        data-label="Employment">
-
-                        ${escapeHTML(
-                            person.current_employment ||
-                            'Not provided'
-                        )}
-
-                    </div>
-
-
-                    <div
-                        class="table-text"
-                        data-label="Status">
-
-                        <span class="status">
-                            Alumni
-                        </span>
-
-                    </div>
-
-                </div>
-            `;
-        });
-
-
-        list.innerHTML = html;
-    }
-
-
-    /* =====================================================
-       SEARCH ALUMNI
-    ===================================================== */
-
-    function filterAlumni() {
-
-        const search =
-            document
-                .getElementById(
-                    'alumniSearch'
-                )
-                .value
-                .toLowerCase()
-                .trim();
-
-
-        if (!search) {
-
-            renderAlumni(
-                allAlumni
-            );
-
-            return;
         }
 
-
-        const filtered =
-            allAlumni.filter(person => {
-
-                const name =
-                    person.full_name ||
-                    '';
-
-                const degree =
-                    person.degree ||
-                    '';
-
-                const employment =
-                    person.current_employment ||
-                    '';
-
-
-                return (
-
-                    name.toLowerCase().includes(search) ||
-
-                    degree.toLowerCase().includes(search) ||
-
-                    employment.toLowerCase().includes(search)
-
-                );
-            });
-
-
-        renderAlumni(filtered);
     }
 
 
-    /* =====================================================
-       EDIT PROFILE / SETTINGS
-    ===================================================== */
+    /* =========================================================
+       POPULATE PROFILE
+    ========================================================== */
+
+    function populateProfile(
+        data,
+        user
+    ) {
+
+        const name =
+            safe(data.full_name);
+
+        const role =
+            safe(data.account_type);
+
+        const degree =
+            safe(data.degree);
+
+        const employment =
+            safe(data.current_employment);
+
+        const department =
+            safe(
+                data.department ||
+                data.dept ||
+                data.branch
+            );
+
+        const bio =
+            safe(data.bio);
+
+        const email =
+            safe(user.email);
+
+
+        /* Dashboard greeting */
+
+        document.getElementById(
+            'welcomeName'
+        ).textContent =
+            `Welcome, ${name}`;
+
+
+        /* Profile preview */
+
+        document.getElementById(
+            'profileName'
+        ).textContent =
+            name;
+
+        document.getElementById(
+            'profileRole'
+        ).textContent =
+            role;
+
+
+        /* Profile information */
+
+        document.getElementById(
+            'infoName'
+        ).textContent =
+            name;
+
+        document.getElementById(
+            'infoAccountType'
+        ).textContent =
+            role;
+
+        document.getElementById(
+            'infoEmail'
+        ).textContent =
+            email;
+
+        document.getElementById(
+            'infoDegree'
+        ).textContent =
+            degree;
+
+        document.getElementById(
+            'infoEmployment'
+        ).textContent =
+            employment;
+
+        document.getElementById(
+            'infoDepartment'
+        ).textContent =
+            department;
+
+        document.getElementById(
+            'infoBio'
+        ).textContent =
+            bio;
+
+
+        /* Email verification */
+
+        const verified =
+            Boolean(user.email_confirmed_at);
+
+        document.getElementById(
+            'infoVerification'
+        ).textContent =
+            verified
+                ? '✓ Verified'
+                : 'Not verified';
+
+        document.getElementById(
+            'accountEmail'
+        ).textContent =
+            email;
+
+        document.getElementById(
+            'accountType'
+        ).textContent =
+            role;
+
+        document.getElementById(
+            'accountUserId'
+        ).textContent =
+            user.id;
+
+
+        const badge =
+            document.getElementById(
+                'verifiedBadge'
+            );
+
+        badge.style.display =
+            verified
+                ? 'inline-flex'
+                : 'none';
+
+
+        /* Avatar */
+
+        /*
+         * This checks several common column names.
+         * If your profile.html stores the avatar
+         * under one of these names, it will be shown.
+         */
+
+        const avatar =
+            data.avatar_url ||
+            data.avatar ||
+            data.profile_image ||
+            data.profile_image_url ||
+            data.image_url ||
+            data.photo_url ||
+            null;
+
+
+        if (avatar) {
+
+            showAvatar(
+                avatar
+            );
+
+        }
+
+        else {
+
+            createFallbackAvatar(
+                name
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       AVATAR
+    ========================================================== */
+
+    function showAvatar(url) {
+
+        const headerImage =
+            document.getElementById(
+                'headerAvatar'
+            );
+
+        const headerFallback =
+            document.getElementById(
+                'headerAvatarFallback'
+            );
+
+        const profileImage =
+            document.getElementById(
+                'profileAvatar'
+            );
+
+        const profileFallback =
+            document.getElementById(
+                'profileAvatarFallback'
+            );
+
+
+        headerImage.src = url;
+
+        headerImage.style.display =
+            'block';
+
+        headerFallback.style.display =
+            'none';
+
+
+        profileImage.src = url;
+
+        profileImage.style.display =
+            'block';
+
+        profileFallback.style.display =
+            'none';
+
+
+        headerImage.onerror =
+            function () {
+
+                headerImage.style.display =
+                    'none';
+
+                headerFallback.style.display =
+                    'flex';
+
+            };
+
+
+        profileImage.onerror =
+            function () {
+
+                profileImage.style.display =
+                    'none';
+
+                profileFallback.style.display =
+                    'flex';
+
+            };
+
+    }
+
+
+    function createFallbackAvatar(name) {
+
+        const letter =
+            name &&
+            name !== 'N/A'
+                ? name.charAt(0).toUpperCase()
+                : 'U';
+
+
+        document.getElementById(
+            'headerAvatarFallback'
+        ).textContent =
+            letter;
+
+        document.getElementById(
+            'profileAvatarFallback'
+        ).textContent =
+            letter;
+
+    }
+
+
+    /* =========================================================
+       ACTIVITY
+    ========================================================== */
+
+    function populateActivity(
+        ownProfile
+    ) {
+
+        /*
+         * For now this intentionally shows
+         * the current user's information.
+         *
+         * We do NOT query current students here.
+         * Alumni exploration can be connected
+         * separately later.
+         */
+
+        const rows =
+            document.getElementById(
+                'activityRows'
+            );
+
+
+        rows.innerHTML = '';
+
+
+        const row =
+            document.createElement(
+                'div'
+            );
+
+        row.className =
+            'activity-row';
+
+
+        const name =
+            safe(
+                ownProfile.full_name
+            );
+
+        const degree =
+            safe(
+                ownProfile.degree
+            );
+
+        const type =
+            safe(
+                ownProfile.account_type
+            );
+
+
+        const nameElement =
+            document.createElement(
+                'span'
+            );
+
+        nameElement.className =
+            'activity-name';
+
+        nameElement.textContent =
+            name;
+
+
+        const degreeElement =
+            document.createElement(
+                'span'
+            );
+
+        degreeElement.className =
+            'activity-degree';
+
+        degreeElement.textContent =
+            degree;
+
+
+        const statusElement =
+            document.createElement(
+                'span'
+            );
+
+        statusElement.className =
+            `status ${
+                type.toLowerCase() === 'alumni'
+                    ? 'alumni'
+                    : 'student'
+            }`;
+
+        statusElement.textContent =
+            type;
+
+
+        row.appendChild(
+            nameElement
+        );
+
+        row.appendChild(
+            degreeElement
+        );
+
+        row.appendChild(
+            statusElement
+        );
+
+
+        rows.appendChild(
+            row
+        );
+
+    }
+
+
+    /* =========================================================
+       OPEN PROFILE PANEL
+    ========================================================== */
+
+    function openProfilePanel() {
+
+        document.getElementById(
+            'dashboardView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       BACK TO DASHBOARD
+    ========================================================== */
+
+    function showDashboard() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'dashboardView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       ACCOUNT
+    ========================================================== */
+
+    function openAccountSettings() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       INTERFACE
+    ========================================================== */
+
+    function openInterfaceSettings() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       EDIT PROFILE
+    ========================================================== */
 
     function editProfile() {
 
         window.location.href =
             'profile.html';
+
     }
 
 
-    /* =====================================================
-       SIGN OUT
-    ===================================================== */
+    /* =========================================================
+       ALUMNI
+    ========================================================== */
+
+    function openAlumni() {
+
+        /*
+         * Replace this with your alumni page
+         * when you create it.
+         */
+
+        window.location.href =
+            'alumni.html';
+
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================== */
 
     async function handleLogout() {
 
@@ -1537,24 +1867,26 @@
 
             await supabaseClient.auth.signOut();
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             console.error(
-                'Sign out error:',
+                'Logout error:',
                 error
             );
 
-        } finally {
-
-            window.location.href =
-                'index.html';
         }
+
+        window.location.href =
+            'index.html';
+
     }
 
 
-    /* =====================================================
+    /* =========================================================
        START
-    ===================================================== */
+    ========================================================== */
 
     loadDashboard();
 
