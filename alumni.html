@@ -23,102 +23,58 @@
         }
 
         /* =========================
-           HEADER
-        ========================= */
-
-        .topbar {
-            height: 64px;
-            background: #ffffff;
-            border-bottom: 1px solid #d8dee4;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            padding: 0 28px;
-        }
-
-        .topbar-left {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .back-btn {
-            width: 36px;
-            height: 36px;
-
-            border: 1px solid #d0d7de;
-            background: #ffffff;
-            border-radius: 6px;
-
-            cursor: pointer;
-            font-size: 18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .back-btn:hover {
-            background: #f6f8fa;
-        }
-
-        .page-title {
-            font-size: 17px;
-            font-weight: 600;
-            color: #24292f;
-        }
-
-        .page-subtitle {
-            font-size: 12px;
-            color: #57606a;
-            margin-top: 2px;
-        }
-
-        /* Profile icon */
-
-        .profile-button {
-            width: 36px;
-            height: 36px;
-
-            border-radius: 50%;
-            border: 1px solid #d0d7de;
-
-            background: #f6f8fa;
-
-            cursor: pointer;
-
-            overflow: hidden;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .profile-button img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .profile-letter {
-            font-size: 14px;
-            font-weight: 600;
-            color: #24292f;
-        }
-
-        /* =========================
            MAIN
         ========================= */
 
         .main {
             width: 100%;
             max-width: 1050px;
-
             margin: 0 auto;
-            padding: 38px 24px 60px;
+            padding: 32px 24px 60px;
         }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .main-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            border: 1px solid #d0d7de;
+            background: #ffffff;
+            color: #24292f;
+
+            border-radius: 6px;
+
+            padding: 7px 11px;
+
+            font-size: 13px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            margin-bottom: 26px;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+        .main-back-btn:hover {
+            background: #f6f8fa;
+            border-color: #8c959f;
+        }
+
+        .main-back-btn .arrow {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* =========================
+           HEADING
+        ========================= */
 
         .heading-row {
             display: flex;
@@ -142,7 +98,9 @@
             font-size: 14px;
         }
 
-        /* Search */
+        /* =========================
+           SEARCH
+        ========================= */
 
         .search-box {
             width: 280px;
@@ -162,15 +120,23 @@
         .search-box span {
             color: #57606a;
             margin-right: 8px;
+            font-size: 17px;
         }
 
         .search-box input {
             width: 100%;
+
             border: none;
             outline: none;
+
             font-size: 14px;
+
             background: transparent;
             color: #24292f;
+        }
+
+        .search-box input::placeholder {
+            color: #8c959f;
         }
 
         /* =========================
@@ -225,9 +191,14 @@
             background: #f6f8fa;
         }
 
+        /* =========================
+           PERSON
+        ========================= */
+
         .person {
             display: flex;
             align-items: center;
+
             gap: 12px;
 
             min-width: 0;
@@ -251,12 +222,14 @@
 
             font-size: 14px;
             font-weight: 600;
+
             color: #57606a;
         }
 
         .avatar img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
         }
 
@@ -267,6 +240,7 @@
         .person-name {
             font-size: 14px;
             font-weight: 600;
+
             color: #24292f;
 
             white-space: nowrap;
@@ -276,6 +250,7 @@
 
         .person-email {
             font-size: 12px;
+
             color: #57606a;
 
             margin-top: 3px;
@@ -290,6 +265,10 @@
             font-size: 13px;
             color: #57606a;
         }
+
+        /* =========================
+           VIEW BUTTON
+        ========================= */
 
         .view-btn {
             border: 1px solid #d0d7de;
@@ -306,6 +285,10 @@
             font-weight: 500;
 
             cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
         }
 
         .view-btn:hover {
@@ -313,19 +296,27 @@
             border-color: #0969da;
         }
 
-        /* Empty */
+        /* =========================
+           EMPTY / LOADING
+        ========================= */
 
         .empty {
             padding: 50px 20px;
+
             text-align: center;
+
             color: #57606a;
+
             font-size: 14px;
         }
 
         .loading {
             padding: 50px 20px;
+
             text-align: center;
+
             color: #57606a;
+
             font-size: 14px;
         }
 
@@ -356,9 +347,11 @@
 
         .preview-box {
             width: 100%;
+
             max-width: 600px;
 
             max-height: 90vh;
+
             overflow-y: auto;
 
             background: #ffffff;
@@ -387,6 +380,7 @@
 
         .preview-header {
             display: flex;
+
             align-items: center;
             justify-content: space-between;
 
@@ -397,12 +391,15 @@
 
         .preview-header-left {
             display: flex;
+
             align-items: center;
+
             gap: 10px;
         }
 
         .preview-back {
             border: none;
+
             background: transparent;
 
             font-size: 20px;
@@ -412,8 +409,13 @@
             color: #57606a;
         }
 
+        .preview-back:hover {
+            color: #24292f;
+        }
+
         .preview-header h2 {
             font-size: 16px;
+
             font-weight: 600;
         }
 
@@ -422,6 +424,7 @@
             height: 30px;
 
             border: none;
+
             background: transparent;
 
             border-radius: 6px;
@@ -429,6 +432,7 @@
             cursor: pointer;
 
             font-size: 20px;
+
             color: #57606a;
         }
 
@@ -440,8 +444,13 @@
             padding: 26px;
         }
 
+        /* =========================
+           PROFILE TOP
+        ========================= */
+
         .profile-top {
             display: flex;
+
             align-items: center;
 
             gap: 16px;
@@ -462,22 +471,27 @@
             background: #eaeef2;
 
             display: flex;
+
             align-items: center;
             justify-content: center;
 
             font-size: 22px;
+
             font-weight: 600;
+
             color: #57606a;
         }
 
         .large-avatar img {
             width: 100%;
             height: 100%;
+
             object-fit: cover;
         }
 
         .profile-top h3 {
             font-size: 20px;
+
             font-weight: 600;
 
             color: #24292f;
@@ -487,8 +501,13 @@
 
         .profile-top p {
             font-size: 13px;
+
             color: #57606a;
         }
+
+        /* =========================
+           PROFILE SECTION
+        ========================= */
 
         .profile-section {
             margin-top: 20px;
@@ -496,6 +515,7 @@
 
         .profile-section h4 {
             font-size: 12px;
+
             text-transform: uppercase;
 
             letter-spacing: 0.04em;
@@ -507,10 +527,15 @@
 
         .profile-value {
             font-size: 14px;
+
             line-height: 1.6;
 
             color: #24292f;
         }
+
+        /* =========================
+           PROFILE GRID
+        ========================= */
 
         .profile-grid {
             display: grid;
@@ -548,7 +573,13 @@
             font-weight: 500;
 
             color: #24292f;
+
+            word-break: break-word;
         }
+
+        /* =========================
+           PREVIEW FOOTER
+        ========================= */
 
         .preview-footer {
             display: flex;
@@ -629,6 +660,7 @@
 
         .contact-box {
             width: 100%;
+
             max-width: 450px;
 
             background: #ffffff;
@@ -637,7 +669,8 @@
 
             border-radius: 8px;
 
-            box-shadow: 0 8px 24px rgba(140, 149, 159, 0.3);
+            box-shadow:
+                0 8px 24px rgba(140, 149, 159, 0.3);
         }
 
         .contact-header {
@@ -653,6 +686,7 @@
 
         .contact-header h3 {
             font-size: 16px;
+
             font-weight: 600;
         }
 
@@ -697,7 +731,8 @@
         .contact-body textarea:focus {
             border-color: #0969da;
 
-            box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.1);
+            box-shadow:
+                0 0 0 2px rgba(9, 105, 218, 0.1);
         }
 
         .contact-body textarea {
@@ -744,16 +779,17 @@
 
         @media (max-width: 700px) {
 
-            .topbar {
-                padding: 0 16px;
+            .main {
+                padding: 24px 14px 40px;
             }
 
-            .main {
-                padding: 25px 14px 40px;
+            .main-back-btn {
+                margin-bottom: 20px;
             }
 
             .heading-row {
                 align-items: stretch;
+
                 flex-direction: column;
             }
 
@@ -780,6 +816,7 @@
 
             .view-btn {
                 grid-column: 2;
+
                 grid-row: 1;
             }
 
@@ -809,49 +846,23 @@
 <body>
 
     <!-- =========================
-         HEADER
-    ========================= -->
-
-    <header class="topbar">
-
-        <div class="topbar-left">
-
-            <button
-                class="back-btn"
-                onclick="goDashboard()"
-                title="Back to dashboard"
-            >
-                ←
-            </button>
-
-            <div>
-                <div class="page-title">Alumni</div>
-                <div class="page-subtitle">
-                    Connect with experienced alumni
-                </div>
-            </div>
-
-        </div>
-
-        <button
-            class="profile-button"
-            onclick="goProfile()"
-            id="headerProfileButton"
-            title="My profile"
-        >
-            <span class="profile-letter" id="headerProfileLetter">
-                ?
-            </span>
-        </button>
-
-    </header>
-
-
-    <!-- =========================
          MAIN
     ========================= -->
 
     <main class="main">
+
+        <!-- Back to Dashboard -->
+
+        <button
+            class="main-back-btn"
+            onclick="goDashboard()"
+        >
+            <span class="arrow">←</span>
+            Back to Dashboard
+        </button>
+
+
+        <!-- Heading -->
 
         <div class="heading-row">
 
@@ -864,6 +875,9 @@
                 </p>
 
             </div>
+
+
+            <!-- Search -->
 
             <div class="search-box">
 
@@ -897,6 +911,7 @@
 
             </div>
 
+
             <div id="alumniList">
 
                 <div class="loading">
@@ -929,6 +944,7 @@
                     <button
                         class="preview-back"
                         onclick="closePreview()"
+                        title="Back"
                     >
                         ←
                     </button>
@@ -937,9 +953,11 @@
 
                 </div>
 
+
                 <button
                     class="close-btn"
                     onclick="closePreview()"
+                    title="Close"
                 >
                     ×
                 </button>
@@ -992,12 +1010,14 @@
             <div class="contact-header">
 
                 <h3>
-                    Contact <span id="contactName">Alumni</span>
+                    Contact
+                    <span id="contactName">Alumni</span>
                 </h3>
 
                 <button
                     class="close-btn"
                     onclick="closeContact()"
+                    title="Close"
                 >
                     ×
                 </button>
@@ -1063,7 +1083,7 @@
             'https://kksarduvycfebklmhxfb.supabase.co';
 
         const SUPABASE_ANON_KEY =
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzIiwicmVmIjoia2tzYXJkdXZ5Y2ZlYmtibG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
 
         const supabaseClient =
             window.supabase.createClient(
@@ -1098,6 +1118,7 @@
                     error: userError
                 } = await supabaseClient.auth.getUser();
 
+
                 currentUser = userData.user;
 
 
@@ -1107,7 +1128,8 @@
 
                 if (userError || !currentUser) {
 
-                    window.location.href = 'index.html';
+                    window.location.href =
+                        'index.html';
 
                     return;
                 }
@@ -1130,15 +1152,12 @@
                 if (!profileError && profile) {
 
                     currentProfile = profile;
-
-                    showHeaderProfile(profile);
                 }
 
 
                 /*
                  * Load alumni.
                  *
-                 * IMPORTANT:
                  * Current user is excluded.
                  */
 
@@ -1193,60 +1212,6 @@
 
 
         /* =========================================
-           HEADER PROFILE
-        ========================================= */
-
-        function showHeaderProfile(profile) {
-
-            const button =
-                document.getElementById(
-                    'headerProfileButton'
-                );
-
-            const letter =
-                document.getElementById(
-                    'headerProfileLetter'
-                );
-
-
-            /*
-             * These are possible avatar/image fields.
-             *
-             * If your profile.html saves one of these,
-             * it will automatically be displayed.
-             */
-
-            const image =
-                profile.avatar_url ||
-                profile.profile_image ||
-                profile.profile_photo ||
-                profile.image_url ||
-                profile.photo_url;
-
-
-            if (image) {
-
-                button.innerHTML = `
-                    <img
-                        src="${escapeHtml(image)}"
-                        alt="Profile"
-                    >
-                `;
-
-            } else {
-
-                const name =
-                    profile.full_name ||
-                    currentUser.email ||
-                    'U';
-
-                letter.textContent =
-                    name.charAt(0).toUpperCase();
-            }
-        }
-
-
-        /* =========================================
            RENDER ALUMNI
         ========================================= */
 
@@ -1277,9 +1242,11 @@
                         alumni.full_name ||
                         'Unnamed Alumni';
 
+
                     const degree =
                         alumni.degree ||
                         '—';
+
 
                     const department =
                         alumni.department ||
@@ -1297,6 +1264,7 @@
 
                     let avatarHTML = '';
 
+
                     if (image) {
 
                         avatarHTML = `
@@ -1306,11 +1274,15 @@
                             >
                         `;
 
-                    } else {
+                    }
+
+                    else {
 
                         avatarHTML =
                             escapeHtml(
-                                name.charAt(0).toUpperCase()
+                                name
+                                    .charAt(0)
+                                    .toUpperCase()
                             );
                     }
 
@@ -1325,6 +1297,7 @@
                                     ${avatarHTML}
                                 </div>
 
+
                                 <div class="person-info">
 
                                     <div class="person-name">
@@ -1333,8 +1306,7 @@
 
                                     <div class="person-email">
                                         ${escapeHtml(
-                                            alumni.email ||
-                                            ''
+                                            alumni.email || ''
                                         )}
                                     </div>
 
@@ -1357,7 +1329,7 @@
 
                                 <button
                                     class="view-btn"
-                                    onclick="viewProfile('${alumni.id}')"
+                                    onclick="viewProfile('${escapeHtml(alumni.id)}')"
                                 >
                                     View Profile
                                 </button>
@@ -1401,14 +1373,17 @@
                         alumni.full_name ||
                         '';
 
+
                     const degree =
                         alumni.degree ||
                         '';
+
 
                     const department =
                         alumni.department ||
                         alumni.field_of_study ||
                         '';
+
 
                     const employment =
                         alumni.current_employment ||
@@ -1416,11 +1391,23 @@
 
 
                     return (
-                        name.toLowerCase().includes(query) ||
-                        degree.toLowerCase().includes(query) ||
-                        department.toLowerCase().includes(query) ||
-                        employment.toLowerCase().includes(query)
+                        name
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        degree
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        department
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        employment
+                            .toLowerCase()
+                            .includes(query)
                     );
+
                 });
 
 
@@ -1461,6 +1448,7 @@
 
             let avatarHTML = '';
 
+
             if (image) {
 
                 avatarHTML = `
@@ -1470,11 +1458,15 @@
                     >
                 `;
 
-            } else {
+            }
+
+            else {
 
                 avatarHTML =
                     escapeHtml(
-                        name.charAt(0).toUpperCase()
+                        name
+                            .charAt(0)
+                            .toUpperCase()
                     );
             }
 
@@ -1488,6 +1480,7 @@
                     <div class="large-avatar">
                         ${avatarHTML}
                     </div>
+
 
                     <div>
 
@@ -1512,7 +1505,8 @@
 
                         <strong>
                             ${escapeHtml(
-                                alumni.email || 'Not provided'
+                                alumni.email ||
+                                'Not provided'
                             )}
                         </strong>
 
@@ -1525,7 +1519,8 @@
 
                         <strong>
                             ${escapeHtml(
-                                alumni.degree || 'Not provided'
+                                alumni.degree ||
+                                'Not provided'
                             )}
                         </strong>
 
@@ -1631,7 +1626,9 @@
                 .getElementById('previewOverlay')
                 .classList.add('active');
 
-            document.body.style.overflow = 'hidden';
+
+            document.body.style.overflow =
+                'hidden';
         }
 
 
@@ -1645,7 +1642,9 @@
                 .getElementById('previewOverlay')
                 .classList.remove('active');
 
+
             document.body.style.overflow = '';
+
 
             selectedAlumni = null;
         }
@@ -1795,8 +1794,10 @@
 
         function escapeHtml(value) {
 
-            if (value === null ||
-                value === undefined) {
+            if (
+                value === null ||
+                value === undefined
+            ) {
 
                 return '';
             }
