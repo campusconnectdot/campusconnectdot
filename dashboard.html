@@ -1,1131 +1,1826 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student Guidance Portal</title>
+<title>Student Guidance Portal</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        :root {
-            --bg: #0d1117;
-            --surface: #161b22;
-            --surface-2: #1c2128;
-            --border: #30363d;
-            --border-hover: #484f58;
+<style>
+/* =========================================================
+   STUDENT GUIDANCE PORTAL
+   CLEAN ICI / INSTITUTIONAL WORDPRESS STYLE
+   ========================================================= */
 
-            --text: #f0f6fc;
-            --text-secondary: #c9d1d9;
-            --muted: #8b949e;
+:root{
+    --bg:#f8f8f6;
+    --surface:#ffffff;
+    --surface-soft:#f3f3f0;
+    --surface-hover:#eeeeeb;
 
-            --blue: #58a6ff;
-            --green: #238636;
-            --green-hover: #2ea043;
+    --text:#171717;
+    --text-soft:#343434;
+    --muted:#777771;
 
-            --danger: #f85149;
+    --border:#deded8;
+    --border-dark:#cfcfc8;
+
+    --accent:#164a3a;
+    --accent-light:#e8f0ec;
+    --accent-dark:#0d3025;
+
+    --gold:#b18a4a;
 
-            --header-height: 64px;
-        }
+    --danger:#b42318;
+
+    --header:68px;
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    --container:1320px;
+
+    --shadow:0 8px 28px rgba(20,25,22,.06);
 
-        html {
-            scroll-behavior: smooth;
-        }
+    --radius:12px;
+    --radius-small:8px;
+}
 
-        body {
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Helvetica,
-                Arial,
-                sans-serif;
+[data-theme="dark"]{
+    --bg:#101211;
+    --surface:#171a18;
+    --surface-soft:#202421;
+    --surface-hover:#282c29;
 
-            background: var(--bg);
-            color: var(--text);
+    --text:#f5f5f2;
+    --text-soft:#deded9;
+    --muted:#989b96;
 
-            min-height: 100vh;
-        }
+    --border:#303530;
+    --border-dark:#404640;
 
-        button,
-        input {
-            font: inherit;
-        }
+    --accent:#8dbca7;
+    --accent-light:#172a21;
+    --accent-dark:#b6d7c5;
 
-        button {
-            cursor: pointer;
-        }
+    --gold:#d0ad70;
 
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
+    --shadow:0 12px 35px rgba(0,0,0,.24);
+}
 
+[data-accent="purple"]{
+    --accent:#6941c6;
+    --accent-light:#f0ebff;
+    --accent-dark:#4d2d96;
+}
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+[data-accent="green"]{
+    --accent:#166534;
+    --accent-light:#eaf7ee;
+    --accent-dark:#0e4422;
+}
 
-        .header {
-            height: var(--header-height);
+[data-theme="dark"][data-accent="purple"]{
+    --accent:#b692f6;
+    --accent-light:#251b38;
+    --accent-dark:#d5bdff;
+}
 
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+[data-theme="dark"][data-accent="green"]{
+    --accent:#63b77a;
+    --accent-light:#172c1c;
+    --accent-dark:#8bd49e;
+}
 
-            background: rgba(13, 17, 23, 0.96);
 
-            border-bottom: 1px solid var(--border);
+/* =========================================================
+   RESET
+   ========================================================= */
 
-            backdrop-filter: blur(12px);
-        }
+*{
+    box-sizing:border-box;
+}
 
-        .header-inner {
-            max-width: 1400px;
-            height: 100%;
+html{
+    scroll-behavior:smooth;
+}
 
-            margin: 0 auto;
-            padding: 0 24px;
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
 
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Helvetica,
+        Arial,
+        sans-serif;
 
+    font-size:14px;
+    line-height:1.5;
+}
 
-        /* Menu button */
+button,
+input{
+    font:inherit;
+}
 
-        .icon-button {
-            width: 38px;
-            height: 38px;
+button{
+    cursor:pointer;
+}
 
-            display: grid;
-            place-items: center;
+a{
+    color:inherit;
+    text-decoration:none;
+}
 
-            border: 1px solid var(--border);
-            border-radius: 6px;
+img{
+    display:block;
+}
 
-            background: transparent;
-            color: var(--text);
 
-            transition: 0.15s ease;
-        }
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-        .icon-button:hover {
-            background: var(--surface-2);
-            border-color: var(--border-hover);
-        }
+.header{
+    height:var(--header);
 
-        .icon-button svg {
-            width: 18px;
-            height: 18px;
-        }
+    position:sticky;
+    top:0;
+    z-index:1000;
 
+    background:rgba(248,248,246,.94);
 
-        /* Brand */
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+    border-bottom:1px solid var(--border);
+}
 
-            white-space: nowrap;
-        }
+[data-theme="dark"] .header{
+    background:rgba(16,18,17,.94);
+}
 
-        .brand-mark {
-            width: 34px;
-            height: 34px;
+.header-inner{
+    width:100%;
+    max-width:var(--container);
+    height:100%;
 
-            border-radius: 8px;
+    margin:auto;
+    padding:0 28px;
 
-            background: var(--text);
-            color: var(--bg);
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
 
-            display: grid;
-            place-items: center;
 
-            font-weight: 800;
-            font-size: 15px;
-        }
+/* menu button */
 
-        .brand-text {
-            font-size: 15px;
-            font-weight: 600;
-        }
+.icon-btn{
+    width:34px;
+    height:34px;
 
+    border:1px solid transparent;
+    background:transparent;
+    color:var(--text);
 
-        /* Search */
+    border-radius:7px;
 
-        .header-search {
-            position: relative;
+    display:grid;
+    place-items:center;
 
-            width: min(460px, 100%);
-            margin-left: 12px;
-        }
+    transition:
+        background .16s ease,
+        border-color .16s ease;
+}
 
-        .search-input {
-            width: 100%;
-            height: 38px;
+.icon-btn:hover{
+    background:var(--surface);
+    border-color:var(--border);
+}
 
-            background: var(--surface);
+.icon-btn svg{
+    width:18px;
+    height:18px;
+}
 
-            border: 1px solid var(--border);
-            border-radius: 6px;
 
-            color: var(--text);
+/* brand */
 
-            padding: 0 42px;
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
 
-            outline: none;
+    white-space:nowrap;
 
-            transition: 0.15s ease;
-        }
+    font-size:14px;
+    font-weight:650;
 
-        .search-input::placeholder {
-            color: var(--muted);
-        }
+    letter-spacing:-.01em;
+}
 
-        .search-input:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.12);
-        }
+.brand-mark{
+    width:32px;
+    height:32px;
 
-        .search-icon {
-            position: absolute;
+    border-radius:7px;
 
-            left: 13px;
-            top: 50%;
+    background:var(--accent);
+    color:white;
 
-            transform: translateY(-50%);
+    display:grid;
+    place-items:center;
 
-            color: var(--muted);
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.04em;
+}
 
-            pointer-events: none;
-        }
 
-        .search-icon svg {
-            width: 17px;
-            height: 17px;
-        }
+/* search */
 
+.search-wrap{
+    position:relative;
 
-        /* Header right */
+    width:min(410px,42vw);
 
-        .header-spacer {
-            flex: 1;
-        }
+    margin-left:26px;
+}
 
-        .profile-button {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+.search{
+    width:100%;
+    height:38px;
 
-            padding: 3px 7px 3px 3px;
+    border:1px solid var(--border);
+    border-radius:7px;
 
-            border: 1px solid transparent;
-            border-radius: 20px;
+    background:var(--surface);
 
-            background: transparent;
-            color: var(--text);
+    color:var(--text);
 
-            transition: 0.15s ease;
-        }
+    padding:0 42px;
 
-        .profile-button:hover,
-        .profile-button.active {
-            background: var(--surface-2);
-            border-color: var(--border);
-        }
+    outline:none;
 
-        .avatar {
-            width: 32px;
-            height: 32px;
+    font-size:13px;
 
-            border-radius: 50%;
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
 
-            display: grid;
-            place-items: center;
+.search::placeholder{
+    color:#9a9a94;
+}
 
-            background:
-                linear-gradient(
-                    135deg,
-                    #30363d,
-                    #21262d
-                );
+.search:focus{
+    border-color:var(--accent);
 
-            border: 1px solid var(--border);
+    box-shadow:
+        0 0 0 3px
+        color-mix(
+            in srgb,
+            var(--accent) 10%,
+            transparent
+        );
+}
 
-            color: var(--text);
+.search-icon{
+    position:absolute;
 
-            font-size: 12px;
-            font-weight: 700;
-        }
+    left:13px;
+    top:9px;
 
-        .profile-arrow {
-            color: var(--muted);
-        }
+    color:var(--muted);
 
+    pointer-events:none;
 
-        /* =====================================================
-           PROFILE DROPDOWN
-        ===================================================== */
+    font-size:16px;
+}
 
-        .profile-menu {
-            position: fixed;
+.search-kbd{
+    position:absolute;
 
-            top: 56px;
-            right: 24px;
+    right:9px;
+    top:9px;
 
-            width: 280px;
+    border:1px solid var(--border);
 
-            background: var(--surface);
+    border-radius:4px;
 
-            border: 1px solid var(--border);
-            border-radius: 8px;
+    color:var(--muted);
 
-            box-shadow:
-                0 16px 40px rgba(0, 0, 0, 0.45);
+    font-size:10px;
 
-            overflow: hidden;
+    padding:1px 5px;
 
-            display: none;
+    background:var(--surface-soft);
+}
 
-            z-index: 2000;
-        }
+.header-spacer{
+    flex:1;
+}
 
-        .profile-menu.open {
-            display: block;
-        }
 
-        .profile-menu-header {
-            padding: 16px;
+/* profile */
 
-            border-bottom: 1px solid var(--border);
-        }
+.profile-btn{
+    border:1px solid transparent;
 
-        .profile-menu-name {
-            font-size: 14px;
-            font-weight: 600;
+    background:transparent;
 
-            overflow-wrap: anywhere;
-        }
+    border-radius:20px;
 
-        .profile-menu-email {
-            margin-top: 4px;
+    padding:3px 7px 3px 3px;
 
-            color: var(--muted);
-            font-size: 12px;
+    color:var(--text);
 
-            overflow-wrap: anywhere;
-        }
+    display:flex;
+    align-items:center;
+    gap:7px;
 
-        .menu-list {
-            padding: 8px;
-        }
+    transition:.15s ease;
+}
 
-        .menu-item {
-            width: 100%;
+.profile-btn:hover,
+.profile-btn.active{
+    background:var(--surface);
+    border-color:var(--border);
+}
 
-            display: flex;
-            align-items: center;
-            gap: 12px;
+.avatar{
+    width:31px;
+    height:31px;
 
-            padding: 9px 10px;
+    border-radius:50%;
 
-            border: 0;
-            border-radius: 6px;
+    overflow:hidden;
 
-            background: transparent;
+    background:var(--surface-soft);
 
-            color: var(--text-secondary);
+    border:1px solid var(--border);
 
-            text-align: left;
+    display:grid;
+    place-items:center;
 
-            font-size: 14px;
+    font-weight:700;
+    font-size:10px;
 
-            transition: 0.12s ease;
-        }
+    flex:none;
+}
 
-        .menu-item:hover {
-            background: var(--surface-2);
-            color: var(--text);
-        }
+.avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
 
-        .menu-item svg {
-            width: 16px;
-            height: 16px;
-            color: var(--muted);
-            flex-shrink: 0;
-        }
+.arrow{
+    color:var(--muted);
+    font-size:12px;
+}
 
-        .menu-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 7px 0;
-        }
 
-        .menu-item.danger {
-            color: var(--danger);
-        }
+/* =========================================================
+   PROFILE DROPDOWN
+   ========================================================= */
 
+.dropdown{
+    position:fixed;
 
-        /* =====================================================
-           SEARCH RESULTS
-        ===================================================== */
+    right:max(22px,calc((100vw - var(--container))/2 + 28px));
+    top:59px;
 
-        .search-results {
-            position: absolute;
+    width:280px;
 
-            left: 0;
-            right: 0;
-            top: 45px;
+    background:var(--surface);
 
-            background: var(--surface);
+    border:1px solid var(--border);
 
-            border: 1px solid var(--border);
-            border-radius: 8px;
+    border-radius:10px;
 
-            box-shadow:
-                0 16px 40px rgba(0, 0, 0, 0.45);
+    box-shadow:var(--shadow);
 
-            overflow: hidden;
+    display:none;
 
-            display: none;
+    z-index:2000;
 
-            z-index: 3000;
-        }
+    overflow:hidden;
+}
 
-        .search-results.open {
-            display: block;
-        }
+.dropdown.open{
+    display:block;
+}
 
-        .search-result-header {
-            padding: 10px 14px;
+.drop-head{
+    padding:15px;
 
-            color: var(--muted);
+    border-bottom:1px solid var(--border);
 
-            font-size: 12px;
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
 
-            border-bottom: 1px solid var(--border);
-        }
+.drop-head .avatar{
+    width:40px;
+    height:40px;
+}
 
-        .search-result {
-            width: 100%;
+.drop-name{
+    font-weight:650;
+    font-size:13px;
+}
 
-            display: flex;
-            align-items: center;
+.drop-email{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:2px;
 
-            gap: 12px;
+    overflow-wrap:anywhere;
+}
 
-            padding: 12px 14px;
+.menu{
+    padding:7px;
+}
 
-            border: 0;
+.menu-item{
+    width:100%;
 
-            background: transparent;
+    border:0;
 
-            color: var(--text);
+    background:transparent;
 
-            text-align: left;
-        }
+    color:var(--text);
 
-        .search-result:hover {
-            background: var(--surface-2);
-        }
+    text-align:left;
 
-        .result-avatar {
-            width: 34px;
-            height: 34px;
+    padding:9px 10px;
 
-            border-radius: 50%;
+    border-radius:6px;
 
-            background: #21262d;
+    display:flex;
+    align-items:center;
+    gap:10px;
 
-            display: grid;
-            place-items: center;
+    font-size:13px;
+}
 
-            font-size: 11px;
-            font-weight: 700;
+.menu-item:hover{
+    background:var(--surface-soft);
+}
 
-            flex-shrink: 0;
-        }
+.menu-divider{
+    height:1px;
+    background:var(--border);
+    margin:6px 0;
+}
 
-        .result-info {
-            min-width: 0;
-        }
+.danger{
+    color:var(--danger);
+}
 
-        .result-name {
-            font-size: 14px;
-            font-weight: 600;
 
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+/* =========================================================
+   DRAWER
+   ========================================================= */
 
-        .result-meta {
-            color: var(--muted);
+.drawer-overlay{
+    position:fixed;
+    inset:0;
 
-            font-size: 12px;
+    background:rgba(0,0,0,.28);
 
-            margin-top: 3px;
+    z-index:1500;
 
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    display:none;
+}
 
-        .no-results {
-            padding: 20px;
+.drawer-overlay.open{
+    display:block;
+}
 
-            text-align: center;
+.drawer{
+    position:fixed;
 
-            color: var(--muted);
+    left:0;
+    top:0;
+    bottom:0;
 
-            font-size: 13px;
-        }
+    width:300px;
 
+    background:var(--surface);
 
-        /* =====================================================
-           SIDE NAVIGATION
-        ===================================================== */
+    border-right:1px solid var(--border);
 
-        .drawer-overlay {
-            position: fixed;
+    z-index:1600;
 
-            inset: 0;
+    transform:translateX(-100%);
 
-            background: rgba(0, 0, 0, 0.55);
+    transition:transform .2s ease;
 
-            z-index: 1500;
+    overflow:auto;
+}
 
-            display: none;
-        }
+.drawer.open{
+    transform:translateX(0);
+}
 
-        .drawer-overlay.open {
-            display: block;
-        }
+.drawer-head{
+    height:var(--header);
 
-        .side-drawer {
-            position: fixed;
+    border-bottom:1px solid var(--border);
 
-            top: 0;
-            bottom: 0;
-            left: 0;
+    padding:0 18px;
 
-            width: 320px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
 
-            background: var(--surface);
+.drawer-title{
+    font-weight:650;
+    font-size:13px;
+}
 
-            border-right: 1px solid var(--border);
+.drawer-body{
+    padding:18px 14px;
+}
 
-            z-index: 1600;
+.nav-label{
+    font-size:10px;
 
-            transform: translateX(-100%);
+    text-transform:uppercase;
 
-            transition: transform 0.2s ease;
+    letter-spacing:.11em;
 
-            overflow-y: auto;
-        }
+    color:var(--muted);
 
-        .side-drawer.open {
-            transform: translateX(0);
-        }
+    font-weight:700;
 
-        .drawer-header {
-            height: var(--header-height);
+    padding:8px 10px;
 
-            padding: 0 18px;
+    margin-top:3px;
+}
 
-            border-bottom: 1px solid var(--border);
+.nav-item{
+    width:100%;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    border:0;
 
-        .drawer-title {
-            font-weight: 600;
-            font-size: 15px;
-        }
+    background:transparent;
 
-        .drawer-content {
-            padding: 14px;
-        }
+    color:var(--text);
 
-        .nav-section {
-            margin-bottom: 22px;
-        }
+    padding:9px 10px;
 
-        .nav-title {
-            padding: 6px 10px;
+    border-radius:6px;
 
-            color: var(--muted);
+    text-align:left;
 
-            font-size: 11px;
-            font-weight: 600;
+    display:flex;
 
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+    gap:10px;
 
-        .nav-item {
-            width: 100%;
+    align-items:center;
 
-            display: flex;
-            align-items: center;
+    font-size:13px;
 
-            gap: 12px;
+    transition:.15s ease;
+}
 
-            padding: 10px;
+.nav-item:hover,
+.nav-item.active{
+    background:var(--surface-soft);
+}
 
-            border: 0;
-            border-radius: 6px;
+.nav-item.active{
+    color:var(--accent);
 
-            background: transparent;
+    box-shadow:
+        inset 2px 0 var(--accent);
+}
 
-            color: var(--text-secondary);
+.nav-divider{
+    height:1px;
 
-            text-align: left;
+    background:var(--border);
 
-            font-size: 14px;
+    margin:13px 5px;
+}
 
-            transition: 0.12s ease;
-        }
 
-        .nav-item:hover {
-            background: var(--surface-2);
-            color: var(--text);
-        }
+/* =========================================================
+   MAIN
+   ========================================================= */
 
-        .nav-item.active {
-            background: rgba(88, 166, 255, 0.12);
-            color: var(--text);
-        }
+.app-main{
+    width:100%;
+    max-width:var(--container);
 
-        .nav-item svg {
-            width: 17px;
-            height: 17px;
+    margin:auto;
 
-            color: var(--muted);
+    padding:48px 28px 62px;
+}
 
-            flex-shrink: 0;
-        }
 
-        .nav-item.active svg {
-            color: var(--blue);
-        }
+/* =========================================================
+   HERO
+   ========================================================= */
 
-        .nav-divider {
-            height: 1px;
-            background: var(--border);
-            margin: 10px 0;
-        }
+.hero{
+    display:flex;
 
+    justify-content:space-between;
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+    gap:30px;
 
-        .main {
-            max-width: 1400px;
+    align-items:flex-end;
 
-            margin: 0 auto;
+    padding-bottom:30px;
 
-            padding: 36px 24px 60px;
-        }
+    border-bottom:1px solid var(--border);
 
-        .welcome {
-            margin-bottom: 28px;
-        }
+    margin-bottom:30px;
+}
 
-        .welcome h1 {
-            font-size: 24px;
-            line-height: 1.3;
+.eyebrow{
+    font-size:10px;
 
-            margin-bottom: 7px;
-        }
+    text-transform:uppercase;
 
-        .welcome p {
-            color: var(--muted);
+    letter-spacing:.13em;
 
-            font-size: 14px;
+    color:var(--accent);
 
-            line-height: 1.5;
-        }
+    font-weight:700;
 
+    margin-bottom:10px;
+}
 
-        /* =====================================================
-           CARDS
-        ===================================================== */
+.hero h1{
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
-        .stats {
-            display: grid;
+    font-size:clamp(31px,4vw,48px);
 
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
+    font-weight:500;
 
-            gap: 14px;
+    letter-spacing:-.035em;
 
-            margin-bottom: 24px;
-        }
+    line-height:1.06;
 
-        .stat-card {
-            padding: 18px;
+    margin:0 0 10px;
+}
 
-            background: var(--surface);
+.hero p{
+    margin:0;
 
-            border: 1px solid var(--border);
-            border-radius: 8px;
-        }
+    color:var(--muted);
 
-        .stat-label {
-            color: var(--muted);
+    max-width:610px;
 
-            font-size: 12px;
+    line-height:1.65;
 
-            margin-bottom: 8px;
-        }
+    font-size:13px;
+}
 
-        .stat-value {
-            font-size: 20px;
-            font-weight: 600;
+.hero-actions{
+    display:flex;
 
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    gap:8px;
 
+    flex:none;
+}
 
-        .content-grid {
-            display: grid;
 
-            grid-template-columns:
-                minmax(0, 2fr)
-                minmax(280px, 1fr);
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
-            gap: 20px;
-        }
+.btn{
+    border:1px solid var(--border);
 
-        .panel {
-            background: var(--surface);
+    background:var(--surface);
 
-            border: 1px solid var(--border);
+    color:var(--text);
 
-            border-radius: 8px;
+    border-radius:6px;
 
-            overflow: hidden;
-        }
+    padding:8px 13px;
 
-        .panel-header {
-            padding: 14px 16px;
+    font-size:12px;
 
-            border-bottom: 1px solid var(--border);
+    font-weight:600;
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    transition:.15s ease;
+}
 
-        .panel-title {
-            font-size: 14px;
-            font-weight: 600;
-        }
+.btn:hover{
+    background:var(--surface-soft);
 
-        .panel-body {
-            padding: 18px;
-        }
+    border-color:var(--border-dark);
+}
 
+.btn.primary{
+    background:var(--accent);
 
-        /* Profile */
+    color:#fff;
 
-        .profile-summary {
-            display: flex;
-            align-items: flex-start;
-            gap: 16px;
+    border-color:var(--accent);
+}
 
-            margin-bottom: 20px;
-        }
+.btn.primary:hover{
+    background:var(--accent-dark);
 
-        .large-avatar {
-            width: 72px;
-            height: 72px;
+    border-color:var(--accent-dark);
+}
 
-            border-radius: 50%;
 
-            background: linear-gradient(
-                135deg,
-                #30363d,
-                #21262d
-            );
+/* =========================================================
+   SECTION TITLES
+   ========================================================= */
 
-            border: 1px solid var(--border);
+.section-title{
+    font-size:11px;
 
-            display: grid;
-            place-items: center;
+    text-transform:uppercase;
 
-            font-weight: 700;
+    letter-spacing:.1em;
 
-            flex-shrink: 0;
-        }
+    color:var(--text);
 
-        .profile-summary h2 {
-            font-size: 19px;
+    font-weight:700;
 
-            margin-bottom: 3px;
-        }
+    margin:0 0 12px;
+}
 
-        .profile-summary p {
-            color: var(--muted);
+.section-title span{
+    text-transform:none;
 
-            font-size: 13px;
-        }
+    letter-spacing:0;
 
-        .bio {
-            color: var(--text-secondary);
+    font-weight:400;
 
-            font-size: 14px;
+    color:var(--muted);
 
-            line-height: 1.6;
+    margin-left:6px;
+}
 
-            margin-bottom: 20px;
-        }
 
-        .details {
-            display: grid;
+/* =========================================================
+   CATEGORY GRID
+   ========================================================= */
 
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+.category-grid{
+    display:grid;
 
-            gap: 12px;
-        }
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
 
-        .detail {
-            padding: 13px;
+    gap:12px;
 
-            background: var(--bg);
+    margin-bottom:38px;
+}
 
-            border: 1px solid var(--border);
+.workspace-card{
+    position:relative;
 
-            border-radius: 6px;
-        }
+    min-height:145px;
 
-        .detail-label {
-            color: var(--muted);
+    text-align:left;
 
-            font-size: 11px;
+    background:var(--surface);
 
-            margin-bottom: 5px;
-        }
+    border:1px solid var(--border);
 
-        .detail-value {
-            font-size: 13px;
+    border-radius:10px;
 
-            overflow-wrap: anywhere;
-        }
+    padding:18px 18px 16px;
 
+    overflow:hidden;
 
-        /* Quick links */
+    color:var(--text);
 
-        .quick-link {
-            display: flex;
+    transition:
+        transform .16s ease,
+        border-color .16s ease,
+        box-shadow .16s ease,
+        background .16s ease;
+}
 
-            align-items: center;
+.workspace-card:hover{
+    transform:translateY(-2px);
 
-            gap: 12px;
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 40%,
+            var(--border)
+        );
 
-            padding: 12px;
+    box-shadow:var(--shadow);
+}
 
-            border-radius: 6px;
+.workspace-card::after{
+    content:"";
 
-            color: var(--text-secondary);
+    position:absolute;
 
-            transition: 0.12s ease;
-        }
+    width:120px;
+    height:120px;
 
-        .quick-link:hover {
-            background: var(--surface-2);
-            color: var(--text);
-        }
+    right:-50px;
+    bottom:-60px;
 
-        .quick-icon {
-            width: 34px;
-            height: 34px;
+    border-radius:50%;
 
-            display: grid;
-            place-items: center;
+    background:
+        color-mix(
+            in srgb,
+            var(--card-accent,var(--accent)) 7%,
+            transparent
+        );
 
-            background: var(--bg);
+    pointer-events:none;
+}
 
-            border: 1px solid var(--border);
+.card-top{
+    display:flex;
 
-            border-radius: 6px;
-        }
+    justify-content:space-between;
 
-        .quick-link strong {
-            display: block;
+    align-items:center;
+}
 
-            font-size: 13px;
+.card-icon{
+    width:35px;
+    height:35px;
 
-            margin-bottom: 2px;
-        }
+    border:1px solid var(--border);
 
-        .quick-link span {
-            color: var(--muted);
+    border-radius:7px;
 
-            font-size: 11px;
-        }
+    display:grid;
+    place-items:center;
 
+    background:var(--surface-soft);
 
-        /* =====================================================
-           FOOTER
-        ===================================================== */
+    color:var(--card-accent,var(--accent));
 
-        .footer {
-            max-width: 1400px;
+    font-size:15px;
 
-            margin: 0 auto;
+    position:relative;
+    z-index:1;
+}
 
-            padding: 28px 24px 36px;
+.card-arrow{
+    color:var(--muted);
 
-            border-top: 1px solid var(--border);
+    font-size:17px;
 
-            color: var(--muted);
+    transition:
+        transform .15s ease,
+        color .15s ease;
+}
 
-            font-size: 12px;
-        }
+.workspace-card:hover .card-arrow{
+    color:var(--card-accent,var(--accent));
 
-        .footer-inner {
-            display: flex;
+    transform:translateX(3px);
+}
 
-            align-items: center;
-            justify-content: center;
+.workspace-card h3{
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
 
-            gap: 22px;
+    font-size:18px;
 
-            flex-wrap: wrap;
-        }
+    font-weight:500;
 
-        .footer-brand {
-            display: flex;
+    letter-spacing:-.015em;
 
-            align-items: center;
+    margin:17px 0 5px;
 
-            gap: 8px;
+    position:relative;
+    z-index:1;
+}
 
-            color: var(--text-secondary);
-        }
+.workspace-card p{
+    font-size:11px;
 
-        .footer-logo {
-            width: 24px;
-            height: 24px;
+    color:var(--muted);
 
-            border-radius: 6px;
+    line-height:1.55;
 
-            background: var(--text);
-            color: var(--bg);
+    margin:0 0 13px;
 
-            display: grid;
-            place-items: center;
+    max-width:270px;
 
-            font-size: 10px;
-            font-weight: 800;
-        }
+    position:relative;
+    z-index:1;
+}
 
-        .footer-links {
-            display: flex;
+.count{
+    font-size:10px;
 
-            align-items: center;
+    color:var(--muted);
 
-            justify-content: center;
+    position:relative;
+    z-index:1;
+}
 
-            flex-wrap: wrap;
+.count strong{
+    color:var(--text);
 
-            gap: 18px;
-        }
+    font-size:12px;
+}
 
-        .footer-links a,
-        .footer-links button {
-            border: 0;
 
-            background: transparent;
+/* card accents */
 
-            color: var(--muted);
+.workspace-card.student-card{
+    --card-accent:#1d5fa7;
+}
 
-            font-size: 12px;
+.workspace-card.alumni-card{
+    --card-accent:#28734a;
+}
 
-            padding: 0;
+.workspace-card.academic-card{
+    --card-accent:#9a712f;
+}
 
-            cursor: pointer;
-        }
+.workspace-card.resource-card{
+    --card-accent:#7351a7;
+}
 
-        .footer-links a:hover,
-        .footer-links button:hover {
-            color: var(--blue);
 
-            text-decoration: underline;
-        }
+/* =========================================================
+   DIRECTORY PANEL
+   ========================================================= */
 
+.table-panel{
+    margin-top:0;
 
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+    background:var(--surface);
 
-        @media (max-width: 900px) {
+    border:1px solid var(--border);
 
-            .content-grid {
-                grid-template-columns: 1fr;
-            }
+    border-radius:10px;
 
-            .header-search {
-                flex: 1;
+    overflow:hidden;
+}
 
-                width: auto;
+.panel-head{
+    padding:14px 17px;
 
-                margin-left: 0;
-            }
+    border-bottom:1px solid var(--border);
 
-            .stats {
-                grid-template-columns:
-                    repeat(3, 1fr);
-            }
-        }
+    display:flex;
 
+    justify-content:space-between;
 
-        @media (max-width: 650px) {
+    align-items:center;
 
-            :root {
-                --header-height: 60px;
-            }
+    gap:15px;
+}
 
-            .header-inner {
-                padding: 0 12px;
+.panel-title{
+    font-size:13px;
 
-                gap: 8px;
-            }
+    font-weight:650;
+}
 
-            .brand-text {
-                display: none;
-            }
+.panel-sub{
+    color:var(--muted);
 
-            .header-search {
-                margin-left: 4px;
-            }
+    font-size:11px;
 
-            .search-input {
-                padding-left: 38px;
-            }
+    margin-top:2px;
+}
 
-            .profile-arrow {
-                display: none;
-            }
 
-            .profile-menu {
-                top: 54px;
-                right: 10px;
-                left: 10px;
-                width: auto;
-            }
+/* =========================================================
+   TABLE
+   ========================================================= */
 
-            .side-drawer {
-                width: min(320px, 88vw);
-            }
+.directory{
+    width:100%;
 
-            .main {
-                padding: 26px 16px 45px;
-            }
+    border-collapse:collapse;
+}
 
-            .stats {
-                grid-template-columns: 1fr;
-            }
+.directory th{
+    font-size:9px;
 
-            .details {
-                grid-template-columns: 1fr;
-            }
+    text-transform:uppercase;
 
-            .footer {
-                padding-left: 16px;
-                padding-right: 16px;
-            }
+    letter-spacing:.08em;
 
-            .footer-inner {
-                flex-direction: column;
-            }
-        }
-    </style>
+    color:var(--muted);
+
+    font-weight:700;
+
+    text-align:left;
+
+    background:var(--surface-soft);
+}
+
+.directory th,
+.directory td{
+    padding:11px 15px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.directory tbody tr{
+    transition:background .12s ease;
+}
+
+.directory tbody tr:hover{
+    background:var(--surface-soft);
+}
+
+.directory tr:last-child td{
+    border-bottom:0;
+}
+
+.person{
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+}
+
+.person .avatar{
+    width:30px;
+    height:30px;
+}
+
+.person-name{
+    font-weight:600;
+
+    font-size:12px;
+}
+
+.person-meta{
+    font-size:10px;
+
+    color:var(--muted);
+
+    margin-top:1px;
+}
+
+.badge{
+    display:inline-flex;
+
+    padding:3px 7px;
+
+    border:1px solid var(--border);
+
+    border-radius:99px;
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    background:var(--surface);
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty{
+    padding:38px 20px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer{
+    width:100%;
+
+    border-top:1px solid var(--border);
+
+    max-width:var(--container);
+
+    margin:auto;
+
+    padding:23px 28px 30px;
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+.footer-inner{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.footer-brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+.footer-logo{
+    width:23px;
+    height:23px;
+
+    border-radius:5px;
+
+    background:var(--accent);
+
+    color:#fff;
+
+    display:grid;
+
+    place-items:center;
+
+    font-size:8px;
+
+    font-weight:800;
+}
+
+.footer-links{
+    display:flex;
+
+    gap:17px;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+}
+
+.footer-links a:hover{
+    color:var(--accent);
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.46);
+
+    z-index:4000;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+}
+
+.modal.open{
+    display:flex;
+}
+
+.modal-card{
+    width:min(650px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.18);
+}
+
+.modal-head{
+    padding:14px 17px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.modal-head h2{
+    font-size:13px;
+
+    margin:0;
+
+    font-weight:650;
+}
+
+.close{
+    width:30px;
+    height:30px;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--muted);
+
+    font-size:20px;
+
+    border-radius:6px;
+}
+
+.close:hover{
+    background:var(--surface-soft);
+
+    color:var(--text);
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.profile-view{
+    padding:20px;
+}
+
+.profile-cover{
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.profile-view .big-avatar{
+    width:74px;
+    height:74px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    border:2px solid var(--surface);
+
+    outline:1px solid var(--border);
+
+    background:var(--surface-soft);
+
+    flex:none;
+}
+
+.big-avatar img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.profile-view h3{
+    margin:0 0 4px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:23px;
+
+    font-weight:500;
+
+    letter-spacing:-.02em;
+}
+
+.profile-view .role{
+    color:var(--accent);
+
+    font-size:11px;
+
+    font-weight:650;
+
+    text-transform:uppercase;
+
+    letter-spacing:.06em;
+}
+
+.view-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:8px;
+
+    margin-top:17px;
+}
+
+.view-field{
+    padding:10px 11px;
+
+    background:var(--surface-soft);
+
+    border:1px solid var(--border);
+
+    border-radius:7px;
+}
+
+.view-field label{
+    display:block;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.07em;
+
+    margin-bottom:4px;
+
+    font-weight:700;
+}
+
+.view-field div{
+    font-size:12px;
+
+    overflow-wrap:anywhere;
+}
+
+.section-mini{
+    margin-top:18px;
+
+    margin-bottom:7px;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.09em;
+
+    color:var(--muted);
+
+    font-weight:700;
+}
+
+.muted-inline{
+    font-size:11px;
+
+    color:var(--muted);
+}
+
+.accent-link{
+    color:var(--accent);
+
+    overflow-wrap:anywhere;
+}
+
+.private-note{
+    margin-top:16px;
+
+    padding:10px;
+
+    border:1px solid var(--border);
+
+    border-radius:7px;
+
+    background:var(--accent-light);
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    line-height:1.5;
+}
+
+.view-bio{
+    margin-top:12px;
+
+    padding:12px;
+
+    border:1px solid var(--border);
+
+    border-radius:7px;
+
+    line-height:1.55;
+
+    white-space:pre-wrap;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+.socials{
+    display:flex;
+
+    gap:7px;
+
+    flex-wrap:wrap;
+
+    margin-top:10px;
+}
+
+.socials a{
+    border:1px solid var(--border);
+
+    padding:5px 8px;
+
+    border-radius:5px;
+
+    font-size:10px;
+
+    background:var(--surface);
+}
+
+.socials a:hover{
+    border-color:var(--accent);
+
+    color:var(--accent);
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
+
+.search-results{
+    position:absolute;
+
+    top:44px;
+
+    left:0;
+    right:0;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:8px;
+
+    box-shadow:var(--shadow);
+
+    display:none;
+
+    overflow:hidden;
+
+    z-index:3000;
+}
+
+.search-results.open{
+    display:block;
+}
+
+.search-result{
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--text);
+
+    padding:10px 12px;
+
+    display:flex;
+
+    gap:9px;
+
+    text-align:left;
+}
+
+.search-result:hover{
+    background:var(--surface-soft);
+}
+
+.search-result .avatar{
+    width:30px;
+    height:30px;
+}
+
+.search-result small{
+    display:block;
+
+    color:var(--muted);
+
+    margin-top:2px;
+
+    font-size:10px;
+}
+
+.result-head{
+    padding:8px 12px;
+
+    border-bottom:1px solid var(--border);
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+    color:var(--muted);
+
+    font-weight:700;
+}
+
+
+/* =========================================================
+   MOTION
+   ========================================================= */
+
+.reduce-motion *{
+    transition:none!important;
+    animation:none!important;
+    scroll-behavior:auto!important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1100px){
+
+    .category-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .app-main{
+        padding-top:38px;
+    }
+}
+
+
+@media(max-width:760px){
+
+    :root{
+        --header:60px;
+    }
+
+    .header-inner{
+        padding:0 14px;
+
+        gap:9px;
+    }
+
+    .brand-text{
+        display:none;
+    }
+
+    .search-wrap{
+        flex:1;
+
+        width:auto;
+
+        margin-left:0;
+    }
+
+    .search-kbd{
+        display:none;
+    }
+
+    .profile-btn .arrow{
+        display:none;
+    }
+
+    .app-main{
+        padding:
+            30px 15px
+            45px;
+    }
+
+    .hero{
+        display:block;
+
+        padding-bottom:24px;
+
+        margin-bottom:25px;
+    }
+
+    .hero h1{
+        font-size:34px;
+    }
+
+    .hero-actions{
+        margin-top:18px;
+    }
+
+    .category-grid{
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:9px;
+
+        margin-bottom:30px;
+    }
+
+    .workspace-card{
+        min-height:140px;
+
+        padding:15px;
+    }
+
+    .workspace-card h3{
+        font-size:16px;
+    }
+
+    .workspace-card p{
+        font-size:10px;
+    }
+
+    .directory th:nth-child(3),
+    .directory td:nth-child(3){
+        display:none;
+    }
+
+    .footer{
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    .footer-inner{
+        justify-content:center;
+    }
+
+    .dropdown{
+        right:10px;
+
+        top:53px;
+
+        width:calc(100vw - 20px);
+    }
+}
+
+
+@media(max-width:520px){
+
+    .category-grid{
+        grid-template-columns:1fr;
+    }
+
+    .workspace-card{
+        min-height:125px;
+    }
+
+    .view-grid{
+        grid-template-columns:1fr;
+    }
+
+    .drawer{
+        width:min(300px,88vw);
+    }
+
+    .directory th,
+    .directory td{
+        padding:
+            10px 9px;
+    }
+
+    .directory th:nth-child(2),
+    .directory td:nth-child(2){
+        display:none;
+    }
+
+    .panel-head{
+        align-items:flex-start;
+    }
+
+    .hero-actions{
+        width:100%;
+    }
+
+    .hero-actions .btn{
+        flex:1;
+    }
+}
+
+
+/* =========================================================
+   SMALL SCREEN HEADER
+   ========================================================= */
+
+@media(max-width:420px){
+
+    .header-inner{
+        gap:6px;
+    }
+
+    .icon-btn{
+        width:32px;
+        height:32px;
+    }
+
+    .brand-mark{
+        width:30px;
+        height:30px;
+    }
+
+    .search{
+        height:34px;
+
+        padding-left:36px;
+    }
+
+    .search-icon{
+        top:7px;
+    }
+}
+</style>
 </head>
 
 
 <body>
 
 
-<!-- =========================================================
+<!-- =====================================================
      HEADER
-========================================================= -->
+     ===================================================== -->
 
 <header class="header">
 
     <div class="header-inner">
 
-        <!-- MENU -->
-
         <button
+            class="icon-btn"
             id="menuButton"
-            class="icon-button"
             aria-label="Open navigation"
-            title="Navigation"
         >
             <svg
-                viewBox="0 0 16 16"
-                fill="currentColor"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
             >
-                <path d="M1 2.75A.75.75 0 0 1 1.75 2h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 2.75Zm0 5A.75.75 0 0 1 1.75 7h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 7.75Zm0 5A.75.75 0 0 1 1.75 12h12.5a.75.75 0 0 1 0 1.5H1.75A.75.75 0 0 1 1 12.75Z"/>
+                <path d="M4 6h16M4 12h16M4 18h16"/>
             </svg>
         </button>
 
 
-        <!-- BRAND -->
+        <a class="brand" href="dashboard.html">
 
-        <a
-            href="dashboard.html"
-            class="brand"
-        >
-            <div class="brand-mark">
-                SG
-            </div>
+            <span class="brand-mark">SG</span>
 
             <span class="brand-text">
                 Student Guidance Portal
             </span>
+
         </a>
 
 
-        <!-- SEARCH -->
+        <div class="search-wrap">
 
-        <div class="header-search">
-
-            <span class="search-icon">
-                <svg
-                    viewBox="0 0 16 16"
-                    fill="currentColor"
-                >
-                    <path d="M10.68 11.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06ZM11 7a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z"/>
-                </svg>
-            </span>
+            <span class="search-icon">⌕</span>
 
             <input
                 id="studentSearch"
-                class="search-input"
-                type="search"
+                class="search"
+                placeholder="Search students, alumni, degrees..."
                 autocomplete="off"
-                placeholder="Search students, degrees, alumni..."
             >
+
+            <span class="search-kbd">/</span>
 
             <div
                 id="searchResults"
@@ -1138,25 +1833,20 @@
         <div class="header-spacer"></div>
 
 
-        <!-- PROFILE -->
-
         <button
+            class="profile-btn"
             id="profileButton"
-            class="profile-button"
-            aria-label="Open profile menu"
             aria-expanded="false"
         >
 
-            <div
-                id="headerAvatar"
+            <span
                 class="avatar"
+                id="headerAvatar"
             >
                 ?
-            </div>
-
-            <span class="profile-arrow">
-                ▾
             </span>
+
+            <span class="arrow">⌄</span>
 
         </button>
 
@@ -1166,69 +1856,68 @@
 
 
 
-<!-- =========================================================
-     PROFILE MENU
-========================================================= -->
+<!-- =====================================================
+     PROFILE DROPDOWN
+     ===================================================== -->
 
 <div
+    class="dropdown"
     id="profileMenu"
-    class="profile-menu"
 >
 
-    <div class="profile-menu-header">
+    <div class="drop-head">
 
-        <div
-            id="menuName"
-            class="profile-menu-name"
+        <span
+            class="avatar"
+            id="menuAvatar"
         >
-            Student
-        </div>
+            ?
+        </span>
 
-        <div
-            id="menuEmail"
-            class="profile-menu-email"
-        >
-            —
+        <div>
+
+            <div
+                class="drop-name"
+                id="menuName"
+            >
+                Loading...
+            </div>
+
+            <div
+                class="drop-email"
+                id="menuEmail"
+            >
+                —
+            </div>
+
         </div>
 
     </div>
 
 
-    <div class="menu-list">
+    <div class="menu">
 
         <button
             class="menu-item"
-            onclick="goTo('dashboard.html')"
+            onclick="openOwnProfile()"
         >
-            <svg viewBox="0 0 16 16" fill="currentColor">
-                <path d="M1 1.75A.75.75 0 0 1 1.75 1h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 1 7.25Zm1.5.75v4h4v-4ZM8 1.75A.75.75 0 0 1 8.75 1h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 8 7.25Zm1.5.75v4h4v-4ZM1 8.75A.75.75 0 0 1 1.75 8h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 1 14.25Zm1.5.75v4h4v-4ZM8 8.75A.75.75 0 0 1 8.75 8h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1-.75-.75Zm1.5.75v4h4v-4Z"/>
-            </svg>
-
-            Dashboard
+            ◉ &nbsp; View profile
         </button>
 
 
         <button
             class="menu-item"
-            onclick="goTo('profile.html')"
+            onclick="location.href='profile.html'"
         >
-            <svg viewBox="0 0 16 16" fill="currentColor">
-                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 1.5c-2.76 0-5 1.57-5 3.5v1h10v-1c0-1.93-2.24-3.5-5-3.5Z"/>
-            </svg>
-
-            View profile
+            ✎ &nbsp; Edit profile
         </button>
 
 
         <button
             class="menu-item"
-            onclick="goTo('profile.html')"
+            onclick="location.href='settings.html'"
         >
-            <svg viewBox="0 0 16 16" fill="currentColor">
-                <path d="M11.013 1.427a1.75 1.75 0 0 1 2.474 2.475L5.53 11.86l-3.18.707a.75.75 0 0 1-.9-.9l.707-3.18 8.856-7.06ZM10.5 3.5l2 2"/>
-            </svg>
-
-            Edit profile
+            ⚙ &nbsp; Settings
         </button>
 
 
@@ -1236,26 +1925,10 @@
 
 
         <button
-            class="menu-item"
-            onclick="goTo('settings.html')"
-        >
-            <svg viewBox="0 0 16 16" fill="currentColor">
-                <path d="M6.5 1.5a1 1 0 0 1 3 0v.32c.45.14.87.33 1.26.55l.28-.17a1 1 0 1 1 1.5 1.73l-.27.17c.2.4.36.82.47 1.27H13a1 1 0 1 1 0 2h-.26a5.6 5.6 0 0 1-.47 1.27l.27.17a1 1 0 1 1-1.5 1.73l-.28-.17c-.39.22-.81.41-1.26.55v.32a1 1 0 1 1-2 0v-.32a5.6 5.6 0 0 1-1.26-.55l-.28.17a1 1 0 1 1-1.5-1.73l.27-.17A5.6 5.6 0 0 1 4.26 7H4a1 1 0 1 1 0-2h.26c.11-.45.27-.87.47-1.27l-.27-.17a1 1 0 1 1 1.5-1.73l.28.17c.39-.22.81-.41 1.26-.55Zm1.5 3A2.5 2.5 0 1 0 8 9.5a2.5 2.5 0 0 0 0-5Z"/>
-            </svg>
-
-            Settings
-        </button>
-
-
-        <button
-            id="logoutMenuButton"
             class="menu-item danger"
+            id="logoutButton"
         >
-            <svg viewBox="0 0 16 16" fill="currentColor">
-                <path d="M2 2.75C2 1.78 2.78 1 3.75 1h2.5a.75.75 0 0 1 0 1.5h-2.5a.25.25 0 0 0-.25.25v10.5c0 .14.11.25.25.25h2.5a.75.75 0 0 1 0 1.5h-2.5A1.75 1.75 0 0 1 2 13.25Zm9.47 2.53a.75.75 0 0 1 1.06 0l2.75 2.75a.75.75 0 0 1 0 1.06l-2.75 2.75a.75.75 0 0 1-1.06-1.06l1.47-1.47H6.75a.75.75 0 0 1 0-1.5h6.19l-1.47-1.47a.75.75 0 0 1 0-1.06Z"/>
-            </svg>
-
-            Sign out
+            ↪ &nbsp; Sign out
         </button>
 
     </div>
@@ -1264,31 +1937,30 @@
 
 
 
-<!-- =========================================================
-     SIDE NAVIGATION
-========================================================= -->
+<!-- =====================================================
+     DRAWER
+     ===================================================== -->
 
 <div
-    id="drawerOverlay"
     class="drawer-overlay"
+    id="drawerOverlay"
 ></div>
 
 
 <aside
+    class="drawer"
     id="sideDrawer"
-    class="side-drawer"
 >
 
-    <div class="drawer-header">
+    <div class="drawer-head">
 
         <span class="drawer-title">
             Student Guidance Portal
         </span>
 
         <button
+            class="icon-btn"
             id="closeDrawer"
-            class="icon-button"
-            aria-label="Close navigation"
         >
             ×
         </button>
@@ -1296,106 +1968,107 @@
     </div>
 
 
-    <div class="drawer-content">
+    <div class="drawer-body">
 
-        <div class="nav-section">
-
-            <div class="nav-title">
-                Main
-            </div>
-
-            <button class="nav-item active">
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M1 1.75A.75.75 0 0 1 1.75 1h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 1 7.25Zm1.5.75v4h4v-4ZM8 1.75A.75.75 0 0 1 8.75 1h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 8 7.25Zm1.5.75v4h4v-4ZM1 8.75A.75.75 0 0 1 1.75 8h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5A.75.75 0 0 1 1 14.25Zm1.5.75v4h4v-4ZM8 8.75A.75.75 0 0 1 8.75 8h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-.75.75h-5.5a.75.75 0 0 1-.75-.75Zm1.5.75v4h4v-4Z"/>
-                </svg>
-                Dashboard
-            </button>
-
-            <button
-                class="nav-item"
-                onclick="focusSearch()"
-            >
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M10.68 11.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06ZM11 7a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z"/>
-                </svg>
-                Find students
-            </button>
-
+        <div class="nav-label">
+            Workspace
         </div>
 
 
-        <div class="nav-section">
-
-            <div class="nav-title">
-                Connections
-            </div>
-
-            <button class="nav-item">
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM2 14a6 6 0 0 1 12 0H2Z"/>
-                </svg>
-                Mentorship
-            </button>
-
-            <button class="nav-item">
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M1 3.75A2.75 2.75 0 0 1 3.75 1h8.5A2.75 2.75 0 0 1 15 3.75v5.5A2.75 2.75 0 0 1 12.25 12H9.5l-3.75 3v-3h-2A2.75 2.75 0 0 1 1 9.25v-5.5Z"/>
-                </svg>
-                Alumni
-            </button>
-
-        </div>
+        <button
+            class="nav-item active"
+            onclick="closeNavigation();window.scrollTo({top:0,behavior:'smooth'})"
+        >
+            ⌂
+            <span>Overview</span>
+        </button>
 
 
-        <div class="nav-section">
-
-            <div class="nav-title">
-                Academic
-            </div>
-
-            <button class="nav-item">
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 .5 1 4l7 3.5L15 4 8 .5ZM2.5 6.5v4L8 13l5.5-2.5v-4L8 9.25 2.5 6.5Z"/>
-                </svg>
-                Academic insights
-            </button>
-
-            <button class="nav-item">
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M2 2h12v12H2V2Zm1.5 1.5v9h9v-9h-9Zm1.5 6h1.5v1.5H5V9.5Zm2.25-2H8.75v3.5H7.25V7.5Zm2.25-2H11v5.5H9.5V5.5Z"/>
-                </svg>
-                Academic resources
-            </button>
-
-        </div>
+        <button
+            class="nav-item"
+            onclick="closeNavigation();focusSearch()"
+        >
+            ⌕
+            <span>Search directory</span>
+        </button>
 
 
         <div class="nav-divider"></div>
 
 
-        <div class="nav-section">
-
-            <button
-                class="nav-item"
-                onclick="goTo('profile.html')"
-            >
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 1.5c-2.76 0-5 1.57-5 3.5v1h10v-1c0-1.93-2.24-3.5-5-3.5Z"/>
-                </svg>
-                My Profile
-            </button>
-
-            <button
-                class="nav-item"
-                onclick="goTo('settings.html')"
-            >
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M6.5 1.5a1 1 0 0 1 3 0v.32c.45.14.87.33 1.26.55l.28-.17a1 1 0 1 1 1.5 1.73l-.27.17c.2.4.36.82.47 1.27H13a1 1 0 1 1 0 2h-.26a5.6 5.6 0 0 1-.47 1.27l.27.17a1 1 0 1 1-1.5 1.73l-.28-.17c-.39.22-.81.41-1.26.55v.32a1 1 0 1 1-2 0v-.32a5.6 5.6 0 0 1-1.26-.55l-.28.17a1 1 0 1 1-1.5-1.73l.27-.17A5.6 5.6 0 0 1 4.26 7H4a1 1 0 1 1 0-2h.26c.11-.45.27-.87.47-1.27l-.27-.17a1 1 0 1 1 1.5-1.73l.28.17c.39-.22.81-.41 1.26-.55Zm1.5 3A2.5 2.5 0 1 0 8 9.5a2.5 2.5 0 0 0 0-5Z"/>
-                </svg>
-                Settings
-            </button>
-
+        <div class="nav-label">
+            People
         </div>
+
+
+        <button
+            class="nav-item"
+            onclick="searchByType('Current Student')"
+        >
+            ♙
+            <span>Current students</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="searchByType('Alumni')"
+        >
+            ♧
+            <span>Alumni</span>
+        </button>
+
+
+        <div class="nav-divider"></div>
+
+
+        <div class="nav-label">
+            Academics
+        </div>
+
+
+        <button
+            class="nav-item"
+            onclick="showCategory('academic')"
+        >
+            ▤
+            <span>Academic profiles</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="showCategory('resources')"
+        >
+            ▦
+            <span>Academic resources</span>
+        </button>
+
+
+        <div class="nav-divider"></div>
+
+
+        <div class="nav-label">
+            Account
+        </div>
+
+
+        <button
+            class="nav-item"
+            onclick="openOwnProfile()"
+        >
+            ◉
+            <span>My profile</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="location.href='settings.html'"
+        >
+            ⚙
+            <span>Settings</span>
+        </button>
 
     </div>
 
@@ -1403,317 +2076,300 @@
 
 
 
-<!-- =========================================================
-     MAIN CONTENT
-========================================================= -->
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
 
-<main class="main">
-
-    <section class="welcome">
-
-        <h1 id="welcomeTitle">
-            Welcome back
-        </h1>
-
-        <p>
-            Connect with students, mentors, alumni,
-            and explore your academic opportunities.
-        </p>
-
-    </section>
+<main class="app-main">
 
 
-    <!-- STATS -->
+    <!-- HERO -->
 
-    <section class="stats">
+    <div class="hero">
 
-        <div class="stat-card">
+        <div>
 
-            <div class="stat-label">
-                Account type
+            <div class="eyebrow">
+                Workspace / Overview
             </div>
 
-            <div
-                id="statAccount"
-                class="stat-value"
-            >
-                —
-            </div>
+
+            <h1 id="welcomeTitle">
+                Student Guidance Portal
+            </h1>
+
+
+            <p>
+                A structured place to discover students,
+                connect with alumni, and explore academic
+                information.
+            </p>
 
         </div>
 
 
-        <div class="stat-card">
+        <div class="hero-actions">
 
-            <div class="stat-label">
-                Degree
-            </div>
-
-            <div
-                id="statDegree"
-                class="stat-value"
+            <button
+                class="btn"
+                onclick="openOwnProfile()"
             >
-                —
-            </div>
+                View profile
+            </button>
+
+
+            <button
+                class="btn primary"
+                onclick="location.href='profile.html'"
+            >
+                Edit profile
+            </button>
 
         </div>
 
-
-        <div class="stat-card">
-
-            <div class="stat-label">
-                Employment
-            </div>
-
-            <div
-                id="statEmployment"
-                class="stat-value"
-            >
-                —
-            </div>
-
-        </div>
-
-    </section>
+    </div>
 
 
 
-    <!-- CONTENT -->
+    <!-- DIRECTORY -->
 
-    <section class="content-grid">
+    <div class="section-title">
+
+        Directory
+
+        <span>
+            Browse by category
+        </span>
+
+    </div>
 
 
-        <!-- PROFILE -->
+    <section class="category-grid">
 
-        <div class="panel">
 
-            <div class="panel-header">
+        <!-- CURRENT STUDENTS -->
 
-                <span class="panel-title">
-                    My profile
+        <button
+            class="workspace-card student-card"
+            onclick="searchByType('Current Student')"
+        >
+
+            <div class="card-top">
+
+                <span class="card-icon">
+                    ♙
                 </span>
 
-                <button
-                    class="menu-item"
-                    style="width:auto;padding:5px 8px;"
-                    onclick="goTo('profile.html')"
-                >
-                    Edit
-                </button>
+                <span class="card-arrow">
+                    →
+                </span>
 
             </div>
 
 
-            <div class="panel-body">
-
-                <div class="profile-summary">
-
-                    <div
-                        id="mainAvatar"
-                        class="large-avatar"
-                    >
-                        ?
-                    </div>
-
-                    <div>
-
-                        <h2 id="profileName">
-                            Loading...
-                        </h2>
-
-                        <p id="profileRole">
-                            —
-                        </p>
-
-                    </div>
-
-                </div>
+            <h3>
+                Current students
+            </h3>
 
 
-                <p
-                    id="profileBio"
-                    class="bio"
-                >
+            <p>
+                Browse students who currently belong
+                to the portal and open their profiles.
+            </p>
+
+
+            <div class="count">
+
+                <strong id="studentCount">
                     —
-                </p>
+                </strong>
 
-
-                <div class="details">
-
-                    <div class="detail">
-
-                        <div class="detail-label">
-                            Degree
-                        </div>
-
-                        <div
-                            id="detailDegree"
-                            class="detail-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                        <div class="detail-label">
-                            Current employment
-                        </div>
-
-                        <div
-                            id="detailEmployment"
-                            class="detail-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                        <div class="detail-label">
-                            Account type
-                        </div>
-
-                        <div
-                            id="detailAccount"
-                            class="detail-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                        <div class="detail-label">
-                            Email
-                        </div>
-
-                        <div
-                            id="detailEmail"
-                            class="detail-value"
-                        >
-                            —
-                        </div>
-
-                    </div>
-
-                </div>
+                profiles
 
             </div>
 
-        </div>
+        </button>
 
 
 
-        <!-- QUICK ACTIONS -->
+        <!-- ALUMNI -->
 
-        <div class="panel">
+        <button
+            class="workspace-card alumni-card"
+            onclick="searchByType('Alumni')"
+        >
 
-            <div class="panel-header">
+            <div class="card-top">
 
-                <span class="panel-title">
-                    Quick access
+                <span class="card-icon">
+                    ♧
+                </span>
+
+                <span class="card-arrow">
+                    →
                 </span>
 
             </div>
 
 
-            <div class="panel-body">
-
-                <a
-                    href="#"
-                    class="quick-link"
-                    onclick="focusSearch(); return false;"
-                >
-
-                    <div class="quick-icon">
-                        🔎
-                    </div>
-
-                    <div>
-                        <strong>
-                            Find students
-                        </strong>
-
-                        <span>
-                            Discover students by profile
-                        </span>
-                    </div>
-
-                </a>
+            <h3>
+                Alumni
+            </h3>
 
 
-                <a
-                    href="#"
-                    class="quick-link"
-                >
-
-                    <div class="quick-icon">
-                        🤝
-                    </div>
-
-                    <div>
-                        <strong>
-                            Find a mentor
-                        </strong>
-
-                        <span>
-                            Connect with experienced people
-                        </span>
-                    </div>
-
-                </a>
+            <p>
+                Discover alumni profiles, education,
+                skills, and professional backgrounds.
+            </p>
 
 
-                <a
-                    href="#"
-                    class="quick-link"
-                >
+            <div class="count">
 
-                    <div class="quick-icon">
-                        🎓
-                    </div>
+                <strong id="alumniCount">
+                    —
+                </strong>
 
-                    <div>
-                        <strong>
-                            Alumni network
-                        </strong>
+                profiles
 
-                        <span>
-                            Explore alumni connections
-                        </span>
-                    </div>
+            </div>
 
-                </a>
+        </button>
 
 
-                <a
-                    href="#"
-                    class="quick-link"
-                >
 
-                    <div class="quick-icon">
-                        📊
-                    </div>
+        <!-- ACADEMIC -->
 
-                    <div>
-                        <strong>
-                            Academic insights
-                        </strong>
+        <button
+            class="workspace-card academic-card"
+            onclick="showCategory('academic')"
+        >
 
-                        <span>
-                            Explore academic information
-                        </span>
-                    </div>
+            <div class="card-top">
 
-                </a>
+                <span class="card-icon">
+                    ▤
+                </span>
 
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <h3>
+                Academic profiles
+            </h3>
+
+
+            <p>
+                View the complete academic directory
+                across current students and alumni.
+            </p>
+
+
+            <div class="count">
+
+                <strong id="academicCount">
+                    —
+                </strong>
+
+                profiles
+
+            </div>
+
+        </button>
+
+
+
+        <!-- RESOURCES -->
+
+        <button
+            class="workspace-card resource-card"
+            onclick="showCategory('resources')"
+        >
+
+            <div class="card-top">
+
+                <span class="card-icon">
+                    ▦
+                </span>
+
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <h3>
+                Academic resources
+            </h3>
+
+
+            <p>
+                Keep this area for future guides,
+                programs, scholarships, and resources.
+            </p>
+
+
+            <div class="count">
+                Coming soon
+            </div>
+
+        </button>
+
+    </section>
+
+
+
+    <!-- DIRECTORY TABLE -->
+
+    <div
+        class="section-title"
+        id="directoryTitle"
+    >
+
+        People directory
+
+        <span>
+            recent profiles
+        </span>
+
+    </div>
+
+
+    <section class="table-panel">
+
+        <div class="panel-head">
+
+            <div>
+
+                <div class="panel-title">
+                    Profile directory
+                </div>
+
+                <div class="panel-sub">
+                    Select a person to open a read-only profile
+                </div>
+
+            </div>
+
+
+            <button
+                class="btn"
+                onclick="loadDirectory()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div id="directoryContainer">
+
+            <div class="empty">
+                Loading profiles…
             </div>
 
         </div>
@@ -1724,9 +2380,9 @@
 
 
 
-<!-- =========================================================
+<!-- =====================================================
      FOOTER
-========================================================= -->
+     ===================================================== -->
 
 <footer class="footer">
 
@@ -1734,9 +2390,9 @@
 
         <div class="footer-brand">
 
-            <div class="footer-logo">
+            <span class="footer-logo">
                 SG
-            </div>
+            </span>
 
             <span>
                 © 2026 Student Guidance Portal
@@ -1762,21 +2418,17 @@
                 Security
             </a>
 
+            <a href="settings.html">
+                Settings
+            </a>
+
             <a href="#">
                 Help
             </a>
 
             <a href="#">
-                Community
-            </a>
-
-            <a href="#">
                 Contact
             </a>
-
-            <button type="button">
-                Manage cookies
-            </button>
 
         </nav>
 
@@ -1786,16 +2438,277 @@
 
 
 
+<!-- =====================================================
+     PROFILE MODAL
+     ===================================================== -->
+
+<div
+    class="modal"
+    id="profileModal"
+>
+
+    <div class="modal-card">
+
+
+        <div class="modal-head">
+
+            <h2>
+                Profile
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeProfileModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="profile-view">
+
+
+            <div class="profile-cover">
+
+                <div
+                    class="big-avatar"
+                    id="viewAvatar"
+                ></div>
+
+
+                <div>
+
+                    <h3 id="viewName">
+                        —
+                    </h3>
+
+                    <div
+                        class="role"
+                        id="viewRole"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="view-grid">
+
+
+                <div class="view-field">
+
+                    <label>
+                        Legal name
+                    </label>
+
+                    <div id="viewLegalName">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Account type
+                    </label>
+
+                    <div id="viewAccountType">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Degree
+                    </label>
+
+                    <div id="viewDegree">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Employment
+                    </label>
+
+                    <div id="viewEmployment">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Date of birth
+                    </label>
+
+                    <div id="viewDob">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Gender
+                    </label>
+
+                    <div id="viewGender">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <div id="viewPhone">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Address type
+                    </label>
+
+                    <div id="viewAddressType">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="view-field"
+                    style="grid-column:1/-1"
+                >
+
+                    <label>
+                        Address
+                    </label>
+
+                    <div id="viewAddress">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="view-field"
+                    style="grid-column:1/-1"
+                >
+
+                    <label>
+                        Tech stack
+                    </label>
+
+                    <div id="viewTechStack">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="view-field"
+                    style="grid-column:1/-1"
+                >
+
+                    <label>
+                        Custom skills
+                    </label>
+
+                    <div id="viewCustomSkills">
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                class="view-bio"
+                id="viewBio"
+            >
+                No bio provided.
+            </div>
+
+
+
+            <div class="section-mini">
+                Links and profile extras
+            </div>
+
+
+            <div
+                class="socials"
+                id="viewLinks"
+            ></div>
+
+
+            <div
+                class="view-grid"
+                id="viewExtras"
+            ></div>
+
+
+            <div class="private-note">
+
+                Sensitive identity numbers such as Aadhaar
+                are intentionally not displayed in the public
+                profile view.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
 <script>
-/* =========================================================
-   SUPABASE
-========================================================= */
 
 const SUPABASE_URL =
     'https://kksarduvycfebklmhxfb.supabase.co';
 
+
 const SUPABASE_ANON_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -1804,807 +2717,756 @@ const supabaseClient =
     );
 
 
-/* =========================================================
-   GLOBAL USER
-========================================================= */
-
 let currentUser = null;
+let currentProfile = null;
 
 
-/* =========================================================
-   DEBUG MESSAGE
-========================================================= */
+const $ = id =>
+    document.getElementById(id);
 
-function showDebug(title, message) {
 
-    document.body.innerHTML = `
-        <div style="
-            min-height:100vh;
-            background:#0d1117;
-            color:#f0f6fc;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            padding:20px;
-            font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
-        ">
+const esc = value =>
+    String(value ?? '').replace(
+        /[&<>"']/g,
+        char => ({
+            '&':'&amp;',
+            '<':'&lt;',
+            '>':'&gt;',
+            '"':'&quot;',
+            "'":'&#039;'
+        }[char])
+    );
 
-            <div style="
-                width:100%;
-                max-width:700px;
-                background:#161b22;
-                border:1px solid #30363d;
-                border-radius:8px;
-                padding:25px;
-            ">
 
-                <h2 style="
-                    margin:0 0 15px;
-                    color:#f0f6fc;
-                ">
-                    ${title}
-                </h2>
+function avatarUrl(profile,id){
 
-                <pre style="
-                    white-space:pre-wrap;
-                    word-break:break-word;
-                    color:#ff7b72;
-                    background:#0d1117;
-                    padding:15px;
-                    border-radius:6px;
-                    border:1px solid #30363d;
-                ">${message}</pre>
+    return profile?.avatar_url ||
+        `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(
+            id || profile?.id || 'student'
+        )}&backgroundColor=f6f8fa`;
 
-                <p style="
-                    margin-top:15px;
-                    color:#8b949e;
-                    font-size:13px;
-                    line-height:1.6;
-                ">
-                    This diagnostic message is temporary.
-                    It is being shown instead of redirecting you
-                    to the login page so we can identify the problem.
-                </p>
+}
 
-            </div>
 
-        </div>
+function avatarHTML(
+    profile,
+    id,
+    cls='avatar'
+){
+
+    return `
+        <span class="${cls}">
+            <img
+                src="${esc(avatarUrl(profile,id))}"
+                alt=""
+            >
+        </span>
     `;
-}
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function setText(id, value) {
-
-    const element =
-        document.getElementById(id);
-
-    if (element) {
-        element.textContent =
-            value || 'N/A';
-    }
-}
-
-
-function initials(name) {
-
-    if (!name) {
-        return '?';
-    }
-
-    return name
-        .trim()
-        .split(/\s+/)
-        .slice(0, 2)
-        .map(word => word[0])
-        .join('')
-        .toUpperCase();
-}
-
-
-function goTo(page) {
-    window.location.href = page;
-}
-
-
-/* =========================================================
-   LOAD USER
-========================================================= */
-
-async function loadDashboard() {
-
-    console.log('================================');
-    console.log('DASHBOARD START');
-    console.log('================================');
-
-    try {
-
-        /* -----------------------------------------
-           CHECK AUTHENTICATION
-        ----------------------------------------- */
-
-        console.log('Checking Supabase session...');
-
-        const {
-            data: {
-                user
-            },
-            error: authError
-        } =
-            await supabaseClient.auth.getUser();
-
-
-        console.log('Supabase user:', user);
-        console.log('Auth error:', authError);
-
-
-        if (authError) {
-
-            console.error(
-                'AUTH ERROR:',
-                authError
-            );
-
-            showDebug(
-                'Supabase Authentication Error',
-                authError.message ||
-                JSON.stringify(authError, null, 2)
-            );
-
-            return;
-        }
-
-
-        if (!user) {
-
-            console.error(
-                'NO AUTHENTICATED USER'
-            );
-
-            showDebug(
-                'No Supabase Session Found',
-                `dashboard.html loaded successfully,
-but Supabase cannot find your logged-in session.
-
-This means the problem is with the authentication
-session between index.html and dashboard.html.
-
-Current URL:
-${window.location.href}`
-            );
-
-            return;
-        }
-
-
-        /* -----------------------------------------
-           USER EXISTS
-        ----------------------------------------- */
-
-        currentUser = user;
-
-        console.log(
-            'AUTHENTICATED USER:',
-            user.id
-        );
-
-        console.log(
-            'EMAIL:',
-            user.email
-        );
-
-
-        /* -----------------------------------------
-           LOAD PROFILE
-        ----------------------------------------- */
-
-        console.log(
-            'Loading profile for user:',
-            user.id
-        );
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from('profiles')
-                .select('*')
-                .eq('id', user.id)
-                .single();
-
-
-        console.log(
-            'Profile data:',
-            data
-        );
-
-        console.log(
-            'Profile error:',
-            error
-        );
-
-
-        if (error) {
-
-            console.error(
-                'PROFILE QUERY ERROR:',
-                error
-            );
-
-            showDebug(
-                'Profile Database Error',
-                `Supabase authentication worked.
-
-User:
-${user.email}
-
-User ID:
-${user.id}
-
-But the profiles table could not be read.
-
-Error:
-${error.message}
-
-Error code:
-${error.code || 'N/A'}
-
-Details:
-${error.details || 'N/A'}
-
-Hint:
-${error.hint || 'N/A'}`
-            );
-
-            return;
-        }
-
-
-        if (!data) {
-
-            showDebug(
-                'No Profile Found',
-                `The user is successfully logged in.
-
-User:
-${user.email}
-
-User ID:
-${user.id}
-
-However, there is no matching row in
-the profiles table.`
-            );
-
-            return;
-        }
-
-
-        /* -----------------------------------------
-           ACCOUNT TYPE
-        ----------------------------------------- */
-
-        if (!data.account_type) {
-
-            showDebug(
-                'Profile Is Incomplete',
-                `Your profile exists, but account_type
-is empty.
-
-User:
-${user.email}
-
-User ID:
-${user.id}
-
-Profile:
-${JSON.stringify(data, null, 2)}`
-            );
-
-            return;
-        }
-
-
-        /* -----------------------------------------
-           PROFILE DATA
-        ----------------------------------------- */
-
-        const name =
-            data.full_name || 'Student';
-
-        const role =
-            data.account_type || 'Student';
-
-        const degree =
-            data.degree || 'Not specified';
-
-        const employment =
-            data.current_employment ||
-            'Not specified';
-
-        const bio =
-            data.bio ||
-            'No bio added yet.';
-
-
-        /* -----------------------------------------
-           WELCOME
-        ----------------------------------------- */
-
-        setText(
-            'welcomeTitle',
-            `Welcome back, ${name}`
-        );
-
-
-        /* -----------------------------------------
-           HEADER
-        ----------------------------------------- */
-
-        setText(
-            'headerAvatar',
-            initials(name)
-        );
-
-
-        /* -----------------------------------------
-           PROFILE MENU
-        ----------------------------------------- */
-
-        setText(
-            'menuName',
-            name
-        );
-
-
-        setText(
-            'menuEmail',
-            user.email
-        );
-
-
-        /* -----------------------------------------
-           MAIN PROFILE
-        ----------------------------------------- */
-
-        setText(
-            'mainAvatar',
-            initials(name)
-        );
-
-
-        setText(
-            'profileName',
-            name
-        );
-
-
-        setText(
-            'profileRole',
-            role
-        );
-
-
-        setText(
-            'profileBio',
-            bio
-        );
-
-
-        /* -----------------------------------------
-           STATS
-        ----------------------------------------- */
-
-        setText(
-            'statAccount',
-            role
-        );
-
-
-        setText(
-            'statDegree',
-            degree
-        );
-
-
-        setText(
-            'statEmployment',
-            employment
-        );
-
-
-        /* -----------------------------------------
-           DETAILS
-        ----------------------------------------- */
-
-        setText(
-            'detailDegree',
-            degree
-        );
-
-
-        setText(
-            'detailEmployment',
-            employment
-        );
-
-
-        setText(
-            'detailAccount',
-            role
-        );
-
-
-        setText(
-            'detailEmail',
-            user.email
-        );
-
-
-        console.log(
-            '================================'
-        );
-
-        console.log(
-            'DASHBOARD LOADED SUCCESSFULLY'
-        );
-
-        console.log(
-            '================================'
-        );
-
-    } catch (error) {
-
-        console.error(
-            'Dashboard error:',
-            error
-        );
-
-        showDebug(
-            'Dashboard JavaScript Error',
-            error.message ||
-            JSON.stringify(error, null, 2)
-        );
-    }
-}
-
-
-/* =========================================================
-   PROFILE MENU
-========================================================= */
-
-const profileButton =
-    document.getElementById(
-        'profileButton'
-    );
-
-const profileMenu =
-    document.getElementById(
-        'profileMenu'
-    );
-
-
-if (profileButton && profileMenu) {
-
-    profileButton.addEventListener(
-        'click',
-        function(event) {
-
-            event.stopPropagation();
-
-            const isOpen =
-                profileMenu.classList.toggle(
-                    'open'
-                );
-
-            profileButton.classList.toggle(
-                'active',
-                isOpen
-            );
-
-            profileButton.setAttribute(
-                'aria-expanded',
-                isOpen
-            );
-        }
-    );
-
-
-    document.addEventListener(
-        'click',
-        function(event) {
-
-            if (
-                !profileMenu.contains(event.target) &&
-                !profileButton.contains(event.target)
-            ) {
-
-                profileMenu.classList.remove(
-                    'open'
-                );
-
-                profileButton.classList.remove(
-                    'active'
-                );
-
-            }
-
-        }
-    );
 
 }
 
 
-/* =========================================================
-   SIDE DRAWER
-========================================================= */
+function setAvatar(
+    id,
+    profile,
+    userId
+){
 
-const menuButton =
-    document.getElementById(
-        'menuButton'
-    );
+    const element = $(id);
 
-const sideDrawer =
-    document.getElementById(
-        'sideDrawer'
-    );
+    if(!element) return;
 
-const drawerOverlay =
-    document.getElementById(
-        'drawerOverlay'
-    );
+    element.innerHTML = `
+        <img
+            src="${esc(avatarUrl(profile,userId))}"
+            alt=""
+        >
+    `;
 
-const closeDrawer =
-    document.getElementById(
-        'closeDrawer'
-    );
+}
 
 
-function openDrawer() {
+/* =====================================================
+   SETTINGS
+   ===================================================== */
 
-    if (sideDrawer) {
-        sideDrawer.classList.add('open');
+function applySettings(){
+
+    let settings = {};
+
+    try{
+
+        settings = JSON.parse(
+            localStorage.getItem('sgp-settings-v1') || '{}'
+        );
+
+    }catch{}
+
+    let theme =
+        settings.theme || 'light';
+
+
+    if(theme === 'system'){
+
+        theme =
+            matchMedia(
+                '(prefers-color-scheme: dark)'
+            ).matches
+                ? 'dark'
+                : 'light';
+
     }
 
-    if (drawerOverlay) {
-        drawerOverlay.classList.add('open');
-    }
 
-    document.body.style.overflow =
-        'hidden';
+    document.documentElement.dataset.theme =
+        theme;
+
+
+    document.documentElement.dataset.accent =
+        settings.accent || 'green';
+
+
+    document.documentElement.dataset.density =
+        settings.density || 'comfortable';
+
+
+    document.documentElement.classList.toggle(
+        'reduce-motion',
+        !!settings.reduceMotion
+    );
+
 }
 
 
-function closeNavigation() {
-
-    if (sideDrawer) {
-        sideDrawer.classList.remove('open');
-    }
-
-    if (drawerOverlay) {
-        drawerOverlay.classList.remove('open');
-    }
-
-    document.body.style.overflow =
-        '';
-}
+applySettings();
 
 
-if (menuButton) {
-    menuButton.addEventListener(
-        'click',
-        openDrawer
-    );
-}
+window.addEventListener(
+    'storage',
+    event => {
 
+        if(
+            event.key === 'sgp-settings-v1'
+        ){
 
-if (closeDrawer) {
-    closeDrawer.addEventListener(
-        'click',
-        closeNavigation
-    );
-}
-
-
-if (drawerOverlay) {
-    drawerOverlay.addEventListener(
-        'click',
-        closeNavigation
-    );
-}
-
-
-/* =========================================================
-   SEARCH
-========================================================= */
-
-const searchInput =
-    document.getElementById(
-        'studentSearch'
-    );
-
-const searchResults =
-    document.getElementById(
-        'searchResults'
-    );
-
-let searchTimer = null;
-
-
-if (searchInput && searchResults) {
-
-    searchInput.addEventListener(
-        'input',
-        function() {
-
-            clearTimeout(
-                searchTimer
-            );
-
-            const query =
-                this.value.trim();
-
-
-            if (query.length < 2) {
-
-                searchResults.classList.remove(
-                    'open'
-                );
-
-                searchResults.innerHTML =
-                    '';
-
-                return;
-            }
-
-
-            searchTimer =
-                setTimeout(
-                    () => searchStudents(query),
-                    350
-                );
+            applySettings();
 
         }
-    );
 
-}
+    }
+);
 
 
-async function searchStudents(query) {
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
 
-    if (!searchResults) {
+async function loadDashboard(){
+
+    const {
+        data:{user},
+        error:authError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if(authError || !user){
+
+        location.href =
+            'index.html';
+
         return;
+
     }
 
 
-    searchResults.classList.add(
-        'open'
+    currentUser = user;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id',user.id)
+            .single();
+
+
+    if(
+        error ||
+        !data ||
+        !data.account_type
+    ){
+
+        location.href =
+            'profile.html';
+
+        return;
+
+    }
+
+
+    currentProfile = data;
+
+
+    $('welcomeTitle').textContent =
+        `Welcome back, ${data.full_name || 'Student'}`;
+
+
+    $('menuName').textContent =
+        data.full_name || 'Student';
+
+
+    $('menuEmail').textContent =
+        user.email || '';
+
+
+    setAvatar(
+        'headerAvatar',
+        data,
+        user.id
     );
 
 
-    searchResults.innerHTML = `
-        <div class="search-result-header">
-            Searching students...
-        </div>
+    setAvatar(
+        'menuAvatar',
+        data,
+        user.id
+    );
+
+
+    await loadCounts();
+
+    await loadDirectory();
+
+}
+
+
+/* =====================================================
+   COUNTS
+   ===================================================== */
+
+async function loadCounts(){
+
+    const students =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                'id',
+                {
+                    count:'exact',
+                    head:true
+                }
+            )
+            .eq(
+                'account_type',
+                'Current Student'
+            );
+
+
+    const alumni =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                'id',
+                {
+                    count:'exact',
+                    head:true
+                }
+            )
+            .eq(
+                'account_type',
+                'Alumni'
+            );
+
+
+    const academic =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                'id',
+                {
+                    count:'exact',
+                    head:true
+                }
+            );
+
+
+    $('studentCount').textContent =
+        students.count ?? '—';
+
+
+    $('alumniCount').textContent =
+        alumni.count ?? '—';
+
+
+    $('academicCount').textContent =
+        academic.count ?? '—';
+
+}
+
+
+/* =====================================================
+   DIRECTORY
+   ===================================================== */
+
+async function loadDirectory(type=null){
+
+    const container =
+        $('directoryContainer');
+
+
+    container.innerHTML =
+        '<div class="empty">Loading profiles…</div>';
+
+
+    let query =
+        supabaseClient
+            .from('profiles')
+            .select(
+                `
+                id,
+                full_name,
+                degree,
+                current_employment,
+                account_type,
+                avatar_url
+                `
+            )
+            .order(
+                'full_name',
+                {
+                    ascending:true
+                }
+            )
+            .limit(8);
+
+
+    if(type){
+
+        query =
+            query.eq(
+                'account_type',
+                type
+            );
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await query;
+
+
+    if(error){
+
+        container.innerHTML =
+            `
+            <div class="empty">
+                Directory is unavailable with the
+                current database permissions.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    if(!data?.length){
+
+        container.innerHTML =
+            `
+            <div class="empty">
+                No profiles found.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <table class="directory">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Person
+                    </th>
+
+                    <th>
+                        Degree
+                    </th>
+
+                    <th>
+                        Employment
+                    </th>
+
+                    <th>
+                        Type
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                ${data.map(profile => `
+
+                    <tr>
+
+                        <td>
+
+                            <button
+                                class="person"
+                                style="
+                                    border:0;
+                                    background:none;
+                                    color:inherit;
+                                    padding:0;
+                                    text-align:left;
+                                "
+                                onclick="openProfile('${profile.id}')"
+                            >
+
+                                ${avatarHTML(
+                                    profile,
+                                    profile.id
+                                )}
+
+                                <span>
+
+                                    <span class="person-name">
+                                        ${esc(
+                                            profile.full_name ||
+                                            'Unnamed'
+                                        )}
+                                    </span>
+
+                                    <span class="person-meta">
+                                        Open profile
+                                    </span>
+
+                                </span>
+
+                            </button>
+
+                        </td>
+
+
+                        <td>
+                            ${esc(
+                                profile.degree ||
+                                '—'
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${esc(
+                                profile.current_employment ||
+                                '—'
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge">
+                                ${esc(
+                                    profile.account_type ||
+                                    '—'
+                                )}
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                `).join('')}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+
+/* =====================================================
+   PROFILE MODAL
+   ===================================================== */
+
+async function openProfile(id){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id',id)
+            .single();
+
+
+    if(error || !data){
+
+        alert(
+            'This profile could not be loaded.'
+        );
+
+        return;
+
+    }
+
+
+    $('viewName').textContent =
+        data.full_name ||
+        'Unnamed profile';
+
+
+    $('viewRole').textContent =
+        data.account_type ||
+        'Student';
+
+
+    $('viewLegalName').textContent =
+        data.legal_name ||
+        data.full_name ||
+        '—';
+
+
+    $('viewAccountType').textContent =
+        data.account_type ||
+        '—';
+
+
+    $('viewDegree').textContent =
+        data.degree ||
+        '—';
+
+
+    $('viewEmployment').textContent =
+        data.current_employment ||
+        '—';
+
+
+    $('viewDob').textContent =
+        data.date_of_birth ||
+        '—';
+
+
+    $('viewGender').textContent =
+        data.gender ||
+        '—';
+
+
+    $('viewPhone').textContent =
+        data.phone ||
+        '—';
+
+
+    $('viewAddressType').textContent =
+        data.address_type ||
+        '—';
+
+
+    $('viewAddress').textContent =
+        data.address ||
+        '—';
+
+
+    $('viewTechStack').textContent =
+        data.tech_stack ||
+        '—';
+
+
+    $('viewCustomSkills').textContent =
+        data.custom_skills ||
+        '—';
+
+
+    $('viewBio').textContent =
+        data.bio ||
+        'No bio provided.';
+
+
+    $('viewAvatar').innerHTML = `
+
+        <img
+            src="${esc(
+                avatarUrl(data,id)
+            )}"
+            alt=""
+        >
+
     `;
 
 
-    try {
+    const links = [
 
-        const safeQuery =
-            query.replace(
-                /[%_]/g,
-                '\\$&'
-            );
+        [
+            'Website',
+            data.featured_website
+        ],
 
+        [
+            'LinkedIn',
+            data.social_linkedin
+        ],
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from('profiles')
-                .select(
-                    'id, full_name, degree, current_employment, account_type'
-                )
-                .or(
-                    `full_name.ilike.%${safeQuery}%,degree.ilike.%${safeQuery}%,current_employment.ilike.%${safeQuery}%,account_type.ilike.%${safeQuery}%`
-                )
-                .limit(8);
+        [
+            'Instagram',
+            data.social_instagram
+        ],
 
+        [
+            'YouTube',
+            data.social_youtube
+        ],
 
-        if (error) {
+        [
+            'Twitter',
+            data.social_twitter
+        ],
 
-            console.error(
-                'Search error:',
-                error
-            );
+        [
+            'TikTok',
+            data.social_tiktok
+        ]
 
-
-            searchResults.innerHTML = `
-                <div class="no-results">
-                    Search is currently unavailable.
-                </div>
-            `;
-
-            return;
-        }
+    ].filter(
+        item => item[1]
+    );
 
 
-        if (!data || data.length === 0) {
+    $('viewLinks').innerHTML =
+        links.length
 
-            searchResults.innerHTML = `
-                <div class="no-results">
-                    No students found for
-                    "${escapeHtml(query)}"
-                </div>
-            `;
+        ? links.map(
+            ([label,url]) => `
 
-            return;
-        }
-
-
-        searchResults.innerHTML = `
-            <div class="search-result-header">
-                Students
-            </div>
-
-            ${data.map(student => `
-
-                <button
-                    class="search-result"
-                    onclick="openStudent('${student.id}')"
+                <a
+                    href="${esc(url)}"
+                    target="_blank"
+                    rel="noopener"
                 >
+                    ${esc(label)}
+                </a>
 
-                    <div class="result-avatar">
-                        ${escapeHtml(
-                            initials(student.full_name)
-                        )}
-                    </div>
+            `
+        ).join('')
 
-                    <div class="result-info">
-
-                        <div class="result-name">
-                            ${escapeHtml(
-                                student.full_name ||
-                                'Unnamed student'
-                            )}
-                        </div>
-
-                        <div class="result-meta">
-
-                            ${escapeHtml(
-                                student.degree ||
-                                'Degree not specified'
-                            )}
-
-                            ·
-
-                            ${escapeHtml(
-                                student.account_type ||
-                                'Student'
-                            )}
-
-                        </div>
-
-                    </div>
-
-                </button>
-
-            `).join('')}
+        : `
+            <span class="muted-inline">
+                No social links added.
+            </span>
         `;
 
 
-    } catch (error) {
+    const extras = [
 
-        console.error(
-            'Student search error:',
-            error
+        [
+            'Buy Me a Coffee',
+            data.donate_buymeacoffee
+        ],
+
+        [
+            'PayPal',
+            data.donate_paypal
+        ],
+
+        [
+            'Patreon',
+            data.donate_patreon
+        ],
+
+        [
+            'Ko-fi',
+            data.donate_kofi
+        ]
+
+    ].filter(
+        item => item[1]
+    );
+
+
+    $('viewExtras').innerHTML =
+
+        extras.length
+
+        ? extras.map(
+            ([label,url]) => `
+
+                <div class="view-field">
+
+                    <label>
+                        ${esc(label)}
+                    </label>
+
+                    <div>
+
+                        <a
+                            class="accent-link"
+                            href="${esc(url)}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            ${esc(url)}
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `
+        ).join('')
+
+        : `
+
+            <div
+                class="view-field"
+                style="grid-column:1/-1"
+            >
+
+                <label>
+                    Support links
+                </label>
+
+                <div>
+                    —
+                </div>
+
+            </div>
+
+        `;
+
+
+    $('profileModal')
+        .classList
+        .add('open');
+
+}
+
+
+function openOwnProfile(){
+
+    if(currentUser){
+
+        openProfile(
+            currentUser.id
         );
 
     }
@@ -2612,133 +3474,454 @@ async function searchStudents(query) {
 }
 
 
-function openStudent(id) {
+function closeProfileModal(){
 
-    sessionStorage.setItem(
-        'selectedStudentId',
-        id
+    $('profileModal')
+        .classList
+        .remove('open');
+
+}
+
+
+$('profileModal')
+    .addEventListener(
+        'click',
+        event => {
+
+            if(
+                event.target.id ===
+                'profileModal'
+            ){
+
+                closeProfileModal();
+
+            }
+
+        }
     );
 
 
-    /*
-       IMPORTANT:
-       student.html must exist before this
-       button is used.
-    */
+/* =====================================================
+   CATEGORY NAVIGATION
+   ===================================================== */
 
-    window.location.href =
-        'student.html';
-
-}
-
-
-function escapeHtml(value) {
-
-    return String(value)
-        .replaceAll(
-            '&',
-            '&amp;'
-        )
-        .replaceAll(
-            '<',
-            '&lt;'
-        )
-        .replaceAll(
-            '>',
-            '&gt;'
-        )
-        .replaceAll(
-            '"',
-            '&quot;'
-        )
-        .replaceAll(
-            "'",
-            '&#039;'
-        );
-
-}
-
-
-function focusSearch() {
+function searchByType(type){
 
     closeNavigation();
 
 
-    if (!searchInput) {
-        return;
-    }
+    $('studentSearch').value =
+        '';
 
 
-    searchInput.focus();
+    loadDirectory(type);
 
 
-    searchInput.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-    });
+    $('directoryTitle').textContent =
+        type === 'Current Student'
+            ? 'Current students'
+            : 'Alumni';
+
+
+    $('directoryTitle')
+        .scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
 
 }
 
 
-/* =========================================================
-   LOGOUT
-========================================================= */
+function showCategory(type){
 
-async function logout() {
-
-    try {
-
-        const {
-            error
-        } =
-            await supabaseClient.auth.signOut();
+    closeNavigation();
 
 
-        if (error) {
+    if(type === 'academic'){
 
-            console.error(
-                'Logout error:',
-                error
+        $('directoryTitle').textContent =
+            'Academic profiles';
+
+
+        loadDirectory();
+
+    }
+
+    else{
+
+        $('directoryTitle').textContent =
+            'Academic resources';
+
+
+        $('directoryContainer').innerHTML = `
+
+            <div class="empty">
+
+                Academic resources will be added
+                here in a future module.
+
+                This space is intentionally reserved
+                for guides, scholarships, programs,
+                and other student resources.
+
+            </div>
+
+        `;
+
+    }
+
+
+    $('directoryTitle')
+        .scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+
+}
+
+
+function focusSearch(){
+
+    closeNavigation();
+
+    $('studentSearch').focus();
+
+}
+
+
+function closeNavigation(){
+
+    $('sideDrawer')
+        .classList
+        .remove('open');
+
+
+    $('drawerOverlay')
+        .classList
+        .remove('open');
+
+
+    document.body.style.overflow =
+        '';
+
+}
+
+
+/* =====================================================
+   DRAWER
+   ===================================================== */
+
+$('menuButton').onclick = () => {
+
+    $('sideDrawer')
+        .classList
+        .add('open');
+
+
+    $('drawerOverlay')
+        .classList
+        .add('open');
+
+
+    document.body.style.overflow =
+        'hidden';
+
+};
+
+
+$('closeDrawer').onclick =
+    closeNavigation;
+
+
+$('drawerOverlay').onclick =
+    closeNavigation;
+
+
+/* =====================================================
+   PROFILE MENU
+   ===================================================== */
+
+$('profileButton').onclick =
+    event => {
+
+        event.stopPropagation();
+
+
+        const open =
+            $('profileMenu')
+                .classList
+                .toggle('open');
+
+
+        $('profileButton')
+            .classList
+            .toggle(
+                'active',
+                open
             );
 
-            return;
+
+        $('profileButton')
+            .setAttribute(
+                'aria-expanded',
+                open
+            );
+
+    };
+
+
+document.addEventListener(
+    'click',
+    event => {
+
+        if(
+            !$('profileMenu')
+                .contains(event.target)
+
+            &&
+
+            !$('profileButton')
+                .contains(event.target)
+        ){
+
+            $('profileMenu')
+                .classList
+                .remove('open');
+
+
+            $('profileButton')
+                .classList
+                .remove('active');
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+let timer = null;
+
+
+$('studentSearch')
+    .addEventListener(
+        'input',
+        event => {
+
+            clearTimeout(timer);
+
+
+            const query =
+                event.target.value.trim();
+
+
+            if(query.length < 2){
+
+                $('searchResults')
+                    .classList
+                    .remove('open');
+
+                return;
+
+            }
+
+
+            timer =
+                setTimeout(
+                    () => searchStudents(query),
+                    300
+                );
+
+        }
+    );
+
+
+async function searchStudents(query){
+
+    const safe =
+        query.replace(
+            /[%_]/g,
+            '\\$&'
+        );
+
+
+    $('searchResults')
+        .classList
+        .add('open');
+
+
+    $('searchResults').innerHTML = `
+
+        <div class="result-head">
+            Searching…
+        </div>
+
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                `
+                id,
+                full_name,
+                degree,
+                account_type,
+                avatar_url
+                `
+            )
+            .or(
+                `
+                full_name.ilike.%${safe}%,
+                degree.ilike.%${safe}%,
+                account_type.ilike.%${safe}%
+                `
+            )
+            .limit(8);
+
+
+    if(
+        error ||
+        !data?.length
+    ){
+
+        $('searchResults').innerHTML = `
+
+            <div class="empty">
+                No matching profiles.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    $('searchResults').innerHTML =
+
+        '<div class="result-head">Profiles</div>' +
+
+        data.map(profile => `
+
+            <button
+                class="search-result"
+                onclick="openProfile('${profile.id}')"
+            >
+
+                ${avatarHTML(
+                    profile,
+                    profile.id
+                )}
+
+                <span>
+
+                    <b>
+                        ${esc(
+                            profile.full_name ||
+                            'Unnamed'
+                        )}
+                    </b>
+
+                    <small>
+                        ${esc(
+                            profile.degree ||
+                            'Degree not specified'
+                        )}
+
+                        ·
+
+                        ${esc(
+                            profile.account_type ||
+                            'Student'
+                        )}
+                    </small>
+
+                </span>
+
+            </button>
+
+        `).join('');
+
+}
+
+
+/* =====================================================
+   KEYBOARD
+   ===================================================== */
+
+$('studentSearch')
+    .addEventListener(
+        'keydown',
+        event => {
+
+            if(event.key === 'Escape'){
+
+                $('searchResults')
+                    .classList
+                    .remove('open');
+
+                event.target.blur();
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    'keydown',
+    event => {
+
+        if(
+            event.key === '/' &&
+            document.activeElement.tagName !== 'INPUT'
+        ){
+
+            event.preventDefault();
+
+            focusSearch();
+
         }
 
 
-        window.location.href =
-            'index.html';
+        if(event.key === 'Escape'){
 
-    } catch (error) {
+            closeProfileModal();
 
-        console.error(
-            'Logout exception:',
-            error
-        );
+        }
 
     }
-
-}
-
-
-const logoutMenuButton =
-    document.getElementById(
-        'logoutMenuButton'
-    );
+);
 
 
-if (logoutMenuButton) {
+/* =====================================================
+   LOGOUT
+   ===================================================== */
 
-    logoutMenuButton.addEventListener(
-        'click',
-        logout
-    );
+$('logoutButton').onclick =
+    async () => {
 
-}
+        await supabaseClient
+            .auth
+            .signOut();
+
+        location.href =
+            'index.html';
+
+    };
 
 
-/* =========================================================
+/* =====================================================
    START
-========================================================= */
+   ===================================================== */
 
 loadDashboard();
 
