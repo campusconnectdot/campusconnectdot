@@ -1,0 +1,3931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student Guidance Portal</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* =========================================================
+   STUDENT GUIDANCE PORTAL
+   CLEAN ICI / INSTITUTIONAL WORDPRESS STYLE
+   ========================================================= */
+
+:root{
+    --bg:#f8f8f6;
+    --surface:#ffffff;
+    --surface-soft:#f3f3f0;
+    --surface-hover:#eeeeeb;
+
+    --text:#171717;
+    --text-soft:#343434;
+    --muted:#777771;
+
+    --border:#deded8;
+    --border-dark:#cfcfc8;
+
+    --accent:#164a3a;
+    --accent-light:#e8f0ec;
+    --accent-dark:#0d3025;
+
+    --gold:#b18a4a;
+
+    --danger:#b42318;
+
+    --header:68px;
+
+    --container:1320px;
+
+    --shadow:0 8px 28px rgba(20,25,22,.06);
+
+    --radius:12px;
+    --radius-small:8px;
+}
+
+[data-theme="dark"]{
+    --bg:#101211;
+    --surface:#171a18;
+    --surface-soft:#202421;
+    --surface-hover:#282c29;
+
+    --text:#f5f5f2;
+    --text-soft:#deded9;
+    --muted:#989b96;
+
+    --border:#303530;
+    --border-dark:#404640;
+
+    --accent:#8dbca7;
+    --accent-light:#172a21;
+    --accent-dark:#b6d7c5;
+
+    --gold:#d0ad70;
+
+    --shadow:0 12px 35px rgba(0,0,0,.24);
+}
+
+[data-accent="purple"]{
+    --accent:#6941c6;
+    --accent-light:#f0ebff;
+    --accent-dark:#4d2d96;
+}
+
+[data-accent="green"]{
+    --accent:#166534;
+    --accent-light:#eaf7ee;
+    --accent-dark:#0e4422;
+}
+
+[data-theme="dark"][data-accent="purple"]{
+    --accent:#b692f6;
+    --accent-light:#251b38;
+    --accent-dark:#d5bdff;
+}
+
+[data-theme="dark"][data-accent="green"]{
+    --accent:#63b77a;
+    --accent-light:#172c1c;
+    --accent-dark:#8bd49e;
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size:14px;
+    line-height:1.5;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+img{
+    display:block;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header{
+    height:var(--header);
+
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:rgba(248,248,246,.94);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    border-bottom:1px solid var(--border);
+}
+
+[data-theme="dark"] .header{
+    background:rgba(16,18,17,.94);
+}
+
+.header-inner{
+    width:100%;
+    max-width:var(--container);
+    height:100%;
+
+    margin:auto;
+    padding:0 28px;
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+
+/* menu button */
+
+.icon-btn{
+    width:34px;
+    height:34px;
+
+    border:1px solid transparent;
+    background:transparent;
+    color:var(--text);
+
+    border-radius:7px;
+
+    display:grid;
+    place-items:center;
+
+    transition:
+        background .16s ease,
+        border-color .16s ease;
+}
+
+.icon-btn:hover{
+    background:var(--surface);
+    border-color:var(--border);
+}
+
+.icon-btn svg{
+    width:18px;
+    height:18px;
+}
+
+
+/* brand */
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    white-space:nowrap;
+
+    font-size:14px;
+    font-weight:650;
+
+    letter-spacing:-.01em;
+}
+
+.brand-mark{
+    width:32px;
+    height:32px;
+
+    border-radius:7px;
+
+    background:var(--accent);
+    color:white;
+
+    display:grid;
+    place-items:center;
+
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.04em;
+}
+
+
+/* search */
+
+.search-wrap{
+    position:relative;
+
+    width:min(410px,42vw);
+
+    margin-left:26px;
+}
+
+.search{
+    width:100%;
+    height:38px;
+
+    border:1px solid var(--border);
+    border-radius:7px;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    padding:0 42px;
+
+    outline:none;
+
+    font-size:13px;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
+}
+
+.search::placeholder{
+    color:#9a9a94;
+}
+
+.search:focus{
+    border-color:var(--accent);
+
+    box-shadow:
+        0 0 0 3px
+        color-mix(
+            in srgb,
+            var(--accent) 10%,
+            transparent
+        );
+}
+
+.search-icon{
+    position:absolute;
+
+    left:13px;
+    top:9px;
+
+    color:var(--muted);
+
+    pointer-events:none;
+
+    font-size:16px;
+}
+
+.search-kbd{
+    position:absolute;
+
+    right:9px;
+    top:9px;
+
+    border:1px solid var(--border);
+
+    border-radius:4px;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    padding:1px 5px;
+
+    background:var(--surface-soft);
+}
+
+.header-spacer{
+    flex:1;
+}
+
+
+/* profile */
+
+.profile-btn{
+    border:1px solid transparent;
+
+    background:transparent;
+
+    border-radius:20px;
+
+    padding:3px 7px 3px 3px;
+
+    color:var(--text);
+
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    transition:.15s ease;
+}
+
+.profile-btn:hover,
+.profile-btn.active{
+    background:var(--surface);
+    border-color:var(--border);
+}
+
+.avatar{
+    width:31px;
+    height:31px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    background:var(--surface-soft);
+
+    border:1px solid var(--border);
+
+    display:grid;
+    place-items:center;
+
+    font-weight:700;
+    font-size:10px;
+
+    flex:none;
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.arrow{
+    color:var(--muted);
+    font-size:12px;
+}
+
+
+/* =========================================================
+   PROFILE DROPDOWN
+   ========================================================= */
+
+.dropdown{
+    position:fixed;
+
+    right:max(22px,calc((100vw - var(--container))/2 + 28px));
+    top:59px;
+
+    width:280px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    box-shadow:var(--shadow);
+
+    display:none;
+
+    z-index:2000;
+
+    overflow:hidden;
+}
+
+.dropdown.open{
+    display:block;
+}
+
+.drop-head{
+    padding:15px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.drop-head .avatar{
+    width:40px;
+    height:40px;
+}
+
+.drop-name{
+    font-weight:650;
+    font-size:13px;
+}
+
+.drop-email{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:2px;
+
+    overflow-wrap:anywhere;
+}
+
+.menu{
+    padding:7px;
+}
+
+.menu-item{
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--text);
+
+    text-align:left;
+
+    padding:9px 10px;
+
+    border-radius:6px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font-size:13px;
+}
+
+.menu-item:hover{
+    background:var(--surface-soft);
+}
+
+.menu-divider{
+    height:1px;
+    background:var(--border);
+    margin:6px 0;
+}
+
+.danger{
+    color:var(--danger);
+}
+
+
+/* =========================================================
+   DRAWER
+   ========================================================= */
+
+.drawer-overlay{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.28);
+
+    z-index:1500;
+
+    display:none;
+}
+
+.drawer-overlay.open{
+    display:block;
+}
+
+.drawer{
+    position:fixed;
+
+    left:0;
+    top:0;
+    bottom:0;
+
+    width:300px;
+
+    background:var(--surface);
+
+    border-right:1px solid var(--border);
+
+    z-index:1600;
+
+    transform:translateX(-100%);
+
+    transition:transform .2s ease;
+
+    overflow:auto;
+}
+
+.drawer.open{
+    transform:translateX(0);
+}
+
+.drawer-head{
+    height:var(--header);
+
+    border-bottom:1px solid var(--border);
+
+    padding:0 18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.drawer-title{
+    font-weight:650;
+    font-size:13px;
+}
+
+.drawer-body{
+    padding:18px 14px;
+}
+
+.nav-label{
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.11em;
+
+    color:var(--muted);
+
+    font-weight:700;
+
+    padding:8px 10px;
+
+    margin-top:3px;
+}
+
+.nav-item{
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--text);
+
+    padding:9px 10px;
+
+    border-radius:6px;
+
+    text-align:left;
+
+    display:flex;
+
+    gap:10px;
+
+    align-items:center;
+
+    font-size:13px;
+
+    transition:.15s ease;
+}
+
+.nav-item:hover,
+.nav-item.active{
+    background:var(--surface-soft);
+}
+
+.nav-item.active{
+    color:var(--accent);
+
+    box-shadow:
+        inset 2px 0 var(--accent);
+}
+
+.nav-divider{
+    height:1px;
+
+    background:var(--border);
+
+    margin:13px 5px;
+}
+
+
+/* =========================================================
+   MAIN
+   ========================================================= */
+
+.app-main{
+    width:100%;
+    max-width:var(--container);
+
+    margin:auto;
+
+    padding:48px 28px 62px;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:30px;
+
+    align-items:flex-end;
+
+    padding-bottom:30px;
+
+    border-bottom:1px solid var(--border);
+
+    margin-bottom:30px;
+}
+
+.eyebrow{
+    font-size:10px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.13em;
+
+    color:var(--accent);
+
+    font-weight:700;
+
+    margin-bottom:10px;
+}
+
+.hero h1{
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:clamp(31px,4vw,48px);
+
+    font-weight:500;
+
+    letter-spacing:-.035em;
+
+    line-height:1.06;
+
+    margin:0 0 10px;
+}
+
+.hero p{
+    margin:0;
+
+    color:var(--muted);
+
+    max-width:610px;
+
+    line-height:1.65;
+
+    font-size:13px;
+}
+
+.hero-actions{
+    display:flex;
+
+    gap:8px;
+
+    flex:none;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn{
+    border:1px solid var(--border);
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    border-radius:6px;
+
+    padding:8px 13px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    transition:.15s ease;
+}
+
+.btn:hover{
+    background:var(--surface-soft);
+
+    border-color:var(--border-dark);
+}
+
+.btn.primary{
+    background:var(--accent);
+
+    color:#fff;
+
+    border-color:var(--accent);
+}
+
+.btn.primary:hover{
+    background:var(--accent-dark);
+
+    border-color:var(--accent-dark);
+}
+
+
+/* =========================================================
+   SECTION TITLES
+   ========================================================= */
+
+.section-title{
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.1em;
+
+    color:var(--text);
+
+    font-weight:700;
+
+    margin:0 0 12px;
+}
+
+.section-title span{
+    text-transform:none;
+
+    letter-spacing:0;
+
+    font-weight:400;
+
+    color:var(--muted);
+
+    margin-left:6px;
+}
+
+
+/* =========================================================
+   CATEGORY GRID
+   ========================================================= */
+
+.category-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,minmax(0,1fr));
+
+    gap:12px;
+
+    margin-bottom:38px;
+}
+
+.workspace-card{
+    position:relative;
+
+    min-height:145px;
+
+    text-align:left;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    padding:18px 18px 16px;
+
+    overflow:hidden;
+
+    color:var(--text);
+
+    transition:
+        transform .16s ease,
+        border-color .16s ease,
+        box-shadow .16s ease,
+        background .16s ease;
+}
+
+.workspace-card:hover{
+    transform:translateY(-2px);
+
+    border-color:
+        color-mix(
+            in srgb,
+            var(--accent) 40%,
+            var(--border)
+        );
+
+    box-shadow:var(--shadow);
+}
+
+.workspace-card::after{
+    content:"";
+
+    position:absolute;
+
+    width:120px;
+    height:120px;
+
+    right:-50px;
+    bottom:-60px;
+
+    border-radius:50%;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--card-accent,var(--accent)) 7%,
+            transparent
+        );
+
+    pointer-events:none;
+}
+
+.card-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.card-icon{
+    width:35px;
+    height:35px;
+
+    border:1px solid var(--border);
+
+    border-radius:7px;
+
+    display:grid;
+    place-items:center;
+
+    background:var(--surface-soft);
+
+    color:var(--card-accent,var(--accent));
+
+    font-size:15px;
+
+    position:relative;
+    z-index:1;
+}
+
+.card-arrow{
+    color:var(--muted);
+
+    font-size:17px;
+
+    transition:
+        transform .15s ease,
+        color .15s ease;
+}
+
+.workspace-card:hover .card-arrow{
+    color:var(--card-accent,var(--accent));
+
+    transform:translateX(3px);
+}
+
+.workspace-card h3{
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:18px;
+
+    font-weight:500;
+
+    letter-spacing:-.015em;
+
+    margin:17px 0 5px;
+
+    position:relative;
+    z-index:1;
+}
+
+.workspace-card p{
+    font-size:11px;
+
+    color:var(--muted);
+
+    line-height:1.55;
+
+    margin:0 0 13px;
+
+    max-width:270px;
+
+    position:relative;
+    z-index:1;
+}
+
+.count{
+    font-size:10px;
+
+    color:var(--muted);
+
+    position:relative;
+    z-index:1;
+}
+
+.count strong{
+    color:var(--text);
+
+    font-size:12px;
+}
+
+
+/* card accents */
+
+.workspace-card.student-card{
+    --card-accent:#1d5fa7;
+}
+
+.workspace-card.alumni-card{
+    --card-accent:#28734a;
+}
+
+.workspace-card.academic-card{
+    --card-accent:#9a712f;
+}
+
+.workspace-card.resource-card{
+    --card-accent:#7351a7;
+}
+
+
+/* =========================================================
+   DIRECTORY PANEL
+   ========================================================= */
+
+.table-panel{
+    margin-top:0;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:10px;
+
+    overflow:hidden;
+}
+
+.panel-head{
+    padding:14px 17px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+}
+
+.panel-title{
+    font-size:13px;
+
+    font-weight:650;
+}
+
+.panel-sub{
+    color:var(--muted);
+
+    font-size:11px;
+
+    margin-top:2px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.directory{
+    width:100%;
+
+    border-collapse:collapse;
+}
+
+.directory th{
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+    color:var(--muted);
+
+    font-weight:700;
+
+    text-align:left;
+
+    background:var(--surface-soft);
+}
+
+.directory th,
+.directory td{
+    padding:11px 15px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.directory tbody tr{
+    transition:background .12s ease;
+}
+
+.directory tbody tr:hover{
+    background:var(--surface-soft);
+}
+
+.directory tr:last-child td{
+    border-bottom:0;
+}
+
+.person{
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+}
+
+.person .avatar{
+    width:30px;
+    height:30px;
+}
+
+.person-name{
+    font-weight:600;
+
+    font-size:12px;
+}
+
+.person-meta{
+    font-size:10px;
+
+    color:var(--muted);
+
+    margin-top:1px;
+}
+
+.badge{
+    display:inline-flex;
+
+    padding:3px 7px;
+
+    border:1px solid var(--border);
+
+    border-radius:99px;
+
+    font-size:9px;
+
+    color:var(--muted);
+
+    background:var(--surface);
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty{
+    padding:38px 20px;
+
+    text-align:center;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer{
+    width:100%;
+
+    border-top:1px solid var(--border);
+
+    max-width:var(--container);
+
+    margin:auto;
+
+    padding:23px 28px 30px;
+
+    color:var(--muted);
+
+    font-size:10px;
+}
+
+.footer-inner{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+    flex-wrap:wrap;
+}
+
+.footer-brand{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+}
+
+.footer-logo{
+    width:23px;
+    height:23px;
+
+    border-radius:5px;
+
+    background:var(--accent);
+
+    color:#fff;
+
+    display:grid;
+
+    place-items:center;
+
+    font-size:8px;
+
+    font-weight:800;
+}
+
+.footer-links{
+    display:flex;
+
+    gap:17px;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+}
+
+.footer-links a:hover{
+    color:var(--accent);
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.46);
+
+    z-index:4000;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+}
+
+.modal.open{
+    display:flex;
+}
+
+.modal-card{
+    width:min(650px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.18);
+}
+
+.modal-head{
+    padding:14px 17px;
+
+    border-bottom:1px solid var(--border);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+}
+
+.modal-head h2{
+    font-size:13px;
+
+    margin:0;
+
+    font-weight:650;
+}
+
+.close{
+    width:30px;
+    height:30px;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--muted);
+
+    font-size:20px;
+
+    border-radius:6px;
+}
+
+.close:hover{
+    background:var(--surface-soft);
+
+    color:var(--text);
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.profile-view{
+    padding:20px;
+}
+
+.profile-cover{
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+    padding-bottom:18px;
+
+    border-bottom:1px solid var(--border);
+}
+
+.profile-view .big-avatar{
+    width:74px;
+    height:74px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    border:2px solid var(--surface);
+
+    outline:1px solid var(--border);
+
+    background:var(--surface-soft);
+
+    flex:none;
+}
+
+.big-avatar img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.profile-view h3{
+    margin:0 0 4px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size:23px;
+
+    font-weight:500;
+
+    letter-spacing:-.02em;
+}
+
+.profile-view .role{
+    color:var(--accent);
+
+    font-size:11px;
+
+    font-weight:650;
+
+    text-transform:uppercase;
+
+    letter-spacing:.06em;
+}
+
+.view-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:8px;
+
+    margin-top:17px;
+}
+
+.view-field{
+    padding:10px 11px;
+
+    background:var(--surface-soft);
+
+    border:1px solid var(--border);
+
+    border-radius:7px;
+}
+
+.view-field label{
+    display:block;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.07em;
+
+    margin-bottom:4px;
+
+    font-weight:700;
+}
+
+.view-field div{
+    font-size:12px;
+
+    overflow-wrap:anywhere;
+}
+
+.section-mini{
+    margin-top:18px;
+
+    margin-bottom:7px;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.09em;
+
+    color:var(--muted);
+
+    font-weight:700;
+}
+
+.muted-inline{
+    font-size:11px;
+
+    color:var(--muted);
+}
+
+.accent-link{
+    color:var(--accent);
+
+    overflow-wrap:anywhere;
+}
+
+.private-note{
+    margin-top:16px;
+
+    padding:10px;
+
+    border:1px solid var(--border);
+
+    border-radius:7px;
+
+    background:var(--accent-light);
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    line-height:1.5;
+}
+
+.view-bio{
+    margin-top:12px;
+
+    padding:12px;
+
+    border:1px solid var(--border);
+
+    border-radius:7px;
+
+    line-height:1.55;
+
+    white-space:pre-wrap;
+
+    color:var(--muted);
+
+    font-size:12px;
+}
+
+.socials{
+    display:flex;
+
+    gap:7px;
+
+    flex-wrap:wrap;
+
+    margin-top:10px;
+}
+
+.socials a{
+    border:1px solid var(--border);
+
+    padding:5px 8px;
+
+    border-radius:5px;
+
+    font-size:10px;
+
+    background:var(--surface);
+}
+
+.socials a:hover{
+    border-color:var(--accent);
+
+    color:var(--accent);
+}
+
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
+
+.search-results{
+    position:absolute;
+
+    top:44px;
+
+    left:0;
+    right:0;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:8px;
+
+    box-shadow:var(--shadow);
+
+    display:none;
+
+    overflow:hidden;
+
+    z-index:3000;
+}
+
+.search-results.open{
+    display:block;
+}
+
+.search-result{
+    width:100%;
+
+    border:0;
+
+    background:transparent;
+
+    color:var(--text);
+
+    padding:10px 12px;
+
+    display:flex;
+
+    gap:9px;
+
+    text-align:left;
+}
+
+.search-result:hover{
+    background:var(--surface-soft);
+}
+
+.search-result .avatar{
+    width:30px;
+    height:30px;
+}
+
+.search-result small{
+    display:block;
+
+    color:var(--muted);
+
+    margin-top:2px;
+
+    font-size:10px;
+}
+
+.result-head{
+    padding:8px 12px;
+
+    border-bottom:1px solid var(--border);
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.08em;
+
+    color:var(--muted);
+
+    font-weight:700;
+}
+
+
+/* =========================================================
+   MOTION
+   ========================================================= */
+
+.reduce-motion *{
+    transition:none!important;
+    animation:none!important;
+    scroll-behavior:auto!important;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1100px){
+
+    .category-grid{
+        grid-template-columns:
+            repeat(2,minmax(0,1fr));
+    }
+
+    .app-main{
+        padding-top:38px;
+    }
+}
+
+
+@media(max-width:760px){
+
+    :root{
+        --header:60px;
+    }
+
+    .header-inner{
+        padding:0 14px;
+
+        gap:9px;
+    }
+
+    .brand-text{
+        display:none;
+    }
+
+    .search-wrap{
+        flex:1;
+
+        width:auto;
+
+        margin-left:0;
+    }
+
+    .search-kbd{
+        display:none;
+    }
+
+    .profile-btn .arrow{
+        display:none;
+    }
+
+    .app-main{
+        padding:
+            30px 15px
+            45px;
+    }
+
+    .hero{
+        display:block;
+
+        padding-bottom:24px;
+
+        margin-bottom:25px;
+    }
+
+    .hero h1{
+        font-size:34px;
+    }
+
+    .hero-actions{
+        margin-top:18px;
+    }
+
+    .category-grid{
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:9px;
+
+        margin-bottom:30px;
+    }
+
+    .workspace-card{
+        min-height:140px;
+
+        padding:15px;
+    }
+
+    .workspace-card h3{
+        font-size:16px;
+    }
+
+    .workspace-card p{
+        font-size:10px;
+    }
+
+    .directory th:nth-child(3),
+    .directory td:nth-child(3){
+        display:none;
+    }
+
+    .footer{
+        padding-left:15px;
+        padding-right:15px;
+    }
+
+    .footer-inner{
+        justify-content:center;
+    }
+
+    .dropdown{
+        right:10px;
+
+        top:53px;
+
+        width:calc(100vw - 20px);
+    }
+}
+
+
+@media(max-width:520px){
+
+    .category-grid{
+        grid-template-columns:1fr;
+    }
+
+    .workspace-card{
+        min-height:125px;
+    }
+
+    .view-grid{
+        grid-template-columns:1fr;
+    }
+
+    .drawer{
+        width:min(300px,88vw);
+    }
+
+    .directory th,
+    .directory td{
+        padding:
+            10px 9px;
+    }
+
+    .directory th:nth-child(2),
+    .directory td:nth-child(2){
+        display:none;
+    }
+
+    .panel-head{
+        align-items:flex-start;
+    }
+
+    .hero-actions{
+        width:100%;
+    }
+
+    .hero-actions .btn{
+        flex:1;
+    }
+}
+
+
+/* =========================================================
+   SMALL SCREEN HEADER
+   ========================================================= */
+
+@media(max-width:420px){
+
+    .header-inner{
+        gap:6px;
+    }
+
+    .icon-btn{
+        width:32px;
+        height:32px;
+    }
+
+    .brand-mark{
+        width:30px;
+        height:30px;
+    }
+
+    .search{
+        height:34px;
+
+        padding-left:36px;
+    }
+
+    .search-icon{
+        top:7px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <button
+            class="icon-btn"
+            id="menuButton"
+            aria-label="Open navigation"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+            >
+                <path d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+        </button>
+
+
+        <a class="brand" href="dashboard.html">
+
+            <span class="brand-mark">SG</span>
+
+            <span class="brand-text">
+                Student Guidance Portal
+            </span>
+
+        </a>
+
+
+        <div class="search-wrap">
+
+            <span class="search-icon">⌕</span>
+
+            <input
+                id="studentSearch"
+                class="search"
+                placeholder="Search students, alumni, degrees..."
+                autocomplete="off"
+            >
+
+            <span class="search-kbd">/</span>
+
+            <div
+                id="searchResults"
+                class="search-results"
+            ></div>
+
+        </div>
+
+
+        <div class="header-spacer"></div>
+
+
+        <button
+            class="profile-btn"
+            id="profileButton"
+            aria-expanded="false"
+        >
+
+            <span
+                class="avatar"
+                id="headerAvatar"
+            >
+                ?
+            </span>
+
+            <span class="arrow">⌄</span>
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     PROFILE DROPDOWN
+     ===================================================== -->
+
+<div
+    class="dropdown"
+    id="profileMenu"
+>
+
+    <div class="drop-head">
+
+        <span
+            class="avatar"
+            id="menuAvatar"
+        >
+            ?
+        </span>
+
+        <div>
+
+            <div
+                class="drop-name"
+                id="menuName"
+            >
+                Loading...
+            </div>
+
+            <div
+                class="drop-email"
+                id="menuEmail"
+            >
+                —
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="menu">
+
+        <button
+            class="menu-item"
+            onclick="openOwnProfile()"
+        >
+            ◉ &nbsp; View profile
+        </button>
+
+
+        <button
+            class="menu-item"
+            onclick="location.href='profile.html'"
+        >
+            ✎ &nbsp; Edit profile
+        </button>
+
+
+        <button
+            class="menu-item"
+            onclick="location.href='settings.html'"
+        >
+            ⚙ &nbsp; Settings
+        </button>
+
+
+        <div class="menu-divider"></div>
+
+
+        <button
+            class="menu-item danger"
+            id="logoutButton"
+        >
+            ↪ &nbsp; Sign out
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     DRAWER
+     ===================================================== -->
+
+<div
+    class="drawer-overlay"
+    id="drawerOverlay"
+></div>
+
+
+<aside
+    class="drawer"
+    id="sideDrawer"
+>
+
+    <div class="drawer-head">
+
+        <span class="drawer-title">
+            Student Guidance Portal
+        </span>
+
+        <button
+            class="icon-btn"
+            id="closeDrawer"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="drawer-body">
+
+        <div class="nav-label">
+            Workspace
+        </div>
+
+
+        <button
+            class="nav-item active"
+            onclick="closeNavigation();window.scrollTo({top:0,behavior:'smooth'})"
+        >
+            ⌂
+            <span>Overview</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="closeNavigation();focusSearch()"
+        >
+            ⌕
+            <span>Search directory</span>
+        </button>
+
+
+        <div class="nav-divider"></div>
+
+
+        <div class="nav-label">
+            People
+        </div>
+
+
+        <button
+            class="nav-item"
+            onclick="searchByType('Current Student')"
+        >
+            ♙
+            <span>Current students</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="searchByType('Alumni')"
+        >
+            ♧
+            <span>Alumni</span>
+        </button>
+
+
+        <div class="nav-divider"></div>
+
+
+        <div class="nav-label">
+            Academics
+        </div>
+
+
+        <button
+            class="nav-item"
+            onclick="showCategory('academic')"
+        >
+            ▤
+            <span>Academic profiles</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="showCategory('resources')"
+        >
+            ▦
+            <span>Academic resources</span>
+        </button>
+
+
+        <div class="nav-divider"></div>
+
+
+        <div class="nav-label">
+            Account
+        </div>
+
+
+        <button
+            class="nav-item"
+            onclick="openOwnProfile()"
+        >
+            ◉
+            <span>My profile</span>
+        </button>
+
+
+        <button
+            class="nav-item"
+            onclick="location.href='settings.html'"
+        >
+            ⚙
+            <span>Settings</span>
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN
+     ===================================================== -->
+
+<main class="app-main">
+
+
+    <!-- HERO -->
+
+    <div class="hero">
+
+        <div>
+
+            <div class="eyebrow">
+                Workspace / Overview
+            </div>
+
+
+            <h1 id="welcomeTitle">
+                Student Guidance Portal
+            </h1>
+
+
+            <p>
+                A structured place to discover students,
+                connect with alumni, and explore academic
+                information.
+            </p>
+
+        </div>
+
+
+        <div class="hero-actions">
+
+            <button
+                class="btn"
+                onclick="openOwnProfile()"
+            >
+                View profile
+            </button>
+
+
+            <button
+                class="btn primary"
+                onclick="location.href='profile.html'"
+            >
+                Edit profile
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- DIRECTORY -->
+
+    <div class="section-title">
+
+        Directory
+
+        <span>
+            Browse by category
+        </span>
+
+    </div>
+
+
+    <section class="category-grid">
+
+
+        <!-- CURRENT STUDENTS -->
+
+        <button
+            class="workspace-card student-card"
+            onclick="searchByType('Current Student')"
+        >
+
+            <div class="card-top">
+
+                <span class="card-icon">
+                    ♙
+                </span>
+
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <h3>
+                Current students
+            </h3>
+
+
+            <p>
+                Browse students who currently belong
+                to the portal and open their profiles.
+            </p>
+
+
+            <div class="count">
+
+                <strong id="studentCount">
+                    —
+                </strong>
+
+                profiles
+
+            </div>
+
+        </button>
+
+
+
+        <!-- ALUMNI -->
+
+        <button
+            class="workspace-card alumni-card"
+            onclick="searchByType('Alumni')"
+        >
+
+            <div class="card-top">
+
+                <span class="card-icon">
+                    ♧
+                </span>
+
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <h3>
+                Alumni
+            </h3>
+
+
+            <p>
+                Discover alumni profiles, education,
+                skills, and professional backgrounds.
+            </p>
+
+
+            <div class="count">
+
+                <strong id="alumniCount">
+                    —
+                </strong>
+
+                profiles
+
+            </div>
+
+        </button>
+
+
+
+        <!-- ACADEMIC -->
+
+        <button
+            class="workspace-card academic-card"
+            onclick="showCategory('academic')"
+        >
+
+            <div class="card-top">
+
+                <span class="card-icon">
+                    ▤
+                </span>
+
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <h3>
+                Academic profiles
+            </h3>
+
+
+            <p>
+                View the complete academic directory
+                across current students and alumni.
+            </p>
+
+
+            <div class="count">
+
+                <strong id="academicCount">
+                    —
+                </strong>
+
+                profiles
+
+            </div>
+
+        </button>
+
+
+
+        <!-- RESOURCES -->
+
+        <button
+            class="workspace-card resource-card"
+            onclick="showCategory('resources')"
+        >
+
+            <div class="card-top">
+
+                <span class="card-icon">
+                    ▦
+                </span>
+
+                <span class="card-arrow">
+                    →
+                </span>
+
+            </div>
+
+
+            <h3>
+                Academic resources
+            </h3>
+
+
+            <p>
+                Keep this area for future guides,
+                programs, scholarships, and resources.
+            </p>
+
+
+            <div class="count">
+                Coming soon
+            </div>
+
+        </button>
+
+    </section>
+
+
+
+    <!-- DIRECTORY TABLE -->
+
+    <div
+        class="section-title"
+        id="directoryTitle"
+    >
+
+        People directory
+
+        <span>
+            recent profiles
+        </span>
+
+    </div>
+
+
+    <section class="table-panel">
+
+        <div class="panel-head">
+
+            <div>
+
+                <div class="panel-title">
+                    Profile directory
+                </div>
+
+                <div class="panel-sub">
+                    Select a person to open a read-only profile
+                </div>
+
+            </div>
+
+
+            <button
+                class="btn"
+                onclick="loadDirectory()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div id="directoryContainer">
+
+            <div class="empty">
+                Loading profiles…
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer class="footer">
+
+    <div class="footer-inner">
+
+        <div class="footer-brand">
+
+            <span class="footer-logo">
+                SG
+            </span>
+
+            <span>
+                © 2026 Student Guidance Portal
+            </span>
+
+        </div>
+
+
+        <nav
+            class="footer-links"
+            aria-label="Footer"
+        >
+
+            <a href="#">
+                Terms
+            </a>
+
+            <a href="#">
+                Privacy
+            </a>
+
+            <a href="#">
+                Security
+            </a>
+
+            <a href="settings.html">
+                Settings
+            </a>
+
+            <a href="#">
+                Help
+            </a>
+
+            <a href="#">
+                Contact
+            </a>
+
+        </nav>
+
+    </div>
+
+</footer>
+
+
+
+<!-- =====================================================
+     PROFILE MODAL
+     ===================================================== -->
+
+<div
+    class="modal"
+    id="profileModal"
+>
+
+    <div class="modal-card">
+
+
+        <div class="modal-head">
+
+            <h2>
+                Profile
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeProfileModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="profile-view">
+
+
+            <div class="profile-cover">
+
+                <div
+                    class="big-avatar"
+                    id="viewAvatar"
+                ></div>
+
+
+                <div>
+
+                    <h3 id="viewName">
+                        —
+                    </h3>
+
+                    <div
+                        class="role"
+                        id="viewRole"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="view-grid">
+
+
+                <div class="view-field">
+
+                    <label>
+                        Legal name
+                    </label>
+
+                    <div id="viewLegalName">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Account type
+                    </label>
+
+                    <div id="viewAccountType">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Degree
+                    </label>
+
+                    <div id="viewDegree">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Employment
+                    </label>
+
+                    <div id="viewEmployment">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Date of birth
+                    </label>
+
+                    <div id="viewDob">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Gender
+                    </label>
+
+                    <div id="viewGender">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Phone
+                    </label>
+
+                    <div id="viewPhone">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="view-field">
+
+                    <label>
+                        Address type
+                    </label>
+
+                    <div id="viewAddressType">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="view-field"
+                    style="grid-column:1/-1"
+                >
+
+                    <label>
+                        Address
+                    </label>
+
+                    <div id="viewAddress">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="view-field"
+                    style="grid-column:1/-1"
+                >
+
+                    <label>
+                        Tech stack
+                    </label>
+
+                    <div id="viewTechStack">
+                        —
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="view-field"
+                    style="grid-column:1/-1"
+                >
+
+                    <label>
+                        Custom skills
+                    </label>
+
+                    <div id="viewCustomSkills">
+                        —
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+                class="view-bio"
+                id="viewBio"
+            >
+                No bio provided.
+            </div>
+
+
+
+            <div class="section-mini">
+                Links and profile extras
+            </div>
+
+
+            <div
+                class="socials"
+                id="viewLinks"
+            ></div>
+
+
+            <div
+                class="view-grid"
+                id="viewExtras"
+            ></div>
+
+
+            <div class="private-note">
+
+                Sensitive identity numbers such as Aadhaar
+                are intentionally not displayed in the public
+                profile view.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+const SUPABASE_URL =
+    'https://kksarduvycfebklmhxfb.supabase.co';
+
+
+const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+let currentUser = null;
+let currentProfile = null;
+
+
+const $ = id =>
+    document.getElementById(id);
+
+
+const esc = value =>
+    String(value ?? '').replace(
+        /[&<>"']/g,
+        char => ({
+            '&':'&amp;',
+            '<':'&lt;',
+            '>':'&gt;',
+            '"':'&quot;',
+            "'":'&#039;'
+        }[char])
+    );
+
+
+function avatarUrl(profile,id){
+
+    return profile?.avatar_url ||
+        `https://api.dicebear.com/7.x/identicon/svg?seed=${encodeURIComponent(
+            id || profile?.id || 'student'
+        )}&backgroundColor=f6f8fa`;
+
+}
+
+
+function avatarHTML(
+    profile,
+    id,
+    cls='avatar'
+){
+
+    return `
+        <span class="${cls}">
+            <img
+                src="${esc(avatarUrl(profile,id))}"
+                alt=""
+            >
+        </span>
+    `;
+
+}
+
+
+function setAvatar(
+    id,
+    profile,
+    userId
+){
+
+    const element = $(id);
+
+    if(!element) return;
+
+    element.innerHTML = `
+        <img
+            src="${esc(avatarUrl(profile,userId))}"
+            alt=""
+        >
+    `;
+
+}
+
+
+/* =====================================================
+   SETTINGS
+   ===================================================== */
+
+function applySettings(){
+
+    let settings = {};
+
+    try{
+
+        settings = JSON.parse(
+            localStorage.getItem('sgp-settings-v1') || '{}'
+        );
+
+    }catch{}
+
+    let theme =
+        settings.theme || 'light';
+
+
+    if(theme === 'system'){
+
+        theme =
+            matchMedia(
+                '(prefers-color-scheme: dark)'
+            ).matches
+                ? 'dark'
+                : 'light';
+
+    }
+
+
+    document.documentElement.dataset.theme =
+        theme;
+
+
+    document.documentElement.dataset.accent =
+        settings.accent || 'green';
+
+
+    document.documentElement.dataset.density =
+        settings.density || 'comfortable';
+
+
+    document.documentElement.classList.toggle(
+        'reduce-motion',
+        !!settings.reduceMotion
+    );
+
+}
+
+
+applySettings();
+
+
+window.addEventListener(
+    'storage',
+    event => {
+
+        if(
+            event.key === 'sgp-settings-v1'
+        ){
+
+            applySettings();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   DASHBOARD
+   ===================================================== */
+
+async function loadDashboard(){
+
+    const {
+        data:{user},
+        error:authError
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if(authError || !user){
+
+        location.href =
+            'index.html';
+
+        return;
+
+    }
+
+
+    currentUser = user;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id',user.id)
+            .single();
+
+
+    if(
+        error ||
+        !data ||
+        !data.account_type
+    ){
+
+        location.href =
+            'profile.html';
+
+        return;
+
+    }
+
+
+    currentProfile = data;
+
+
+    $('welcomeTitle').textContent =
+        `Welcome back, ${data.full_name || 'Student'}`;
+
+
+    $('menuName').textContent =
+        data.full_name || 'Student';
+
+
+    $('menuEmail').textContent =
+        user.email || '';
+
+
+    setAvatar(
+        'headerAvatar',
+        data,
+        user.id
+    );
+
+
+    setAvatar(
+        'menuAvatar',
+        data,
+        user.id
+    );
+
+
+    await loadCounts();
+
+    await loadDirectory();
+
+}
+
+
+/* =====================================================
+   COUNTS
+   ===================================================== */
+
+async function loadCounts(){
+
+    const students =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                'id',
+                {
+                    count:'exact',
+                    head:true
+                }
+            )
+            .eq(
+                'account_type',
+                'Current Student'
+            );
+
+
+    const alumni =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                'id',
+                {
+                    count:'exact',
+                    head:true
+                }
+            )
+            .eq(
+                'account_type',
+                'Alumni'
+            );
+
+
+    const academic =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                'id',
+                {
+                    count:'exact',
+                    head:true
+                }
+            );
+
+
+    $('studentCount').textContent =
+        students.count ?? '—';
+
+
+    $('alumniCount').textContent =
+        alumni.count ?? '—';
+
+
+    $('academicCount').textContent =
+        academic.count ?? '—';
+
+}
+
+
+/* =====================================================
+   DIRECTORY
+   ===================================================== */
+
+async function loadDirectory(type=null){
+
+    const container =
+        $('directoryContainer');
+
+
+    container.innerHTML =
+        '<div class="empty">Loading profiles…</div>';
+
+
+    let query =
+        supabaseClient
+            .from('profiles')
+            .select(
+                `
+                id,
+                full_name,
+                degree,
+                current_employment,
+                account_type,
+                avatar_url
+                `
+            )
+            .order(
+                'full_name',
+                {
+                    ascending:true
+                }
+            )
+            .limit(8);
+
+
+    if(type){
+
+        query =
+            query.eq(
+                'account_type',
+                type
+            );
+
+    }
+
+
+    const {
+        data,
+        error
+    } = await query;
+
+
+    if(error){
+
+        container.innerHTML =
+            `
+            <div class="empty">
+                Directory is unavailable with the
+                current database permissions.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    if(!data?.length){
+
+        container.innerHTML =
+            `
+            <div class="empty">
+                No profiles found.
+            </div>
+            `;
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <table class="directory">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Person
+                    </th>
+
+                    <th>
+                        Degree
+                    </th>
+
+                    <th>
+                        Employment
+                    </th>
+
+                    <th>
+                        Type
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                ${data.map(profile => `
+
+                    <tr>
+
+                        <td>
+
+                            <button
+                                class="person"
+                                style="
+                                    border:0;
+                                    background:none;
+                                    color:inherit;
+                                    padding:0;
+                                    text-align:left;
+                                "
+                                onclick="openProfile('${profile.id}')"
+                            >
+
+                                ${avatarHTML(
+                                    profile,
+                                    profile.id
+                                )}
+
+                                <span>
+
+                                    <span class="person-name">
+                                        ${esc(
+                                            profile.full_name ||
+                                            'Unnamed'
+                                        )}
+                                    </span>
+
+                                    <span class="person-meta">
+                                        Open profile
+                                    </span>
+
+                                </span>
+
+                            </button>
+
+                        </td>
+
+
+                        <td>
+                            ${esc(
+                                profile.degree ||
+                                '—'
+                            )}
+                        </td>
+
+
+                        <td>
+                            ${esc(
+                                profile.current_employment ||
+                                '—'
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <span class="badge">
+                                ${esc(
+                                    profile.account_type ||
+                                    '—'
+                                )}
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                `).join('')}
+
+            </tbody>
+
+        </table>
+
+    `;
+
+}
+
+
+/* =====================================================
+   PROFILE MODAL
+   ===================================================== */
+
+async function openProfile(id){
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id',id)
+            .single();
+
+
+    if(error || !data){
+
+        alert(
+            'This profile could not be loaded.'
+        );
+
+        return;
+
+    }
+
+
+    $('viewName').textContent =
+        data.full_name ||
+        'Unnamed profile';
+
+
+    $('viewRole').textContent =
+        data.account_type ||
+        'Student';
+
+
+    $('viewLegalName').textContent =
+        data.legal_name ||
+        data.full_name ||
+        '—';
+
+
+    $('viewAccountType').textContent =
+        data.account_type ||
+        '—';
+
+
+    $('viewDegree').textContent =
+        data.degree ||
+        '—';
+
+
+    $('viewEmployment').textContent =
+        data.current_employment ||
+        '—';
+
+
+    $('viewDob').textContent =
+        data.date_of_birth ||
+        '—';
+
+
+    $('viewGender').textContent =
+        data.gender ||
+        '—';
+
+
+    $('viewPhone').textContent =
+        data.phone ||
+        '—';
+
+
+    $('viewAddressType').textContent =
+        data.address_type ||
+        '—';
+
+
+    $('viewAddress').textContent =
+        data.address ||
+        '—';
+
+
+    $('viewTechStack').textContent =
+        data.tech_stack ||
+        '—';
+
+
+    $('viewCustomSkills').textContent =
+        data.custom_skills ||
+        '—';
+
+
+    $('viewBio').textContent =
+        data.bio ||
+        'No bio provided.';
+
+
+    $('viewAvatar').innerHTML = `
+
+        <img
+            src="${esc(
+                avatarUrl(data,id)
+            )}"
+            alt=""
+        >
+
+    `;
+
+
+    const links = [
+
+        [
+            'Website',
+            data.featured_website
+        ],
+
+        [
+            'LinkedIn',
+            data.social_linkedin
+        ],
+
+        [
+            'Instagram',
+            data.social_instagram
+        ],
+
+        [
+            'YouTube',
+            data.social_youtube
+        ],
+
+        [
+            'Twitter',
+            data.social_twitter
+        ],
+
+        [
+            'TikTok',
+            data.social_tiktok
+        ]
+
+    ].filter(
+        item => item[1]
+    );
+
+
+    $('viewLinks').innerHTML =
+        links.length
+
+        ? links.map(
+            ([label,url]) => `
+
+                <a
+                    href="${esc(url)}"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    ${esc(label)}
+                </a>
+
+            `
+        ).join('')
+
+        : `
+            <span class="muted-inline">
+                No social links added.
+            </span>
+        `;
+
+
+    const extras = [
+
+        [
+            'Buy Me a Coffee',
+            data.donate_buymeacoffee
+        ],
+
+        [
+            'PayPal',
+            data.donate_paypal
+        ],
+
+        [
+            'Patreon',
+            data.donate_patreon
+        ],
+
+        [
+            'Ko-fi',
+            data.donate_kofi
+        ]
+
+    ].filter(
+        item => item[1]
+    );
+
+
+    $('viewExtras').innerHTML =
+
+        extras.length
+
+        ? extras.map(
+            ([label,url]) => `
+
+                <div class="view-field">
+
+                    <label>
+                        ${esc(label)}
+                    </label>
+
+                    <div>
+
+                        <a
+                            class="accent-link"
+                            href="${esc(url)}"
+                            target="_blank"
+                            rel="noopener"
+                        >
+                            ${esc(url)}
+                        </a>
+
+                    </div>
+
+                </div>
+
+            `
+        ).join('')
+
+        : `
+
+            <div
+                class="view-field"
+                style="grid-column:1/-1"
+            >
+
+                <label>
+                    Support links
+                </label>
+
+                <div>
+                    —
+                </div>
+
+            </div>
+
+        `;
+
+
+    $('profileModal')
+        .classList
+        .add('open');
+
+}
+
+
+function openOwnProfile(){
+
+    if(currentUser){
+
+        openProfile(
+            currentUser.id
+        );
+
+    }
+
+}
+
+
+function closeProfileModal(){
+
+    $('profileModal')
+        .classList
+        .remove('open');
+
+}
+
+
+$('profileModal')
+    .addEventListener(
+        'click',
+        event => {
+
+            if(
+                event.target.id ===
+                'profileModal'
+            ){
+
+                closeProfileModal();
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   CATEGORY NAVIGATION
+   ===================================================== */
+
+function searchByType(type){
+
+    closeNavigation();
+
+
+    $('studentSearch').value =
+        '';
+
+
+    loadDirectory(type);
+
+
+    $('directoryTitle').textContent =
+        type === 'Current Student'
+            ? 'Current students'
+            : 'Alumni';
+
+
+    $('directoryTitle')
+        .scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+
+}
+
+
+function showCategory(type){
+
+    closeNavigation();
+
+
+    if(type === 'academic'){
+
+        $('directoryTitle').textContent =
+            'Academic profiles';
+
+
+        loadDirectory();
+
+    }
+
+    else{
+
+        $('directoryTitle').textContent =
+            'Academic resources';
+
+
+        $('directoryContainer').innerHTML = `
+
+            <div class="empty">
+
+                Academic resources will be added
+                here in a future module.
+
+                This space is intentionally reserved
+                for guides, scholarships, programs,
+                and other student resources.
+
+            </div>
+
+        `;
+
+    }
+
+
+    $('directoryTitle')
+        .scrollIntoView({
+            behavior:'smooth',
+            block:'start'
+        });
+
+}
+
+
+function focusSearch(){
+
+    closeNavigation();
+
+    $('studentSearch').focus();
+
+}
+
+
+function closeNavigation(){
+
+    $('sideDrawer')
+        .classList
+        .remove('open');
+
+
+    $('drawerOverlay')
+        .classList
+        .remove('open');
+
+
+    document.body.style.overflow =
+        '';
+
+}
+
+
+/* =====================================================
+   DRAWER
+   ===================================================== */
+
+$('menuButton').onclick = () => {
+
+    $('sideDrawer')
+        .classList
+        .add('open');
+
+
+    $('drawerOverlay')
+        .classList
+        .add('open');
+
+
+    document.body.style.overflow =
+        'hidden';
+
+};
+
+
+$('closeDrawer').onclick =
+    closeNavigation;
+
+
+$('drawerOverlay').onclick =
+    closeNavigation;
+
+
+/* =====================================================
+   PROFILE MENU
+   ===================================================== */
+
+$('profileButton').onclick =
+    event => {
+
+        event.stopPropagation();
+
+
+        const open =
+            $('profileMenu')
+                .classList
+                .toggle('open');
+
+
+        $('profileButton')
+            .classList
+            .toggle(
+                'active',
+                open
+            );
+
+
+        $('profileButton')
+            .setAttribute(
+                'aria-expanded',
+                open
+            );
+
+    };
+
+
+document.addEventListener(
+    'click',
+    event => {
+
+        if(
+            !$('profileMenu')
+                .contains(event.target)
+
+            &&
+
+            !$('profileButton')
+                .contains(event.target)
+        ){
+
+            $('profileMenu')
+                .classList
+                .remove('open');
+
+
+            $('profileButton')
+                .classList
+                .remove('active');
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   SEARCH
+   ===================================================== */
+
+let timer = null;
+
+
+$('studentSearch')
+    .addEventListener(
+        'input',
+        event => {
+
+            clearTimeout(timer);
+
+
+            const query =
+                event.target.value.trim();
+
+
+            if(query.length < 2){
+
+                $('searchResults')
+                    .classList
+                    .remove('open');
+
+                return;
+
+            }
+
+
+            timer =
+                setTimeout(
+                    () => searchStudents(query),
+                    300
+                );
+
+        }
+    );
+
+
+async function searchStudents(query){
+
+    const safe =
+        query.replace(
+            /[%_]/g,
+            '\\$&'
+        );
+
+
+    $('searchResults')
+        .classList
+        .add('open');
+
+
+    $('searchResults').innerHTML = `
+
+        <div class="result-head">
+            Searching…
+        </div>
+
+    `;
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('profiles')
+            .select(
+                `
+                id,
+                full_name,
+                degree,
+                account_type,
+                avatar_url
+                `
+            )
+            .or(
+                `
+                full_name.ilike.%${safe}%,
+                degree.ilike.%${safe}%,
+                account_type.ilike.%${safe}%
+                `
+            )
+            .limit(8);
+
+
+    if(
+        error ||
+        !data?.length
+    ){
+
+        $('searchResults').innerHTML = `
+
+            <div class="empty">
+                No matching profiles.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    $('searchResults').innerHTML =
+
+        '<div class="result-head">Profiles</div>' +
+
+        data.map(profile => `
+
+            <button
+                class="search-result"
+                onclick="openProfile('${profile.id}')"
+            >
+
+                ${avatarHTML(
+                    profile,
+                    profile.id
+                )}
+
+                <span>
+
+                    <b>
+                        ${esc(
+                            profile.full_name ||
+                            'Unnamed'
+                        )}
+                    </b>
+
+                    <small>
+                        ${esc(
+                            profile.degree ||
+                            'Degree not specified'
+                        )}
+
+                        ·
+
+                        ${esc(
+                            profile.account_type ||
+                            'Student'
+                        )}
+                    </small>
+
+                </span>
+
+            </button>
+
+        `).join('');
+
+}
+
+
+/* =====================================================
+   KEYBOARD
+   ===================================================== */
+
+$('studentSearch')
+    .addEventListener(
+        'keydown',
+        event => {
+
+            if(event.key === 'Escape'){
+
+                $('searchResults')
+                    .classList
+                    .remove('open');
+
+                event.target.blur();
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    'keydown',
+    event => {
+
+        if(
+            event.key === '/' &&
+            document.activeElement.tagName !== 'INPUT'
+        ){
+
+            event.preventDefault();
+
+            focusSearch();
+
+        }
+
+
+        if(event.key === 'Escape'){
+
+            closeProfileModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+$('logoutButton').onclick =
+    async () => {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+        location.href =
+            'index.html';
+
+    };
+
+
+/* =====================================================
+   START
+   ===================================================== */
+
+loadDashboard();
+
+</script>
+
+</body>
+</html>
