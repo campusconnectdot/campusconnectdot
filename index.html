@@ -413,15 +413,43 @@
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
         
-            const { data, error } = await supabaseClient.auth.signInWithPassword({
+            // 1. Authenticate user via Supabase Auth
+            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
                 email: email,
                 password: password
             });
         
-            if (error) {
-                alert(error.message);
+            if (authError) {
+                alert(authError.message);
+                return;
+            }
+        
+            const user = authData.user;
+        
+            // 2. Query the profiles table for the required fields using the user's UUID
+            const { data: profileData, error: profileError } = await supabaseClient
+                .from('profiles')
+                .select('account_type, legal_name, date_of_birth, gender')
+                .eq('id', user.id)
+                .single();
+        
+            if (profileError && profileError.code !== 'PGRST116') {
+                // PGRST116 means row not found, which is normal if they haven't saved a profile yet
+                console.error("Error fetching profile:", profileError.message);
+            }
+        
+            // 3. Check if all required mandatory fields exist and are filled out
+            const isProfileComplete = 
+                profileData && 
+                profileData.account_type && 
+                profileData.legal_name && 
+                profileData.date_of_birth && 
+                profileData.gender;
+        
+            // 4. Conditional redirection based on completeness
+            if (isProfileComplete) {
+                window.location.href = 'dashboard.html';
             } else {
-                // Redirect to profile.html instead of just showing an alert
                 window.location.href = 'profile.html';
             }
         }
