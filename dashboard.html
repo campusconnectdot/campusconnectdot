@@ -3,66 +3,1562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dashboard • Student Guidance Portal</title>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-        body { background-color: #0d1117; color: #c9d1d9; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 24px; }
-        .dashboard-box { background-color: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 24px; width: 100%; max-width: 450px; }
-        h1 { font-size: 20px; color: #f0f6fc; margin-bottom: 12px; }
-        p { color: #8b949e; font-size: 14px; margin-bottom: 20px; line-height: 1.5; }
-        .logout-btn { background-color: #da3633; border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 14px; font-weight: 500; padding: 8px 16px; width: 100%; }
-        .logout-btn:hover { background-color: #b31d18; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f6f8fa;
+            --surface: #ffffff;
+            --border: #d8dee4;
+            --border-light: #eaeef2;
+            --text: #1f2328;
+            --muted: #656d76;
+            --blue: #0969da;
+            --blue-light: #ddf4ff;
+            --green: #1a7f37;
+            --green-light: #dafbe1;
+            --danger: #cf222e;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text);
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Helvetica,
+                Arial,
+                sans-serif;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            height: 64px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .brand-mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 7px;
+            background: #24292f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .brand-text {
+            font-size: 15px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: var(--muted);
+            margin-right: 4px;
+        }
+
+        .header-btn {
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--text);
+            height: 34px;
+            padding: 0 13px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.15s ease;
+        }
+
+        .header-btn:hover {
+            background: #f3f4f6;
+            border-color: #afb8c1;
+        }
+
+        .header-btn.signout {
+            color: var(--danger);
+        }
+
+        .header-btn.signout:hover {
+            background: #fff1f2;
+            border-color: #ff8182;
+        }
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+            width: min(100% - 40px, 1050px);
+            margin: 0 auto;
+            padding: 48px 0 70px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 26px;
+            line-height: 1.25;
+            font-weight: 600;
+            letter-spacing: -0.4px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        /* =========================
+           TWO MAIN SELECTIONS
+        ========================= */
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .selection-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            min-height: 190px;
+            padding: 24px;
+            cursor: pointer;
+            transition:
+                border-color 0.15s ease,
+                box-shadow 0.15s ease,
+                transform 0.15s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .selection-card:hover {
+            border-color: #afb8c1;
+            box-shadow: 0 3px 10px rgba(31, 35, 40, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .profile-icon {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+        .alumni-icon {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .arrow {
+            font-size: 20px;
+            color: #8c959f;
+        }
+
+        .selection-card h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 7px;
+        }
+
+        .selection-card p {
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--muted);
+            max-width: 350px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .card-link {
+            color: var(--blue);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .alumni-link {
+            color: var(--green);
+        }
+
+        /* =========================
+           PROFILE SECTION
+        ========================= */
+
+        .section {
+            margin-top: 24px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            min-height: 58px;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .edit-btn {
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--blue);
+            padding: 7px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .edit-btn:hover {
+            background: #f6f8fa;
+            border-color: #afb8c1;
+        }
+
+        .profile-content {
+            padding: 22px 20px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0;
+        }
+
+        .profile-item {
+            padding: 13px 16px 13px 0;
+            border-bottom: 1px solid var(--border-light);
+            min-width: 0;
+        }
+
+        .profile-item:nth-child(even) {
+            padding-left: 16px;
+            border-left: 1px solid var(--border-light);
+        }
+
+        .profile-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        .profile-label {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .profile-value {
+            font-size: 14px;
+            color: var(--text);
+            word-break: break-word;
+        }
+
+        .profile-bio {
+            grid-column: 1 / -1;
+            padding-right: 0;
+            border-left: none !important;
+        }
+
+        /* =========================
+           ALUMNI DIRECTORY
+        ========================= */
+
+        .directory {
+            display: none;
+        }
+
+        .directory.show {
+            display: block;
+        }
+
+        .directory-tools {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .directory-count {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .search-box {
+            width: 250px;
+            height: 34px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0 10px;
+            outline: none;
+            font-size: 13px;
+            background: white;
+        }
+
+        .search-box:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.12);
+        }
+
+        .alumni-list {
+            padding: 0;
+        }
+
+        .alumni-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+            gap: 15px;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .alumni-row:last-child {
+            border-bottom: none;
+        }
+
+        .alumni-row.header-row {
+            background: #f6f8fa;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            padding-top: 11px;
+            padding-bottom: 11px;
+        }
+
+        .person {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--border);
+            background: #f0f2f4;
+        }
+
+        .avatar-placeholder {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #ddf4ff;
+            color: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .person-name {
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .table-text {
+            font-size: 13px;
+            color: var(--muted);
+            word-break: break-word;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--green-light);
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 45px 20px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 35px 20px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 24px 20px;
+            color: var(--muted);
+            font-size: 12px;
+            text-align: center;
+            background: white;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 8px;
+        }
+
+        .footer a {
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: var(--text);
+            text-decoration: underline;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .header {
+                height: auto;
+                min-height: 60px;
+                padding: 12px 16px;
+                gap: 10px;
+            }
+
+            .brand-text {
+                font-size: 14px;
+            }
+
+            .user-name {
+                display: none;
+            }
+
+            .header-right {
+                gap: 6px;
+            }
+
+            .header-btn {
+                padding: 0 9px;
+            }
+
+            .main {
+                width: min(100% - 28px, 1050px);
+                padding-top: 30px;
+            }
+
+            .welcome h1 {
+                font-size: 22px;
+            }
+
+            .selection-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .selection-card {
+                min-height: 170px;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-item {
+                padding-left: 0 !important;
+                padding-right: 0;
+                border-left: none !important;
+                border-bottom: 1px solid var(--border-light) !important;
+            }
+
+            .profile-item:last-child {
+                border-bottom: none !important;
+            }
+
+            .profile-bio {
+                grid-column: auto;
+            }
+
+            .directory-tools {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .alumni-row.header-row {
+                display: none;
+            }
+
+            .alumni-row {
+                grid-template-columns: 1fr;
+                gap: 7px;
+                padding: 16px 20px;
+            }
+
+            .table-text::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 10px;
+                color: #8c959f;
+                margin-bottom: 2px;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-    <div class="dashboard-box">
-        <h1>Welcome to your Dashboard!</h1>
-        <p id="userDetails">Loading your profile information...</p>
-        <button onclick="handleLogout()" class="logout-btn">Sign out</button>
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="brand">
+        <div class="brand-mark">SG</div>
+        <div class="brand-text">Student Guidance Portal</div>
     </div>
 
-    <script>
-        const SUPABASE_URL = 'https://kksarduvycfebklmhxfb.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <div class="header-right">
+        <span class="user-name" id="headerUserName">Loading...</span>
 
-        async function loadDashboard() {
-            const userResponse = await supabaseClient.auth.getUser();
-            const user = userResponse.data.user;
+        <button
+            class="header-btn"
+            onclick="editProfile()">
+            Settings
+        </button>
 
-            if (!user) {
+        <button
+            class="header-btn signout"
+            onclick="handleLogout()">
+            Sign out
+        </button>
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main class="main">
+
+    <div class="welcome">
+        <h1>Welcome back, <span id="welcomeName">...</span></h1>
+        <p>Your student guidance dashboard</p>
+    </div>
+
+
+    <!-- TWO MAIN OPTIONS -->
+
+    <div class="selection-grid">
+
+        <!-- MY PROFILE -->
+
+        <div
+            class="selection-card"
+            onclick="showProfile()">
+
+            <div>
+                <div class="card-top">
+
+                    <div class="card-icon profile-icon">
+                        ◉
+                    </div>
+
+                    <div class="arrow">
+                        →
+                    </div>
+
+                </div>
+
+                <h2>My Profile</h2>
+
+                <p>
+                    View the academic and personal information
+                    you have saved in your profile.
+                </p>
+            </div>
+
+            <div class="card-footer">
+                <span class="card-link">
+                    View profile →
+                </span>
+            </div>
+
+        </div>
+
+
+        <!-- ALUMNI -->
+
+        <div
+            class="selection-card"
+            onclick="showAlumni()">
+
+            <div>
+                <div class="card-top">
+
+                    <div class="card-icon alumni-icon">
+                        ◉
+                    </div>
+
+                    <div class="arrow">
+                        →
+                    </div>
+
+                </div>
+
+                <h2>Alumni</h2>
+
+                <p>
+                    Explore alumni profiles and discover
+                    people with experience and professional backgrounds.
+                </p>
+            </div>
+
+            <div class="card-footer">
+                <span class="card-link alumni-link">
+                    Explore alumni →
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         MY PROFILE
+    ========================= -->
+
+    <section
+        class="section"
+        id="profileSection">
+
+        <div class="section-header">
+
+            <div>
+                <div class="section-title">
+                    My Profile
+                </div>
+
+                <div class="section-subtitle">
+                    Information saved in your account
+                </div>
+            </div>
+
+            <button
+                class="edit-btn"
+                onclick="editProfile()">
+                Edit Profile
+            </button>
+
+        </div>
+
+
+        <div class="profile-content">
+
+            <div
+                class="profile-grid"
+                id="profileDetails">
+
+                <div class="loading">
+                    Loading profile...
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         ALUMNI DIRECTORY
+    ========================= -->
+
+    <section
+        class="section directory"
+        id="alumniSection">
+
+        <div class="section-header">
+
+            <div>
+                <div class="section-title">
+                    Alumni
+                </div>
+
+                <div class="section-subtitle">
+                    Browse alumni registered on the portal
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="directory-tools">
+
+            <span
+                class="directory-count"
+                id="alumniCount">
+                Loading alumni...
+            </span>
+
+            <input
+                type="text"
+                id="alumniSearch"
+                class="search-box"
+                placeholder="Search alumni..."
+                oninput="filterAlumni()">
+
+        </div>
+
+
+        <div class="alumni-list">
+
+            <div class="alumni-row header-row">
+                <div>Name</div>
+                <div>Degree</div>
+                <div>Employment</div>
+                <div>Status</div>
+            </div>
+
+            <div id="alumniList">
+                <div class="loading">
+                    Loading alumni...
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Privacy</a>
+        <a href="#">Help</a>
+        <a href="profile.html">Profile Settings</a>
+    </div>
+
+    <div>
+        © 2026 Student Guidance Portal
+    </div>
+
+</footer>
+
+
+<script>
+
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
+
+    const SUPABASE_URL =
+        'https://kksarduvycfebklmhxfb.supabase.co';
+
+    const SUPABASE_ANON_KEY =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    let currentUser = null;
+    let currentProfile = null;
+    let allAlumni = [];
+
+
+    /* =====================================================
+       ESCAPE HTML
+       Prevents profile text from being interpreted as HTML
+    ===================================================== */
+
+    function escapeHTML(value) {
+
+        if (value === null || value === undefined) {
+            return '';
+        }
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+
+    /* =====================================================
+       GET INITIALS
+    ===================================================== */
+
+    function getInitials(name) {
+
+        if (!name) {
+            return '?';
+        }
+
+        const parts = name.trim().split(/\s+/);
+
+        if (parts.length === 1) {
+            return parts[0].substring(0, 2).toUpperCase();
+        }
+
+        return (
+            parts[0].charAt(0) +
+            parts[parts.length - 1].charAt(0)
+        ).toUpperCase();
+    }
+
+
+    /* =====================================================
+       LOAD DASHBOARD
+    ===================================================== */
+
+    async function loadDashboard() {
+
+        try {
+
+            /*
+             * getSession() is used first.
+             * This is more reliable for a normal
+             * GitHub Pages dashboard load.
+             */
+
+            const {
+                data: sessionData,
+                error: sessionError
+            } = await supabaseClient.auth.getSession();
+
+            if (sessionError) {
+                console.error(sessionError);
                 window.location.href = 'index.html';
                 return;
             }
 
-            const { data, error } = await supabaseClient
+            const session = sessionData.session;
+
+            if (!session || !session.user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            currentUser = session.user;
+
+
+            /*
+             * Load profile belonging to logged-in user
+             */
+
+            const {
+                data: profile,
+                error: profileError
+            } = await supabaseClient
                 .from('profiles')
                 .select('*')
-                .eq('id', user.id)
-                .single();
+                .eq('id', currentUser.id)
+                .maybeSingle();
 
-            if (error || !data || !data.account_type) {
-                // If profile isn't filled yet, send them back to fill it out
+
+            /*
+             * If there is no profile yet,
+             * send the user to profile.html.
+             */
+
+            if (
+                profileError ||
+                !profile
+            ) {
+
+                console.log(
+                    'Profile not found:',
+                    profileError
+                );
+
                 window.location.href = 'profile.html';
-            } else {
-                document.getElementById('userDetails').innerHTML = `
-                    <strong>Name:</strong> ${data.full_name || 'N/A'}<br>
-                    <strong>Role:</strong> ${data.account_type}<br>
-                    <strong>Degree:</strong> ${data.degree || 'N/A'}<br>
-                    <strong>Employment:</strong> ${data.current_employment || 'N/A'}<br>
-                    <strong>Bio:</strong> ${data.bio || 'N/A'}
+                return;
+            }
+
+
+            currentProfile = profile;
+
+
+            /*
+             * Display user name
+             */
+
+            const name =
+                profile.full_name ||
+                currentUser.user_metadata?.full_name ||
+                'User';
+
+
+            document.getElementById(
+                'welcomeName'
+            ).textContent = name;
+
+
+            document.getElementById(
+                'headerUserName'
+            ).textContent = name;
+
+
+            /*
+             * Display complete profile
+             */
+
+            displayProfile(profile);
+
+
+        } catch (error) {
+
+            console.error(
+                'Dashboard error:',
+                error
+            );
+
+            /*
+             * Do not immediately redirect because
+             * of an ordinary JavaScript/database error.
+             */
+
+            document.getElementById(
+                'profileDetails'
+            ).innerHTML = `
+                <div class="empty">
+                    Unable to load your profile.
+                    Please refresh the page.
+                </div>
+            `;
+        }
+    }
+
+
+    /* =====================================================
+       DISPLAY PROFILE
+    ===================================================== */
+
+    function displayProfile(profile) {
+
+        const container =
+            document.getElementById(
+                'profileDetails'
+            );
+
+
+        const fields = [
+
+            {
+                label: 'Full Name',
+                value: profile.full_name
+            },
+
+            {
+                label: 'Email',
+                value:
+                    profile.email ||
+                    currentUser?.email
+            },
+
+            {
+                label: 'Account Type',
+                value: profile.account_type
+            },
+
+            {
+                label: 'Degree',
+                value: profile.degree
+            },
+
+            {
+                label: 'Current Employment',
+                value: profile.current_employment
+            },
+
+            {
+                label: 'Department',
+                value: profile.department
+            },
+
+            {
+                label: 'Phone',
+                value: profile.phone
+            },
+
+            {
+                label: 'Location',
+                value: profile.location
+            },
+
+            {
+                label: 'Graduation Year',
+                value: profile.graduation_year
+            },
+
+            {
+                label: 'Bio',
+                value: profile.bio,
+                bio: true
+            }
+
+        ];
+
+
+        let html = '';
+
+
+        fields.forEach(field => {
+
+            /*
+             * Only show fields that actually exist
+             * in the database/profile.
+             */
+
+            if (
+                field.value !== null &&
+                field.value !== undefined &&
+                String(field.value).trim() !== ''
+            ) {
+
+                html += `
+                    <div class="profile-item ${field.bio ? 'profile-bio' : ''}">
+
+                        <span class="profile-label">
+                            ${escapeHTML(field.label)}
+                        </span>
+
+                        <div class="profile-value">
+                            ${escapeHTML(field.value)}
+                        </div>
+
+                    </div>
                 `;
             }
+
+        });
+
+
+        if (!html) {
+
+            html = `
+                <div class="empty">
+                    No profile information has been saved yet.
+                </div>
+            `;
         }
 
-        async function handleLogout() {
+
+        container.innerHTML = html;
+    }
+
+
+    /* =====================================================
+       SHOW PROFILE
+    ===================================================== */
+
+    function showProfile() {
+
+        const profileSection =
+            document.getElementById(
+                'profileSection'
+            );
+
+        const alumniSection =
+            document.getElementById(
+                'alumniSection'
+            );
+
+
+        alumniSection.classList.remove(
+            'show'
+        );
+
+
+        profileSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    }
+
+
+    /* =====================================================
+       SHOW ALUMNI
+    ===================================================== */
+
+    async function showAlumni() {
+
+        const alumniSection =
+            document.getElementById(
+                'alumniSection'
+            );
+
+
+        alumniSection.classList.add(
+            'show'
+        );
+
+
+        alumniSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+
+
+        /*
+         * Load only the first time.
+         */
+
+        if (allAlumni.length === 0) {
+            await loadAlumni();
+        }
+    }
+
+
+    /* =====================================================
+       LOAD ALUMNI
+    ===================================================== */
+
+    async function loadAlumni() {
+
+        const list =
+            document.getElementById(
+                'alumniList'
+            );
+
+
+        list.innerHTML = `
+            <div class="loading">
+                Loading alumni...
+            </div>
+        `;
+
+
+        try {
+
+            /*
+             * IMPORTANT:
+             *
+             * This specifically asks Supabase for
+             * account_type = alumni.
+             *
+             * Therefore the current student is NOT
+             * displayed in this section.
+             */
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+                .from('profiles')
+                .select('*')
+                .ilike(
+                    'account_type',
+                    'alumni'
+                )
+                .order(
+                    'full_name',
+                    {
+                        ascending: true
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    'Alumni query error:',
+                    error
+                );
+
+                list.innerHTML = `
+                    <div class="empty">
+                        Unable to load alumni.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            allAlumni = data || [];
+
+
+            document.getElementById(
+                'alumniCount'
+            ).textContent =
+                `${allAlumni.length} alumni`;
+
+
+            renderAlumni(allAlumni);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            list.innerHTML = `
+                <div class="empty">
+                    Unable to load alumni.
+                </div>
+            `;
+        }
+    }
+
+
+    /* =====================================================
+       RENDER ALUMNI
+    ===================================================== */
+
+    function renderAlumni(alumni) {
+
+        const list =
+            document.getElementById(
+                'alumniList'
+            );
+
+
+        if (!alumni || alumni.length === 0) {
+
+            list.innerHTML = `
+                <div class="empty">
+                    No alumni profiles found yet.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        let html = '';
+
+
+        alumni.forEach(person => {
+
+            const name =
+                person.full_name ||
+                'Unnamed Alumni';
+
+
+            const initials =
+                getInitials(name);
+
+
+            /*
+             * If your profile table later contains
+             * avatar_url / profile_image / image_url,
+             * this will automatically use it.
+             */
+
+            const avatar =
+                person.avatar_url ||
+                person.profile_image ||
+                person.image_url ||
+                '';
+
+
+            let avatarHTML;
+
+
+            if (avatar) {
+
+                avatarHTML = `
+                    <img
+                        class="avatar"
+                        src="${escapeHTML(avatar)}"
+                        alt="${escapeHTML(name)}"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                    >
+
+                    <div
+                        class="avatar-placeholder"
+                        style="display:none;">
+                        ${escapeHTML(initials)}
+                    </div>
+                `;
+
+            } else {
+
+                avatarHTML = `
+                    <div class="avatar-placeholder">
+                        ${escapeHTML(initials)}
+                    </div>
+                `;
+            }
+
+
+            html += `
+
+                <div class="alumni-row">
+
+                    <div class="person">
+
+                        ${avatarHTML}
+
+                        <span class="person-name">
+                            ${escapeHTML(name)}
+                        </span>
+
+                    </div>
+
+
+                    <div
+                        class="table-text"
+                        data-label="Degree">
+
+                        ${escapeHTML(
+                            person.degree || 'Not provided'
+                        )}
+
+                    </div>
+
+
+                    <div
+                        class="table-text"
+                        data-label="Employment">
+
+                        ${escapeHTML(
+                            person.current_employment ||
+                            'Not provided'
+                        )}
+
+                    </div>
+
+
+                    <div
+                        class="table-text"
+                        data-label="Status">
+
+                        <span class="status">
+                            Alumni
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+        });
+
+
+        list.innerHTML = html;
+    }
+
+
+    /* =====================================================
+       SEARCH ALUMNI
+    ===================================================== */
+
+    function filterAlumni() {
+
+        const search =
+            document
+                .getElementById(
+                    'alumniSearch'
+                )
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        if (!search) {
+
+            renderAlumni(
+                allAlumni
+            );
+
+            return;
+        }
+
+
+        const filtered =
+            allAlumni.filter(person => {
+
+                const name =
+                    person.full_name ||
+                    '';
+
+                const degree =
+                    person.degree ||
+                    '';
+
+                const employment =
+                    person.current_employment ||
+                    '';
+
+
+                return (
+
+                    name.toLowerCase().includes(search) ||
+
+                    degree.toLowerCase().includes(search) ||
+
+                    employment.toLowerCase().includes(search)
+
+                );
+            });
+
+
+        renderAlumni(filtered);
+    }
+
+
+    /* =====================================================
+       EDIT PROFILE / SETTINGS
+    ===================================================== */
+
+    function editProfile() {
+
+        window.location.href =
+            'profile.html';
+    }
+
+
+    /* =====================================================
+       SIGN OUT
+    ===================================================== */
+
+    async function handleLogout() {
+
+        try {
+
             await supabaseClient.auth.signOut();
-            window.location.href = 'index.html';
-        }
 
-        loadDashboard();
-    </script>
+        } catch (error) {
+
+            console.error(
+                'Sign out error:',
+                error
+            );
+
+        } finally {
+
+            window.location.href =
+                'index.html';
+        }
+    }
+
+
+    /* =====================================================
+       START
+    ===================================================== */
+
+    loadDashboard();
+
+</script>
+
 </body>
 </html>
