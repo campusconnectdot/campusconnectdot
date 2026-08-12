@@ -6,6 +6,7 @@
 
     <title>Alumni • Student Guidance Portal</title>
 
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -22,10 +23,6 @@
             min-height: 100vh;
         }
 
-        /* =========================
-           MAIN
-        ========================= */
-
         .main {
             width: 100%;
             max-width: 1050px;
@@ -33,9 +30,7 @@
             padding: 32px 24px 60px;
         }
 
-        /* =========================
-           BACK BUTTON
-        ========================= */
+        /* BACK BUTTON */
 
         .main-back-btn {
             display: inline-flex;
@@ -72,17 +67,13 @@
             line-height: 1;
         }
 
-        /* =========================
-           HEADING
-        ========================= */
+        /* HEADING */
 
         .heading-row {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-
             gap: 20px;
-
             margin-bottom: 22px;
         }
 
@@ -98,9 +89,7 @@
             font-size: 14px;
         }
 
-        /* =========================
-           SEARCH
-        ========================= */
+        /* SEARCH */
 
         .search-box {
             width: 280px;
@@ -139,9 +128,7 @@
             color: #8c959f;
         }
 
-        /* =========================
-           ALUMNI LIST
-        ========================= */
+        /* ALUMNI LIST */
 
         .alumni-container {
             background: #ffffff;
@@ -191,9 +178,7 @@
             background: #f6f8fa;
         }
 
-        /* =========================
-           PERSON
-        ========================= */
+        /* PERSON */
 
         .person {
             display: flex;
@@ -266,9 +251,7 @@
             color: #57606a;
         }
 
-        /* =========================
-           VIEW BUTTON
-        ========================= */
+        /* VIEW BUTTON */
 
         .view-btn {
             border: 1px solid #d0d7de;
@@ -296,20 +279,9 @@
             border-color: #0969da;
         }
 
-        /* =========================
-           EMPTY / LOADING
-        ========================= */
+        /* EMPTY / LOADING */
 
-        .empty {
-            padding: 50px 20px;
-
-            text-align: center;
-
-            color: #57606a;
-
-            font-size: 14px;
-        }
-
+        .empty,
         .loading {
             padding: 50px 20px;
 
@@ -320,9 +292,7 @@
             font-size: 14px;
         }
 
-        /* =========================
-           PROFILE PREVIEW
-        ========================= */
+        /* PROFILE PREVIEW */
 
         .preview-overlay {
             position: fixed;
@@ -444,9 +414,7 @@
             padding: 26px;
         }
 
-        /* =========================
-           PROFILE TOP
-        ========================= */
+        /* PROFILE TOP */
 
         .profile-top {
             display: flex;
@@ -505,9 +473,7 @@
             color: #57606a;
         }
 
-        /* =========================
-           PROFILE SECTION
-        ========================= */
+        /* PROFILE SECTION */
 
         .profile-section {
             margin-top: 20px;
@@ -533,9 +499,7 @@
             color: #24292f;
         }
 
-        /* =========================
-           PROFILE GRID
-        ========================= */
+        /* PROFILE GRID */
 
         .profile-grid {
             display: grid;
@@ -577,9 +541,7 @@
             word-break: break-word;
         }
 
-        /* =========================
-           PREVIEW FOOTER
-        ========================= */
+        /* PREVIEW FOOTER */
 
         .preview-footer {
             display: flex;
@@ -633,9 +595,7 @@
             background: #f6f8fa;
         }
 
-        /* =========================
-           CONTACT POPUP
-        ========================= */
+        /* CONTACT POPUP */
 
         .contact-overlay {
             position: fixed;
@@ -773,9 +733,35 @@
             background: #0757b5;
         }
 
-        /* =========================
-           RESPONSIVE
-        ========================= */
+        /* AUTH ERROR */
+
+        .auth-error {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 24px;
+
+            background: #ffffff;
+
+            border: 1px solid #d8dee4;
+
+            border-radius: 8px;
+
+            text-align: center;
+        }
+
+        .auth-error h2 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .auth-error p {
+            color: #57606a;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        /* RESPONSIVE */
 
         @media (max-width: 700px) {
 
@@ -789,7 +775,6 @@
 
             .heading-row {
                 align-items: stretch;
-
                 flex-direction: column;
             }
 
@@ -816,7 +801,6 @@
 
             .view-btn {
                 grid-column: 2;
-
                 grid-row: 1;
             }
 
@@ -845,10 +829,6 @@
 
 <body>
 
-    <!-- =========================
-         MAIN
-    ========================= -->
-
     <main class="main">
 
         <!-- Back to Dashboard -->
@@ -860,7 +840,6 @@
             <span class="arrow">←</span>
             Back to Dashboard
         </button>
-
 
         <!-- Heading -->
 
@@ -875,7 +854,6 @@
                 </p>
 
             </div>
-
 
             <!-- Search -->
 
@@ -894,7 +872,6 @@
 
         </div>
 
-
         <!-- Alumni list -->
 
         <section class="alumni-container">
@@ -911,7 +888,6 @@
 
             </div>
 
-
             <div id="alumniList">
 
                 <div class="loading">
@@ -925,9 +901,7 @@
     </main>
 
 
-    <!-- =========================
-         PROFILE PREVIEW
-    ========================= -->
+    <!-- PROFILE PREVIEW -->
 
     <div
         class="preview-overlay"
@@ -953,7 +927,6 @@
 
                 </div>
 
-
                 <button
                     class="close-btn"
                     onclick="closePreview()"
@@ -964,13 +937,11 @@
 
             </div>
 
-
             <div
                 class="preview-content"
                 id="previewContent"
             >
             </div>
-
 
             <div class="preview-footer">
 
@@ -995,9 +966,7 @@
     </div>
 
 
-    <!-- =========================
-         CONTACT POPUP
-    ========================= -->
+    <!-- CONTACT POPUP -->
 
     <div
         class="contact-overlay"
@@ -1024,7 +993,6 @@
 
             </div>
 
-
             <div class="contact-body">
 
                 <label for="contactSubject">
@@ -1037,7 +1005,6 @@
                     placeholder="What would you like to discuss?"
                 >
 
-
                 <label for="contactMessage">
                     Message
                 </label>
@@ -1048,7 +1015,6 @@
                 ></textarea>
 
             </div>
-
 
             <div class="contact-footer">
 
@@ -1061,6 +1027,7 @@
 
                 <button
                     class="send-btn"
+                    id="sendMessageButton"
                     onclick="sendContactMessage()"
                 >
                     Send Message
@@ -1113,26 +1080,67 @@
 
             try {
 
+                /*
+                 * Give Supabase a moment to restore
+                 * the existing browser session.
+                 */
+
+                const {
+                    data: sessionData,
+                    error: sessionError
+                } = await supabaseClient.auth.getSession();
+
+                if (sessionError) {
+
+                    console.error(
+                        'Session error:',
+                        sessionError
+                    );
+
+                }
+
+                /*
+                 * Get authenticated user.
+                 */
+
                 const {
                     data: userData,
                     error: userError
                 } = await supabaseClient.auth.getUser();
 
+                console.log(
+                    'Supabase user:',
+                    userData?.user
+                );
 
-                currentUser = userData.user;
-
+                console.log(
+                    'Supabase auth error:',
+                    userError
+                );
 
                 /*
-                 * User must be logged in.
+                 * If there is no logged-in user,
+                 * send them back to login.
                  */
 
-                if (userError || !currentUser) {
+                if (
+                    userError ||
+                    !userData ||
+                    !userData.user
+                ) {
+
+                    console.warn(
+                        'No authenticated Supabase user found.'
+                    );
 
                     window.location.href =
                         'index.html';
 
                     return;
                 }
+
+                currentUser =
+                    userData.user;
 
 
                 /*
@@ -1146,12 +1154,16 @@
                     .from('profiles')
                     .select('*')
                     .eq('id', currentUser.id)
-                    .single();
+                    .maybeSingle();
 
 
-                if (!profileError && profile) {
+                if (
+                    !profileError &&
+                    profile
+                ) {
 
-                    currentProfile = profile;
+                    currentProfile =
+                        profile;
                 }
 
 
@@ -1176,7 +1188,10 @@
 
                 if (error) {
 
-                    console.error(error);
+                    console.error(
+                        'Alumni loading error:',
+                        error
+                    );
 
                     document.getElementById(
                         'alumniList'
@@ -1190,15 +1205,21 @@
                 }
 
 
-                alumniData = data || [];
+                alumniData =
+                    data || [];
 
-                renderAlumni(alumniData);
+                renderAlumni(
+                    alumniData
+                );
 
             }
 
             catch (error) {
 
-                console.error(error);
+                console.error(
+                    'Page loading error:',
+                    error
+                );
 
                 document.getElementById(
                     'alumniList'
@@ -1223,7 +1244,7 @@
                 );
 
 
-            if (!list.length) {
+            if (!list || !list.length) {
 
                 container.innerHTML = `
                     <div class="empty">
@@ -1271,6 +1292,7 @@
                             <img
                                 src="${escapeHtml(image)}"
                                 alt="${escapeHtml(name)}"
+                                onerror="this.style.display='none'; this.parentElement.textContent='${escapeJs(name.charAt(0).toUpperCase())}'"
                             >
                         `;
 
@@ -1297,7 +1319,6 @@
                                     ${avatarHTML}
                                 </div>
 
-
                                 <div class="person-info">
 
                                     <div class="person-name">
@@ -1314,22 +1335,19 @@
 
                             </div>
 
-
                             <div class="degree">
                                 ${escapeHtml(degree)}
                             </div>
-
 
                             <div class="department">
                                 ${escapeHtml(department)}
                             </div>
 
-
                             <div>
 
                                 <button
                                     class="view-btn"
-                                    onclick="viewProfile('${escapeHtml(alumni.id)}')"
+                                    onclick="viewProfile('${escapeJs(alumni.id)}')"
                                 >
                                     View Profile
                                 </button>
@@ -1352,7 +1370,9 @@
 
             const query =
                 document
-                    .getElementById('searchInput')
+                    .getElementById(
+                        'searchInput'
+                    )
                     .value
                     .toLowerCase()
                     .trim();
@@ -1360,58 +1380,66 @@
 
             if (!query) {
 
-                renderAlumni(alumniData);
+                renderAlumni(
+                    alumniData
+                );
 
                 return;
             }
 
 
             const filtered =
-                alumniData.filter(alumni => {
+                alumniData.filter(
+                    alumni => {
 
-                    const name =
-                        alumni.full_name ||
-                        '';
-
-
-                    const degree =
-                        alumni.degree ||
-                        '';
+                        const name =
+                            alumni.full_name ||
+                            '';
 
 
-                    const department =
-                        alumni.department ||
-                        alumni.field_of_study ||
-                        '';
+                        const degree =
+                            alumni.degree ||
+                            '';
 
 
-                    const employment =
-                        alumni.current_employment ||
-                        '';
+                        const department =
+                            alumni.department ||
+                            alumni.field_of_study ||
+                            '';
 
 
-                    return (
-                        name
-                            .toLowerCase()
-                            .includes(query) ||
-
-                        degree
-                            .toLowerCase()
-                            .includes(query) ||
-
-                        department
-                            .toLowerCase()
-                            .includes(query) ||
-
-                        employment
-                            .toLowerCase()
-                            .includes(query)
-                    );
-
-                });
+                        const employment =
+                            alumni.current_employment ||
+                            '';
 
 
-            renderAlumni(filtered);
+                        return (
+
+                            name
+                                .toLowerCase()
+                                .includes(query) ||
+
+                            degree
+                                .toLowerCase()
+                                .includes(query) ||
+
+                            department
+                                .toLowerCase()
+                                .includes(query) ||
+
+                            employment
+                                .toLowerCase()
+                                .includes(query)
+
+                        );
+
+                    }
+                );
+
+
+            renderAlumni(
+                filtered
+            );
         }
 
 
@@ -1423,14 +1451,25 @@
 
             const alumni =
                 alumniData.find(
-                    person => person.id === id
+                    person =>
+                        String(person.id) ===
+                        String(id)
                 );
 
 
-            if (!alumni) return;
+            if (!alumni) {
+
+                console.error(
+                    'Alumni not found:',
+                    id
+                );
+
+                return;
+            }
 
 
-            selectedAlumni = alumni;
+            selectedAlumni =
+                alumni;
 
 
             const name =
@@ -1480,7 +1519,6 @@
                     <div class="large-avatar">
                         ${avatarHTML}
                     </div>
-
 
                     <div>
 
@@ -1623,8 +1661,12 @@
 
 
             document
-                .getElementById('previewOverlay')
-                .classList.add('active');
+                .getElementById(
+                    'previewOverlay'
+                )
+                .classList.add(
+                    'active'
+                );
 
 
             document.body.style.overflow =
@@ -1639,18 +1681,26 @@
         function closePreview() {
 
             document
-                .getElementById('previewOverlay')
-                .classList.remove('active');
+                .getElementById(
+                    'previewOverlay'
+                )
+                .classList.remove(
+                    'active'
+                );
 
 
-            document.body.style.overflow = '';
+            document.body.style.overflow =
+                '';
 
 
-            selectedAlumni = null;
+            selectedAlumni =
+                null;
         }
 
 
-        function closePreviewFromBackground(event) {
+        function closePreviewFromBackground(
+            event
+        ) {
 
             if (
                 event.target.id ===
@@ -1668,7 +1718,10 @@
 
         function openContact() {
 
-            if (!selectedAlumni) return;
+            if (!selectedAlumni) {
+
+                return;
+            }
 
 
             document.getElementById(
@@ -1689,20 +1742,30 @@
 
 
             document
-                .getElementById('contactOverlay')
-                .classList.add('active');
+                .getElementById(
+                    'contactOverlay'
+                )
+                .classList.add(
+                    'active'
+                );
         }
 
 
         function closeContact() {
 
             document
-                .getElementById('contactOverlay')
-                .classList.remove('active');
+                .getElementById(
+                    'contactOverlay'
+                )
+                .classList.remove(
+                    'active'
+                );
         }
 
 
-        function closeContactFromBackground(event) {
+        function closeContactFromBackground(
+            event
+        ) {
 
             if (
                 event.target.id ===
@@ -1738,7 +1801,10 @@
                     .trim();
 
 
-            if (!subject || !message) {
+            if (
+                !subject ||
+                !message
+            ) {
 
                 alert(
                     'Please enter a subject and message.'
@@ -1748,15 +1814,22 @@
             }
 
 
-            if (!selectedAlumni) return;
+            if (!selectedAlumni) {
+
+                alert(
+                    'Please select an alumni first.'
+                );
+
+                return;
+            }
 
 
             /*
-             * For now this creates a simple local
-             * confirmation.
+             * Currently this only confirms
+             * the message.
              *
-             * Later we can connect this button to
-             * a messages table in Supabase.
+             * We can connect this to a
+             * Supabase messages table later.
              */
 
             alert(
@@ -1789,7 +1862,7 @@
 
 
         /* =========================================
-           SECURITY HELPER
+           SECURITY HELPERS
         ========================================= */
 
         function escapeHtml(value) {
@@ -1804,12 +1877,113 @@
 
 
             return String(value)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+
+                .replace(
+                    /&/g,
+                    '&amp;'
+                )
+
+                .replace(
+                    /</g,
+                    '&lt;'
+                )
+
+                .replace(
+                    />/g,
+                    '&gt;'
+                )
+
+                .replace(
+                    /"/g,
+                    '&quot;'
+                )
+
+                .replace(
+                    /'/g,
+                    '&#039;'
+                );
         }
+
+
+        function escapeJs(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return '';
+            }
+
+
+            return String(value)
+                .replace(
+                    /\\/g,
+                    '\\\\'
+                )
+                .replace(
+                    /'/g,
+                    "\\'"
+                )
+                .replace(
+                    /"/g,
+                    '\\"'
+                )
+                .replace(
+                    /\n/g,
+                    '\\n'
+                )
+                .replace(
+                    /\r/g,
+                    '\\r'
+                );
+        }
+
+
+        /* =========================================
+           KEYBOARD CONTROLS
+        ========================================= */
+
+        document.addEventListener(
+            'keydown',
+            function(event) {
+
+                if (
+                    event.key === 'Escape'
+                ) {
+
+                    const contact =
+                        document.getElementById(
+                            'contactOverlay'
+                        );
+
+                    const preview =
+                        document.getElementById(
+                            'previewOverlay'
+                        );
+
+
+                    if (
+                        contact.classList.contains(
+                            'active'
+                        )
+                    ) {
+
+                        closeContact();
+
+                    }
+
+                    else if (
+                        preview.classList.contains(
+                            'active'
+                        )
+                    ) {
+
+                        closePreview();
+                    }
+                }
+            }
+        );
 
 
         /* =========================================
