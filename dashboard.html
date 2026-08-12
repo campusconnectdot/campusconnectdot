@@ -23,57 +23,49 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            padding: 40px 24px;
+            align-items: center;
+            padding: 24px;
         }
 
         /* =====================================================
-           WRAPPER
+           MAIN DASHBOARD BOX
         ===================================================== */
 
-        .dashboard-wrapper {
+        .dashboard-box {
             width: 100%;
             max-width: 760px;
-        }
-
-        /* =====================================================
-           SEPARATE TOP HEADER
-        ===================================================== */
-
-        .topbar {
-            width: 100%;
-            height: 58px;
-            padding: 0 18px;
-
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-
             background: #ffffff;
             border: 1px solid #d8dee4;
             border-radius: 10px;
-
-            margin-bottom: 12px;
-
+            overflow: hidden;
             box-shadow: 0 4px 18px rgba(31, 35, 40, 0.06);
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .topbar {
+            height: 58px;
+            padding: 0 18px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            border-bottom: 1px solid #eaeef2;
+            background: #ffffff;
         }
 
         .profile-button {
             width: 34px;
             height: 34px;
-
             border-radius: 50%;
             border: 1px solid #d0d7de;
-
             background: #f6f8fa;
-
             cursor: pointer;
             overflow: hidden;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             transition: 0.15s ease;
             padding: 0;
         }
@@ -93,31 +85,12 @@
         .default-avatar {
             width: 100%;
             height: 100%;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             color: #57606a;
             font-size: 15px;
             font-weight: 600;
-        }
-
-        /* =====================================================
-           MAIN DASHBOARD BOX
-        ===================================================== */
-
-        .dashboard-box {
-            width: 100%;
-
-            background: #ffffff;
-
-            border: 1px solid #d8dee4;
-            border-radius: 10px;
-
-            overflow: hidden;
-
-            box-shadow: 0 4px 18px rgba(31, 35, 40, 0.06);
         }
 
         /* =====================================================
@@ -165,15 +138,11 @@
         .explore-card {
             border: 1px solid #d8dee4;
             border-radius: 8px;
-
             padding: 18px;
             min-height: 145px;
-
             background: #ffffff;
-
             cursor: pointer;
             text-align: left;
-
             transition: 0.15s ease;
             position: relative;
         }
@@ -187,15 +156,11 @@
         .card-icon {
             width: 36px;
             height: 36px;
-
             border-radius: 7px;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             margin-bottom: 13px;
-
             font-size: 17px;
             font-weight: 600;
         }
@@ -228,7 +193,6 @@
             position: absolute;
             right: 17px;
             bottom: 16px;
-
             font-size: 19px;
             color: #57606a;
         }
@@ -253,7 +217,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-
             margin-bottom: 10px;
         }
 
@@ -270,22 +233,16 @@
         .activity-box {
             border: 1px solid #d8dee4;
             border-radius: 8px;
-
             overflow: hidden;
         }
 
         .activity-row {
             display: grid;
             grid-template-columns: 1fr 120px 100px;
-
             align-items: center;
-
             min-height: 48px;
-
             padding: 0 14px;
-
             border-bottom: 1px solid #eaeef2;
-
             font-size: 13px;
         }
 
@@ -304,11 +261,8 @@
 
         .status {
             justify-self: start;
-
             font-size: 12px;
-
             border-radius: 20px;
-
             padding: 3px 8px;
         }
 
@@ -328,27 +282,19 @@
 
         .bottom-actions {
             margin-top: 24px;
-
             padding-top: 18px;
-
             border-top: 1px solid #eaeef2;
-
             display: flex;
             justify-content: flex-end;
-
             gap: 8px;
         }
 
         .secondary-button,
         .danger-button {
             border-radius: 6px;
-
             padding: 7px 13px;
-
             font-size: 13px;
-
             cursor: pointer;
-
             background: #ffffff;
         }
 
@@ -382,26 +328,18 @@
         .settings-header {
             display: flex;
             align-items: center;
-
             gap: 10px;
-
             margin-bottom: 26px;
         }
 
         .back-button {
             border: 1px solid #d0d7de;
-
             background: #ffffff;
-
             border-radius: 6px;
-
             width: 32px;
             height: 32px;
-
             cursor: pointer;
-
             color: #1f2328;
-
             font-size: 17px;
         }
 
@@ -421,56 +359,41 @@
         .profile-preview {
             display: flex;
             align-items: center;
-
             gap: 15px;
-
             padding-bottom: 22px;
-
             border-bottom: 1px solid #eaeef2;
-
             margin-bottom: 22px;
         }
 
         .large-avatar {
             width: 68px;
             height: 68px;
-
             border-radius: 50%;
-
             background: #f6f8fa;
-
             border: 1px solid #d0d7de;
-
             overflow: hidden;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             flex-shrink: 0;
         }
 
         .large-avatar img {
             width: 100%;
             height: 100%;
-
             object-fit: cover;
-
             display: none;
         }
 
         .large-avatar-fallback {
             color: #57606a;
-
             font-size: 24px;
-
             font-weight: 600;
         }
 
         .profile-preview h2 {
             font-size: 18px;
             font-weight: 600;
-
             margin-bottom: 4px;
         }
 
@@ -485,23 +408,16 @@
 
         .profile-information {
             display: grid;
-
             grid-template-columns: 1fr 1fr;
-
             gap: 0;
-
             border: 1px solid #d8dee4;
-
             border-radius: 8px;
-
             overflow: hidden;
-
             margin-bottom: 22px;
         }
 
         .info-item {
             padding: 14px;
-
             border-bottom: 1px solid #eaeef2;
         }
 
@@ -515,23 +431,16 @@
 
         .info-label {
             display: block;
-
             font-size: 11px;
-
             color: #656d76;
-
             margin-bottom: 5px;
-
             text-transform: uppercase;
-
             letter-spacing: 0.03em;
         }
 
         .info-value {
             font-size: 13px;
-
             color: #1f2328;
-
             word-break: break-word;
         }
 
@@ -541,41 +450,27 @@
 
         .settings-section-title {
             font-size: 13px;
-
             font-weight: 600;
-
             color: #656d76;
-
             margin-bottom: 8px;
         }
 
         .settings-list {
             border: 1px solid #d8dee4;
-
             border-radius: 8px;
-
             overflow: hidden;
         }
 
         .settings-item {
             width: 100%;
-
             border: none;
-
             border-bottom: 1px solid #eaeef2;
-
             background: #ffffff;
-
             padding: 14px;
-
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
-
             text-align: left;
-
             cursor: pointer;
         }
 
@@ -589,23 +484,18 @@
 
         .settings-item strong {
             display: block;
-
             font-size: 13px;
-
             color: #1f2328;
-
             margin-bottom: 2px;
         }
 
         .settings-item span {
             font-size: 12px;
-
             color: #656d76;
         }
 
         .settings-arrow {
             color: #8c959f;
-
             font-size: 17px;
         }
 
@@ -619,15 +509,12 @@
 
         .subview h2 {
             font-size: 18px;
-
             font-weight: 600;
-
             margin-bottom: 20px;
         }
 
         .subview-row {
             padding: 15px 0;
-
             border-bottom: 1px solid #eaeef2;
         }
 
@@ -637,47 +524,32 @@
 
         .subview-label {
             font-size: 12px;
-
             color: #656d76;
-
             margin-bottom: 5px;
         }
 
         .subview-value {
             font-size: 14px;
-
             color: #1f2328;
         }
 
         .verified {
             display: inline-flex;
-
             align-items: center;
-
             gap: 5px;
-
             color: #1a7f37;
-
             font-size: 12px;
-
             margin-left: 7px;
         }
 
         .edit-profile-button {
             margin-top: 20px;
-
             border: 1px solid #d0d7de;
-
             background: #ffffff;
-
             color: #1f2328;
-
             border-radius: 6px;
-
             padding: 8px 14px;
-
             cursor: pointer;
-
             font-size: 13px;
         }
 
@@ -691,13 +563,9 @@
 
         .interface-option {
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
             padding: 14px 0;
-
             border-bottom: 1px solid #eaeef2;
         }
 
@@ -707,13 +575,11 @@
 
         .interface-option strong {
             font-size: 13px;
-
             font-weight: 500;
         }
 
         .interface-option span {
             color: #656d76;
-
             font-size: 12px;
         }
 
@@ -722,19 +588,14 @@
         ===================================================== */
 
         @media (max-width: 600px) {
-
             body {
-                padding: 18px 12px;
-
+                padding: 12px;
                 align-items: flex-start;
+                padding-top: 18px;
             }
 
-            .dashboard-wrapper {
+            .dashboard-box {
                 max-width: 100%;
-            }
-
-            .topbar {
-                margin-bottom: 10px;
             }
 
             .view {
@@ -747,9 +608,7 @@
 
             .activity-row {
                 grid-template-columns: 1fr;
-
                 gap: 4px;
-
                 padding: 10px 14px;
             }
 
@@ -787,10 +646,10 @@
 
 <body>
 
-<div class="dashboard-wrapper">
+<div class="dashboard-box">
 
     <!-- =====================================================
-         SEPARATE TOP HEADER
+         HEADER
     ====================================================== -->
 
     <div class="topbar">
@@ -801,698 +660,570 @@
             aria-label="Open profile"
             title="Profile"
         >
+            <img id="headerAvatar" alt="Profile">
 
-            <img
-                id="headerAvatar"
-                alt="Profile"
-            >
-
-            <div
-                id="headerAvatarFallback"
-                class="default-avatar"
-            >
+            <div id="headerAvatarFallback" class="default-avatar">
                 U
             </div>
-
         </button>
 
     </div>
 
 
     <!-- =====================================================
-         ORIGINAL DASHBOARD BOX
+         MAIN DASHBOARD
     ====================================================== -->
 
-    <div class="dashboard-box">
+    <div id="dashboardView" class="view">
 
-
-        <!-- =================================================
-             MAIN DASHBOARD
-        ================================================== -->
-
-        <div
-            id="dashboardView"
-            class="view"
-        >
-
-            <div class="welcome">
-
-                <h1 id="welcomeName">
-                    Welcome to your Dashboard
-                </h1>
-
-                <p>
-                    Your student guidance space for profiles,
-                    alumni connections and academic resources.
-                </p>
-
-            </div>
-
-
-            <!-- EXPLORE -->
-
-            <div class="explore-title">
-                Explore
-            </div>
-
-
-            <div class="explore-grid">
-
-
-                <!-- MY PROFILE -->
-
-                <button
-                    class="explore-card profile-card"
-                    onclick="openProfilePanel()"
-                >
-
-                    <div class="card-icon">
-                        👤
-                    </div>
-
-                    <h2>
-                        My Profile
-                    </h2>
-
-                    <p>
-                        View your complete academic and
-                        personal profile.
-                    </p>
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                </button>
-
-
-                <!-- ALUMNI -->
-
-                <button
-                    class="explore-card alumni-card"
-                    onclick="openAlumni()"
-                >
-
-                    <div class="card-icon">
-                        👥
-                    </div>
-
-                    <h2>
-                        Alumni
-                    </h2>
-
-                    <p>
-                        Connect with experienced alumni and
-                        explore their profiles.
-                    </p>
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                </button>
-
-            </div>
-
-
-            <!-- =================================================
-                 RECENT ACTIVITY
-            ================================================== -->
-
-            <div class="activity">
-
-                <div class="activity-header">
-
-                    <h2>
-                        Recent Activity
-                    </h2>
-
-                    <span id="activityStatus">
-                        Latest profiles
-                    </span>
-
-                </div>
-
-
-                <div class="activity-box">
-
-                    <!-- HEADER -->
-
-                    <div class="activity-row">
-
-                        <span class="activity-name">
-                            Student / Alumni
-                        </span>
-
-                        <span class="activity-degree">
-                            Degree
-                        </span>
-
-                        <span>
-                            Status
-                        </span>
-
-                    </div>
-
-
-                    <!-- DATA -->
-
-                    <div id="activityRows">
-
-                        <div class="activity-row">
-
-                            <span class="activity-name">
-                                Loading...
-                            </span>
-
-                            <span class="activity-degree">
-                                —
-                            </span>
-
-                            <span>
-                                —
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 BOTTOM ACTIONS
-                 SETTINGS + SIGN OUT KEPT HERE
-            ================================================== -->
-
-            <div class="bottom-actions">
-
-                <button
-                    class="secondary-button"
-                    onclick="openProfilePanel()"
-                >
-                    Settings
-                </button>
-
-
-                <button
-                    class="danger-button"
-                    onclick="handleLogout()"
-                >
-                    Sign out
-                </button>
-
-            </div>
-
+        <div class="welcome">
+            <h1 id="welcomeName">Welcome to your Dashboard</h1>
+            <p>
+                Your student guidance space for profiles, alumni connections
+                and academic resources.
+            </p>
         </div>
 
 
-        <!-- =================================================
-             PROFILE / SETTINGS PANEL
-        ================================================== -->
-
-        <div
-            id="profileView"
-            class="view settings-view"
-        >
-
-            <div class="settings-header">
-
-                <button
-                    class="back-button"
-                    onclick="showDashboard()"
-                    aria-label="Go back"
-                >
-                    ←
-                </button>
-
-                <h1>
-                    Profile
-                </h1>
-
-            </div>
-
-
-            <!-- PROFILE PREVIEW -->
-
-            <div class="profile-preview">
-
-                <div class="large-avatar">
-
-                    <img
-                        id="profileAvatar"
-                        alt="Profile"
-                    >
-
-                    <div
-                        id="profileAvatarFallback"
-                        class="large-avatar-fallback"
-                    >
-                        U
-                    </div>
-
-                </div>
-
-
-                <div>
-
-                    <h2 id="profileName">
-                        Loading...
-                    </h2>
-
-                    <p id="profileRole">
-                        —
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- PROFILE INFORMATION -->
-
-            <div class="profile-information">
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Full name
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoName"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Account type
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoAccountType"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Email
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoEmail"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Degree
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoDegree"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Employment
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoEmployment"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Department
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoDepartment"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Bio
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoBio"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-
-                <div class="info-item">
-
-                    <span class="info-label">
-                        Email status
-                    </span>
-
-                    <span
-                        class="info-value"
-                        id="infoVerification"
-                    >
-                        —
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- SETTINGS -->
-
-            <div class="settings-section-title">
-                Settings
-            </div>
-
-
-            <div class="settings-list">
-
-
-                <!-- EDIT PROFILE -->
-
-                <button
-                    class="settings-item"
-                    onclick="editProfile()"
-                >
-
-                    <div>
-
-                        <strong>
-                            Edit profile
-                        </strong>
-
-                        <span>
-                            Change your saved profile information
-                        </span>
-
-                    </div>
-
-                    <span class="settings-arrow">
-                        →
-                    </span>
-
-                </button>
-
-
-                <!-- ACCOUNT -->
-
-                <button
-                    class="settings-item"
-                    onclick="openAccountSettings()"
-                >
-
-                    <div>
-
-                        <strong>
-                            Account
-                        </strong>
-
-                        <span>
-                            Email and account information
-                        </span>
-
-                    </div>
-
-                    <span class="settings-arrow">
-                        →
-                    </span>
-
-                </button>
-
-
-                <!-- INTERFACE -->
-
-                <button
-                    class="settings-item"
-                    onclick="openInterfaceSettings()"
-                >
-
-                    <div>
-
-                        <strong>
-                            Interface
-                        </strong>
-
-                        <span>
-                            Simple display preferences
-                        </span>
-
-                    </div>
-
-                    <span class="settings-arrow">
-                        →
-                    </span>
-
-                </button>
-
-            </div>
-
+        <div class="explore-title">
+            Explore
         </div>
 
 
-        <!-- =================================================
-             ACCOUNT SUBVIEW
-        ================================================== -->
+        <div class="explore-grid">
 
-        <div
-            id="accountView"
-            class="view subview"
-        >
-
-            <div class="settings-header">
-
-                <button
-                    class="back-button"
-                    onclick="openProfilePanel()"
-                >
-                    ←
-                </button>
-
-                <h1>
-                    Account
-                </h1>
-
-            </div>
-
-
-            <h2>
-                Account information
-            </h2>
-
-
-            <div class="subview-row">
-
-                <div class="subview-label">
-                    Email
-                </div>
-
-                <div class="subview-value">
-
-                    <span id="accountEmail">
-                        —
-                    </span>
-
-                    <span
-                        id="verifiedBadge"
-                        class="verified"
-                    >
-                        ✓ Verified
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="subview-row">
-
-                <div class="subview-label">
-                    Account type
-                </div>
-
-                <div
-                    class="subview-value"
-                    id="accountType"
-                >
-                    —
-                </div>
-
-            </div>
-
-
-            <div class="subview-row">
-
-                <div class="subview-label">
-                    User ID
-                </div>
-
-                <div
-                    class="subview-value"
-                    id="accountUserId"
-                    style="font-size:12px;color:#656d76;"
-                >
-                    —
-                </div>
-
-            </div>
-
+            <!-- MY PROFILE -->
 
             <button
-                class="edit-profile-button"
-                onclick="editProfile()"
+                class="explore-card profile-card"
+                onclick="openProfilePanel()"
             >
-                Edit profile
+
+                <div class="card-icon">
+                    👤
+                </div>
+
+                <h2>My Profile</h2>
+
+                <p>
+                    View your complete academic and personal profile.
+                </p>
+
+                <span class="arrow">→</span>
+
+            </button>
+
+
+            <!-- ALUMNI -->
+
+            <button
+                class="explore-card alumni-card"
+                onclick="openAlumni()"
+            >
+
+                <div class="card-icon">
+                    👥
+                </div>
+
+                <h2>Alumni</h2>
+
+                <p>
+                    Connect with experienced alumni and explore their profiles.
+                </p>
+
+                <span class="arrow">→</span>
+
             </button>
 
         </div>
 
 
         <!-- =================================================
-             INTERFACE SUBVIEW
+             RECENT ACTIVITY
         ================================================== -->
 
-        <div
-            id="interfaceView"
-            class="view subview"
-        >
+        <div class="activity">
 
-            <div class="settings-header">
+            <div class="activity-header">
+                <h2>Recent Activity</h2>
+                <span id="activityStatus">Latest profiles</span>
+            </div>
 
-                <button
-                    class="back-button"
-                    onclick="openProfilePanel()"
+            <div class="activity-box">
+
+                <div class="activity-row">
+                    <span class="activity-name">Student / Alumni</span>
+                    <span class="activity-degree">Degree</span>
+                    <span>Status</span>
+                </div>
+
+                <div id="activityRows">
+
+                    <div class="activity-row">
+                        <span class="activity-name">Loading...</span>
+                        <span class="activity-degree">—</span>
+                        <span>—</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DASHBOARD ACTIONS
+        ================================================== -->
+
+        <div class="bottom-actions">
+
+            <button
+                class="secondary-button"
+                onclick="openProfilePanel()"
+            >
+                Settings
+            </button>
+
+            <button
+                class="danger-button"
+                onclick="handleLogout()"
+            >
+                Sign out
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PROFILE / SETTINGS PANEL
+    ====================================================== -->
+
+    <div id="profileView" class="view settings-view">
+
+        <div class="settings-header">
+
+            <button
+                class="back-button"
+                onclick="showDashboard()"
+                aria-label="Go back"
+            >
+                ←
+            </button>
+
+            <h1>Profile</h1>
+
+        </div>
+
+
+        <!-- PROFILE PREVIEW -->
+
+        <div class="profile-preview">
+
+            <div class="large-avatar">
+
+                <img id="profileAvatar" alt="Profile">
+
+                <div
+                    id="profileAvatarFallback"
+                    class="large-avatar-fallback"
                 >
-                    ←
-                </button>
-
-                <h1>
-                    Interface
-                </h1>
+                    U
+                </div>
 
             </div>
 
+            <div>
 
-            <h2>
-                Interface preferences
-            </h2>
+                <h2 id="profileName">
+                    Loading...
+                </h2>
+
+                <p id="profileRole">
+                    —
+                </p>
+
+            </div>
+
+        </div>
 
 
-            <div class="interface-option">
+        <!-- PROFILE INFORMATION -->
 
-                <div>
+        <div class="profile-information">
 
-                    <strong>
-                        Appearance
-                    </strong>
+            <div class="info-item">
 
-                    <br>
+                <span class="info-label">
+                    Full name
+                </span>
 
-                    <span>
-                        Your dashboard currently uses
-                        the default light interface.
-                    </span>
-
-                </div>
-
-                <span>
-                    Light
+                <span
+                    class="info-value"
+                    id="infoName"
+                >
+                    —
                 </span>
 
             </div>
 
 
-            <div class="interface-option">
+            <div class="info-item">
 
-                <div>
+                <span class="info-label">
+                    Account type
+                </span>
 
-                    <strong>
-                        Layout
-                    </strong>
-
-                    <br>
-
-                    <span>
-                        Simple dashboard layout
-                    </span>
-
-                </div>
-
-                <span>
-                    Default
+                <span
+                    class="info-value"
+                    id="infoAccountType"
+                >
+                    —
                 </span>
 
             </div>
 
 
-            <div class="interface-option">
+            <div class="info-item">
 
-                <div>
+                <span class="info-label">
+                    Email
+                </span>
 
-                    <strong>
-                        Profile display
-                    </strong>
-
-                    <br>
-
-                    <span>
-                        Show your saved profile information
-                    </span>
-
-                </div>
-
-                <span>
-                    On
+                <span
+                    class="info-value"
+                    id="infoEmail"
+                >
+                    —
                 </span>
 
             </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Degree
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoDegree"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Employment
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoEmployment"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Department
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoDepartment"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Bio
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoBio"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span class="info-label">
+                    Email status
+                </span>
+
+                <span
+                    class="info-value"
+                    id="infoVerification"
+                >
+                    —
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SETTINGS -->
+
+        <div class="settings-section-title">
+            Settings
+        </div>
+
+
+        <div class="settings-list">
+
+            <button
+                class="settings-item"
+                onclick="editProfile()"
+            >
+
+                <div>
+                    <strong>Edit profile</strong>
+                    <span>
+                        Change your saved profile information
+                    </span>
+                </div>
+
+                <span class="settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <button
+                class="settings-item"
+                onclick="openAccountSettings()"
+            >
+
+                <div>
+                    <strong>Account</strong>
+                    <span>
+                        Email and account information
+                    </span>
+                </div>
+
+                <span class="settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <button
+                class="settings-item"
+                onclick="openInterfaceSettings()"
+            >
+
+                <div>
+                    <strong>Interface</strong>
+                    <span>
+                        Simple display preferences
+                    </span>
+                </div>
+
+                <span class="settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACCOUNT SUBVIEW
+    ====================================================== -->
+
+    <div id="accountView" class="view subview">
+
+        <div class="settings-header">
+
+            <button
+                class="back-button"
+                onclick="openProfilePanel()"
+            >
+                ←
+            </button>
+
+            <h1>Account</h1>
+
+        </div>
+
+
+        <h2>Account information</h2>
+
+
+        <div class="subview-row">
+
+            <div class="subview-label">
+                Email
+            </div>
+
+            <div class="subview-value">
+                <span id="accountEmail">
+                    —
+                </span>
+
+                <span
+                    id="verifiedBadge"
+                    class="verified"
+                >
+                    ✓ Verified
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="subview-row">
+
+            <div class="subview-label">
+                Account type
+            </div>
+
+            <div
+                class="subview-value"
+                id="accountType"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="subview-row">
+
+            <div class="subview-label">
+                User ID
+            </div>
+
+            <div
+                class="subview-value"
+                id="accountUserId"
+                style="font-size:12px;color:#656d76;"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <button
+            class="edit-profile-button"
+            onclick="editProfile()"
+        >
+            Edit profile
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         INTERFACE SUBVIEW
+    ====================================================== -->
+
+    <div id="interfaceView" class="view subview">
+
+        <div class="settings-header">
+
+            <button
+                class="back-button"
+                onclick="openProfilePanel()"
+            >
+                ←
+            </button>
+
+            <h1>Interface</h1>
+
+        </div>
+
+
+        <h2>Interface preferences</h2>
+
+
+        <div class="interface-option">
+
+            <div>
+
+                <strong>Appearance</strong>
+
+                <br>
+
+                <span>
+                    Your dashboard currently uses the default light interface.
+                </span>
+
+            </div>
+
+            <span>
+                Light
+            </span>
+
+        </div>
+
+
+        <div class="interface-option">
+
+            <div>
+
+                <strong>Layout</strong>
+
+                <br>
+
+                <span>
+                    Simple dashboard layout
+                </span>
+
+            </div>
+
+            <span>
+                Default
+            </span>
+
+        </div>
+
+
+        <div class="interface-option">
+
+            <div>
+
+                <strong>Profile display</strong>
+
+                <br>
+
+                <span>
+                    Show your saved profile information
+                </span>
+
+            </div>
+
+            <span>
+                On
+            </span>
 
         </div>
 
@@ -1557,11 +1288,9 @@
             const user =
                 userResponse.data.user;
 
-
             if (!user) {
 
-                window.location.href =
-                    'index.html';
+                window.location.href = 'index.html';
 
                 return;
             }
@@ -1600,15 +1329,9 @@
             currentProfile = data;
 
 
-            populateProfile(
-                data,
-                user
-            );
+            populateProfile(data, user);
 
-
-            populateActivity(
-                data
-            );
+            populateActivity(data);
 
         }
 
@@ -1619,6 +1342,11 @@
                 error
             );
 
+            /*
+             * Do not immediately redirect here.
+             * This prevents temporary Supabase/network
+             * problems from throwing the user back to login.
+             */
 
             document.getElementById(
                 'welcomeName'
@@ -1727,10 +1455,7 @@
         /* Email verification */
 
         const verified =
-            Boolean(
-                user.email_confirmed_at
-            );
-
+            Boolean(user.email_confirmed_at);
 
         document.getElementById(
             'infoVerification'
@@ -1739,18 +1464,15 @@
                 ? '✓ Verified'
                 : 'Not verified';
 
-
         document.getElementById(
             'accountEmail'
         ).textContent =
             email;
 
-
         document.getElementById(
             'accountType'
         ).textContent =
             role;
-
 
         document.getElementById(
             'accountUserId'
@@ -1763,7 +1485,6 @@
                 'verifiedBadge'
             );
 
-
         badge.style.display =
             verified
                 ? 'inline-flex'
@@ -1771,6 +1492,12 @@
 
 
         /* Avatar */
+
+        /*
+         * This checks several common column names.
+         * If your profile.html stores the avatar
+         * under one of these names, it will be shown.
+         */
 
         const avatar =
             data.avatar_url ||
@@ -1817,7 +1544,6 @@
                 'headerAvatarFallback'
             );
 
-
         const profileImage =
             document.getElementById(
                 'profileAvatar'
@@ -1829,8 +1555,7 @@
             );
 
 
-        headerImage.src =
-            url;
+        headerImage.src = url;
 
         headerImage.style.display =
             'block';
@@ -1839,8 +1564,7 @@
             'none';
 
 
-        profileImage.src =
-            url;
+        profileImage.src = url;
 
         profileImage.style.display =
             'block';
@@ -1889,7 +1613,6 @@
         ).textContent =
             letter;
 
-
         document.getElementById(
             'profileAvatarFallback'
         ).textContent =
@@ -1906,21 +1629,28 @@
         ownProfile
     ) {
 
+        /*
+         * For now this intentionally shows
+         * the current user's information.
+         *
+         * We do NOT query current students here.
+         * Alumni exploration can be connected
+         * separately later.
+         */
+
         const rows =
             document.getElementById(
                 'activityRows'
             );
 
 
-        rows.innerHTML =
-            '';
+        rows.innerHTML = '';
 
 
         const row =
             document.createElement(
                 'div'
             );
-
 
         row.className =
             'activity-row';
@@ -1931,12 +1661,10 @@
                 ownProfile.full_name
             );
 
-
         const degree =
             safe(
                 ownProfile.degree
             );
-
 
         const type =
             safe(
@@ -1949,10 +1677,8 @@
                 'span'
             );
 
-
         nameElement.className =
             'activity-name';
-
 
         nameElement.textContent =
             name;
@@ -1963,10 +1689,8 @@
                 'span'
             );
 
-
         degreeElement.className =
             'activity-degree';
-
 
         degreeElement.textContent =
             degree;
@@ -1977,14 +1701,12 @@
                 'span'
             );
 
-
         statusElement.className =
             `status ${
                 type.toLowerCase() === 'alumni'
                     ? 'alumni'
                     : 'student'
             }`;
-
 
         statusElement.textContent =
             type;
@@ -1994,11 +1716,9 @@
             nameElement
         );
 
-
         row.appendChild(
             degreeElement
         );
-
 
         row.appendChild(
             statusElement
@@ -2023,18 +1743,15 @@
         ).style.display =
             'none';
 
-
         document.getElementById(
             'accountView'
         ).style.display =
             'none';
 
-
         document.getElementById(
             'interfaceView'
         ).style.display =
             'none';
-
 
         document.getElementById(
             'profileView'
@@ -2055,18 +1772,15 @@
         ).style.display =
             'none';
 
-
         document.getElementById(
             'accountView'
         ).style.display =
             'none';
 
-
         document.getElementById(
             'interfaceView'
         ).style.display =
             'none';
-
 
         document.getElementById(
             'dashboardView'
@@ -2087,13 +1801,6 @@
         ).style.display =
             'none';
 
-
-        document.getElementById(
-            'interfaceView'
-        ).style.display =
-            'none';
-
-
         document.getElementById(
             'accountView'
         ).style.display =
@@ -2112,13 +1819,6 @@
             'profileView'
         ).style.display =
             'none';
-
-
-        document.getElementById(
-            'accountView'
-        ).style.display =
-            'none';
-
 
         document.getElementById(
             'interfaceView'
@@ -2146,6 +1846,11 @@
 
     function openAlumni() {
 
+        /*
+         * Replace this with your alumni page
+         * when you create it.
+         */
+
         window.location.href =
             'alumni.html';
 
@@ -2172,7 +1877,6 @@
             );
 
         }
-
 
         window.location.href =
             'index.html';
