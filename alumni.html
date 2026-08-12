@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Alumni • Student Guidance Portal</title>
 
-    <!-- Supabase -->
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -829,7 +829,7 @@
 
 <body>
 
-    <main class="main">
+    <main class="main" id="mainContent">
 
         <!-- Back to Dashboard -->
 
@@ -874,7 +874,7 @@
 
         <!-- Alumni list -->
 
-        <section class="alumni-container">
+        <section class="alumni-container" id="alumniContainer">
 
             <div class="list-header">
 
@@ -998,1000 +998,281 @@
                 <label for="contactSubject">
                     Subject
                 </label>
-
-                <input
-                    type="text"
-                    id="contactSubject"
-                    placeholder="What would you like to discuss?"
-                >
+                <input id="contactSubject" type="text" />
 
                 <label for="contactMessage">
                     Message
                 </label>
-
-                <textarea
-                    id="contactMessage"
-                    placeholder="Write your message..."
-                ></textarea>
+                <textarea id="contactMessage"></textarea>
 
             </div>
 
             <div class="contact-footer">
-
-                <button
-                    class="secondary-btn"
-                    onclick="closeContact()"
-                >
-                    Cancel
-                </button>
-
-                <button
-                    class="send-btn"
-                    id="sendMessageButton"
-                    onclick="sendContactMessage()"
-                >
-                    Send Message
-                </button>
-
+                <button class="secondary-btn" onclick="closeContact()">Cancel</button>
+                <button class="send-btn" onclick="sendContact()">Send</button>
             </div>
 
         </div>
 
     </div>
 
-
     <script>
+        // ---------- CONFIG ----------
+        // If you already have a Supabase client created globally on your pages,
+        // this script will try to use it. Otherwise set SUPABASE_URL and
+        // SUPABASE_ANON_KEY below (or copy them from index.html).
+        //
+        // NOTE: If you want to preserve immediate redirect behaviour, set
+        // REDIRECT_ON_NO_SESSION = true. Default below shows an inline message
+        // and does NOT redirect so you can debug on GitHub Pages.
+        const REDIRECT_ON_NO_SESSION = false; // change to true if you prefer redirect
+        const SUPABASE_URL = 'https://kksarduvycfebklmhxfb.supabase.co'; // from your index.html
+        const SUPABASE_ANON_KEY = 'REPLACE_WITH_YOUR_ANON_KEY'; // replace with the full anon key from index.html
 
-        /* =========================================
-           SUPABASE
-        ========================================= */
+        // ---------- UTIL ----------
+        function getById(id) { return document.getElementById(id); }
+        function showAuthError(messageHtml) {
+            const main = getById('mainContent');
+            main.innerHTML = `
+              <div class="auth-error">
+                <h2>Sign in required</h2>
+                <p>${messageHtml || 'You need to sign in to view alumni profiles.'}</p>
+                <div style="margin-top: 12px;">
+                  <a href="index.html">Go to Sign in</a>
+                  <span style="margin-left:10px;color:#8c959f;font-size:13px;">or open this page with <code>?bypass=1</code> during development</span>
+                </div>
+              </div>
+            `;
+        }
 
-        const SUPABASE_URL =
-            'https://kksarduvycfebklmhxfb.supabase.co';
+        // ---------- PAGE LOGIC ----------
+        (async function init() {
+            // Allow bypass during development: ?bypass=1
+            const params = new URLSearchParams(window.location.search);
+            const bypass = params.get('bypass') === '1';
 
-        const SUPABASE_ANON_KEY =
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzIiwicmVmIjoia2tzYXJkdXZ5Y2ZlYmtibG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
+            // Prefer any existing global client (if you set it from index)
+            let supabaseClient = window.supabaseClient || null;
+            if (!supabaseClient) {
+                // If user hasn't put anon key in this file, do not crash: show message
+                if (SUPABASE_ANON_KEY === 'REPLACE_WITH_YOUR_ANON_KEY') {
+                    console.warn('Supabase ANON KEY not set in alumni.html. If you want live data on this page, copy the anon key from index.html.');
+                    // We continue without connecting; allow browsing the page content without auth if bypass is present
+                    if (!bypass) {
+                        // show friendly message but don't redirect (unless REDIRECT_ON_NO_SESSION true)
+                        if (REDIRECT_ON_NO_SESSION) {
+                            window.location.href = 'index.html';
+                            return;
+                        } else {
+                            showAuthError('Supabase not configured on this page. To debug, add the ANON key or open with <code>?bypass=1</code>.');
+                            return;
+                        }
+                    } else {
+                        // bypass active — continue without supabase
+                        loadDemoAlumni();
+                        return;
+                    }
+                }
 
-        const supabaseClient =
-            window.supabase.createClient(
-                SUPABASE_URL,
-                SUPABASE_ANON_KEY
-            );
+                try {
+                    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                } catch (err) {
+                    console.error('Supabase init error:', err);
+                    if (!bypass) {
+                        if (REDIRECT_ON_NO_SESSION) {
+                            window.location.href = 'index.html';
+                        } else {
+                            showAuthError('Failed to initialize Supabase client.');
+                        }
+                    } else {
+                        loadDemoAlumni();
+                    }
+                    return;
+                }
+            }
 
+            // Check session
+            try {
+                const { data } = await supabaseClient.auth.getSession();
+                const session = data?.session ?? null;
+                if (!session) {
+                    // No user session found
+                    if (!bypass) {
+                        if (REDIRECT_ON_NO_SESSION) {
+                            // redirect to sign-in (original behaviour)
+                            window.location.href = 'index.html';
+                            return;
+                        } else {
+                            // Show inline message instead of redirect so page stays open for debugging
+                            showAuthError('You are not signed in. Please sign in to view alumni profiles.');
+                            return;
+                        }
+                    } else {
+                        // bypass — show demo content
+                        loadDemoAlumni();
+                        return;
+                    }
+                }
 
-        /* =========================================
-           VARIABLES
-        ========================================= */
+                // If session present, load alumni data from your table (example)
+                await loadAlumni(supabaseClient);
 
-        let currentUser = null;
+            } catch (err) {
+                console.error('Error checking session or loading alumni:', err);
+                if (!bypass) {
+                    if (REDIRECT_ON_NO_SESSION) {
+                        window.location.href = 'index.html';
+                        return;
+                    } else {
+                        showAuthError('An error occurred while validating session.');
+                        return;
+                    }
+                } else {
+                    loadDemoAlumni();
+                    return;
+                }
+            }
+        })();
 
-        let currentProfile = null;
-
-        let alumniData = [];
-
-        let selectedAlumni = null;
-
-
-        /* =========================================
-           LOAD PAGE
-        ========================================= */
-
-        async function loadAlumniPage() {
+        // ---------- DATA LOADING ----------
+        async function loadAlumni(supabaseClient) {
+            const alumniListEl = getById('alumniList');
+            alumniListEl.innerHTML = `<div class="loading">Loading alumni...</div>`;
 
             try {
-
-                /*
-                 * Give Supabase a moment to restore
-                 * the existing browser session.
-                 */
-
-                const {
-                    data: sessionData,
-                    error: sessionError
-                } = await supabaseClient.auth.getSession();
-
-                if (sessionError) {
-
-                    console.error(
-                        'Session error:',
-                        sessionError
-                    );
-
-                }
-
-                /*
-                 * Get authenticated user.
-                 */
-
-                const {
-                    data: userData,
-                    error: userError
-                } = await supabaseClient.auth.getUser();
-
-                console.log(
-                    'Supabase user:',
-                    userData?.user
-                );
-
-                console.log(
-                    'Supabase auth error:',
-                    userError
-                );
-
-                /*
-                 * If there is no logged-in user,
-                 * send them back to login.
-                 */
-
-                if (
-                    userError ||
-                    !userData ||
-                    !userData.user
-                ) {
-
-                    console.warn(
-                        'No authenticated Supabase user found.'
-                    );
-
-                    window.location.href =
-                        'index.html';
-
-                    return;
-                }
-
-                currentUser =
-                    userData.user;
-
-
-                /*
-                 * Load current user's profile.
-                 */
-
-                const {
-                    data: profile,
-                    error: profileError
-                } = await supabaseClient
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', currentUser.id)
-                    .maybeSingle();
-
-
-                if (
-                    !profileError &&
-                    profile
-                ) {
-
-                    currentProfile =
-                        profile;
-                }
-
-
-                /*
-                 * Load alumni.
-                 *
-                 * Current user is excluded.
-                 */
-
-                const {
-                    data,
-                    error
-                } = await supabaseClient
-                    .from('profiles')
-                    .select('*')
-                    .eq('account_type', 'alumni')
-                    .neq('id', currentUser.id)
-                    .order('full_name', {
-                        ascending: true
-                    });
-
+                // Adjust the table/columns below to match your schema
+                const { data, error } = await supabaseClient
+                    .from('alumni')
+                    .select('id, full_name, email, degree, department, avatar_url')
+                    .order('full_name', { ascending: true });
 
                 if (error) {
-
-                    console.error(
-                        'Alumni loading error:',
-                        error
-                    );
-
-                    document.getElementById(
-                        'alumniList'
-                    ).innerHTML = `
-                        <div class="empty">
-                            Unable to load alumni right now.
-                        </div>
-                    `;
-
+                    console.error('Supabase query error:', error);
+                    alumniListEl.innerHTML = `<div class="empty">Failed to load alumni. Check console for details.</div>`;
                     return;
                 }
 
+                if (!data || data.length === 0) {
+                    alumniListEl.innerHTML = `<div class="empty">No alumni found.</div>`;
+                    return;
+                }
 
-                alumniData =
-                    data || [];
-
-                renderAlumni(
-                    alumniData
-                );
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    'Page loading error:',
-                    error
-                );
-
-                document.getElementById(
-                    'alumniList'
-                ).innerHTML = `
-                    <div class="empty">
-                        Something went wrong while loading alumni.
-                    </div>
-                `;
-            }
-        }
-
-
-        /* =========================================
-           RENDER ALUMNI
-        ========================================= */
-
-        function renderAlumni(list) {
-
-            const container =
-                document.getElementById(
-                    'alumniList'
-                );
-
-
-            if (!list || !list.length) {
-
-                container.innerHTML = `
-                    <div class="empty">
-                        No alumni profiles found.
-                    </div>
-                `;
-
-                return;
-            }
-
-
-            container.innerHTML =
-                list.map(alumni => {
-
-                    const name =
-                        alumni.full_name ||
-                        'Unnamed Alumni';
-
-
-                    const degree =
-                        alumni.degree ||
-                        '—';
-
-
-                    const department =
-                        alumni.department ||
-                        alumni.field_of_study ||
-                        '—';
-
-
-                    const image =
-                        alumni.avatar_url ||
-                        alumni.profile_image ||
-                        alumni.profile_photo ||
-                        alumni.image_url ||
-                        alumni.photo_url;
-
-
-                    let avatarHTML = '';
-
-
-                    if (image) {
-
-                        avatarHTML = `
-                            <img
-                                src="${escapeHtml(image)}"
-                                alt="${escapeHtml(name)}"
-                                onerror="this.style.display='none'; this.parentElement.textContent='${escapeJs(name.charAt(0).toUpperCase())}'"
-                            >
-                        `;
-
-                    }
-
-                    else {
-
-                        avatarHTML =
-                            escapeHtml(
-                                name
-                                    .charAt(0)
-                                    .toUpperCase()
-                            );
-                    }
-
-
+                alumniListEl.innerHTML = data.map(a => {
+                    const initials = (a.full_name || 'U').split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
+                    const avatarHtml = a.avatar_url ? `<img src="${a.avatar_url}" alt="${a.full_name}">` : `<div class="avatar">${initials}</div>`;
                     return `
-
-                        <div class="alumni-row">
-
+                        <div class="alumni-row" data-id="${a.id}">
                             <div class="person">
-
-                                <div class="avatar">
-                                    ${avatarHTML}
-                                </div>
-
+                                <div class="avatar">${a.avatar_url ? `<img src="${a.avatar_url}" alt="${a.full_name}">` : initials}</div>
                                 <div class="person-info">
-
-                                    <div class="person-name">
-                                        ${escapeHtml(name)}
-                                    </div>
-
-                                    <div class="person-email">
-                                        ${escapeHtml(
-                                            alumni.email || ''
-                                        )}
-                                    </div>
-
+                                    <div class="person-name">${escapeHtml(a.full_name || '—')}</div>
+                                    <div class="person-email">${escapeHtml(a.email || '—')}</div>
                                 </div>
-
                             </div>
-
-                            <div class="degree">
-                                ${escapeHtml(degree)}
-                            </div>
-
-                            <div class="department">
-                                ${escapeHtml(department)}
-                            </div>
-
+                            <div class="degree">${escapeHtml(a.degree || '—')}</div>
+                            <div class="department">${escapeHtml(a.department || '—')}</div>
                             <div>
-
-                                <button
-                                    class="view-btn"
-                                    onclick="viewProfile('${escapeJs(alumni.id)}')"
-                                >
-                                    View Profile
-                                </button>
-
+                                <button class="view-btn" onclick="openPreview('${a.id}')">View</button>
                             </div>
-
                         </div>
-
                     `;
-
                 }).join('');
+
+            } catch (err) {
+                console.error('Error loading alumni:', err);
+                const alumniListEl = getById('alumniList');
+                alumniListEl.innerHTML = `<div class="empty">An unexpected error occurred while loading alumni.</div>`;
+            }
         }
 
-
-        /* =========================================
-           SEARCH
-        ========================================= */
-
-        function filterAlumni() {
-
-            const query =
-                document
-                    .getElementById(
-                        'searchInput'
-                    )
-                    .value
-                    .toLowerCase()
-                    .trim();
-
-
-            if (!query) {
-
-                renderAlumni(
-                    alumniData
-                );
-
-                return;
-            }
-
-
-            const filtered =
-                alumniData.filter(
-                    alumni => {
-
-                        const name =
-                            alumni.full_name ||
-                            '';
-
-
-                        const degree =
-                            alumni.degree ||
-                            '';
-
-
-                        const department =
-                            alumni.department ||
-                            alumni.field_of_study ||
-                            '';
-
-
-                        const employment =
-                            alumni.current_employment ||
-                            '';
-
-
-                        return (
-
-                            name
-                                .toLowerCase()
-                                .includes(query) ||
-
-                            degree
-                                .toLowerCase()
-                                .includes(query) ||
-
-                            department
-                                .toLowerCase()
-                                .includes(query) ||
-
-                            employment
-                                .toLowerCase()
-                                .includes(query)
-
-                        );
-
-                    }
-                );
-
-
-            renderAlumni(
-                filtered
-            );
-        }
-
-
-        /* =========================================
-           VIEW PROFILE
-        ========================================= */
-
-        function viewProfile(id) {
-
-            const alumni =
-                alumniData.find(
-                    person =>
-                        String(person.id) ===
-                        String(id)
-                );
-
-
-            if (!alumni) {
-
-                console.error(
-                    'Alumni not found:',
-                    id
-                );
-
-                return;
-            }
-
-
-            selectedAlumni =
-                alumni;
-
-
-            const name =
-                alumni.full_name ||
-                'Unnamed Alumni';
-
-
-            const image =
-                alumni.avatar_url ||
-                alumni.profile_image ||
-                alumni.profile_photo ||
-                alumni.image_url ||
-                alumni.photo_url;
-
-
-            let avatarHTML = '';
-
-
-            if (image) {
-
-                avatarHTML = `
-                    <img
-                        src="${escapeHtml(image)}"
-                        alt="${escapeHtml(name)}"
-                    >
-                `;
-
-            }
-
-            else {
-
-                avatarHTML =
-                    escapeHtml(
-                        name
-                            .charAt(0)
-                            .toUpperCase()
-                    );
-            }
-
-
-            document.getElementById(
-                'previewContent'
-            ).innerHTML = `
-
-                <div class="profile-top">
-
-                    <div class="large-avatar">
-                        ${avatarHTML}
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            ${escapeHtml(name)}
-                        </h3>
-
-                        <p>
-                            Alumni
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="profile-grid">
-
-                    <div class="profile-item">
-
-                        <span>Email</span>
-
-                        <strong>
-                            ${escapeHtml(
-                                alumni.email ||
-                                'Not provided'
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-item">
-
-                        <span>Degree</span>
-
-                        <strong>
-                            ${escapeHtml(
-                                alumni.degree ||
-                                'Not provided'
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-item">
-
-                        <span>Department</span>
-
-                        <strong>
-                            ${escapeHtml(
-                                alumni.department ||
-                                alumni.field_of_study ||
-                                'Not provided'
-                            )}
-                        </strong>
-
-                    </div>
-
-
-                    <div class="profile-item">
-
-                        <span>Employment</span>
-
-                        <strong>
-                            ${escapeHtml(
-                                alumni.current_employment ||
-                                'Not provided'
-                            )}
-                        </strong>
-
-                    </div>
-
-                </div>
-
-
-                <div class="profile-section">
-
-                    <h4>
-                        About
-                    </h4>
-
-                    <div class="profile-value">
-                        ${escapeHtml(
-                            alumni.bio ||
-                            'No biography has been added yet.'
-                        )}
-                    </div>
-
-                </div>
-
-
-                ${
-                    alumni.skills
-                    ? `
-
-                        <div class="profile-section">
-
-                            <h4>
-                                Skills
-                            </h4>
-
-                            <div class="profile-value">
-                                ${escapeHtml(
-                                    alumni.skills
-                                )}
-                            </div>
-
+        // Demo content loader for bypass / debugging
+        function loadDemoAlumni() {
+            const alumniListEl = getById('alumniList');
+            alumniListEl.innerHTML = `
+                <div class="alumni-row">
+                    <div class="person">
+                        <div class="avatar">JD</div>
+                        <div class="person-info">
+                            <div class="person-name">John Doe</div>
+                            <div class="person-email">john@example.com</div>
                         </div>
-
-                    `
-                    : ''
-                }
-
-
-                ${
-                    alumni.location
-                    ? `
-
-                        <div class="profile-section">
-
-                            <h4>
-                                Location
-                            </h4>
-
-                            <div class="profile-value">
-                                ${escapeHtml(
-                                    alumni.location
-                                )}
-                            </div>
-
+                    </div>
+                    <div class="degree">B.Sc</div>
+                    <div class="department">Computer Science</div>
+                    <div><button class="view-btn" onclick="alert('Preview (demo)')">View</button></div>
+                </div>
+                <div class="alumni-row">
+                    <div class="person">
+                        <div class="avatar">AS</div>
+                        <div class="person-info">
+                            <div class="person-name">Alice Smith</div>
+                            <div class="person-email">alice@example.com</div>
                         </div>
-
-                    `
-                    : ''
-                }
-
+                    </div>
+                    <div class="degree">M.Sc</div>
+                    <div class="department">Mathematics</div>
+                    <div><button class="view-btn" onclick="alert('Preview (demo)')">View</button></div>
+                </div>
             `;
-
-
-            document
-                .getElementById(
-                    'previewOverlay'
-                )
-                .classList.add(
-                    'active'
-                );
-
-
-            document.body.style.overflow =
-                'hidden';
         }
 
+        // ---------- SMALL HELPERS ----------
+        function escapeHtml(s) {
+            if (!s) return '';
+            return String(s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
 
-        /* =========================================
-           CLOSE PROFILE
-        ========================================= */
+        // preview stubs
+        function openPreview(id) {
+            alert('Open profile preview for id: ' + id);
+        }
 
         function closePreview() {
-
-            document
-                .getElementById(
-                    'previewOverlay'
-                )
-                .classList.remove(
-                    'active'
-                );
-
-
-            document.body.style.overflow =
-                '';
-
-
-            selectedAlumni =
-                null;
+            const overlay = getById('previewOverlay');
+            overlay.classList.remove('active');
         }
 
-
-        function closePreviewFromBackground(
-            event
-        ) {
-
-            if (
-                event.target.id ===
-                'previewOverlay'
-            ) {
-
-                closePreview();
-            }
+        function closePreviewFromBackground(e) {
+            if (e.target.id === 'previewOverlay') closePreview();
         }
 
-
-        /* =========================================
-           CONTACT
-        ========================================= */
-
+        // contact stubs
         function openContact() {
-
-            if (!selectedAlumni) {
-
-                return;
-            }
-
-
-            document.getElementById(
-                'contactName'
-            ).textContent =
-                selectedAlumni.full_name ||
-                'Alumni';
-
-
-            document.getElementById(
-                'contactSubject'
-            ).value = '';
-
-
-            document.getElementById(
-                'contactMessage'
-            ).value = '';
-
-
-            document
-                .getElementById(
-                    'contactOverlay'
-                )
-                .classList.add(
-                    'active'
-                );
+            getById('contactOverlay').classList.add('active');
         }
-
 
         function closeContact() {
-
-            document
-                .getElementById(
-                    'contactOverlay'
-                )
-                .classList.remove(
-                    'active'
-                );
+            getById('contactOverlay').classList.remove('active');
         }
 
-
-        function closeContactFromBackground(
-            event
-        ) {
-
-            if (
-                event.target.id ===
-                'contactOverlay'
-            ) {
-
-                closeContact();
-            }
+        function closeContactFromBackground(e) {
+            if (e.target.id === 'contactOverlay') closeContact();
         }
 
-
-        /* =========================================
-           SEND CONTACT MESSAGE
-        ========================================= */
-
-        async function sendContactMessage() {
-
-            const subject =
-                document
-                    .getElementById(
-                        'contactSubject'
-                    )
-                    .value
-                    .trim();
-
-
-            const message =
-                document
-                    .getElementById(
-                        'contactMessage'
-                    )
-                    .value
-                    .trim();
-
-
-            if (
-                !subject ||
-                !message
-            ) {
-
-                alert(
-                    'Please enter a subject and message.'
-                );
-
-                return;
-            }
-
-
-            if (!selectedAlumni) {
-
-                alert(
-                    'Please select an alumni first.'
-                );
-
-                return;
-            }
-
-
-            /*
-             * Currently this only confirms
-             * the message.
-             *
-             * We can connect this to a
-             * Supabase messages table later.
-             */
-
-            alert(
-                'Your message is ready to be sent to ' +
-                selectedAlumni.full_name +
-                '.'
-            );
-
-
+        function sendContact() {
+            alert('Contact request sent (demo)');
             closeContact();
         }
 
-
-        /* =========================================
-           NAVIGATION
-        ========================================= */
-
+        // simple navigation stub
         function goDashboard() {
-
-            window.location.href =
-                'dashboard.html';
+            window.location.href = 'dashboard.html';
         }
 
-
-        function goProfile() {
-
-            window.location.href =
-                'profile.html';
+        // filter stub (works against current DOM)
+        function filterAlumni() {
+            const q = (getById('searchInput').value || '').toLowerCase();
+            const rows = document.querySelectorAll('#alumniList .alumni-row');
+            rows.forEach(r => {
+                const text = r.textContent.toLowerCase();
+                r.style.display = text.includes(q) ? '' : 'none';
+            });
         }
-
-
-        /* =========================================
-           SECURITY HELPERS
-        ========================================= */
-
-        function escapeHtml(value) {
-
-            if (
-                value === null ||
-                value === undefined
-            ) {
-
-                return '';
-            }
-
-
-            return String(value)
-
-                .replace(
-                    /&/g,
-                    '&amp;'
-                )
-
-                .replace(
-                    /</g,
-                    '&lt;'
-                )
-
-                .replace(
-                    />/g,
-                    '&gt;'
-                )
-
-                .replace(
-                    /"/g,
-                    '&quot;'
-                )
-
-                .replace(
-                    /'/g,
-                    '&#039;'
-                );
-        }
-
-
-        function escapeJs(value) {
-
-            if (
-                value === null ||
-                value === undefined
-            ) {
-
-                return '';
-            }
-
-
-            return String(value)
-                .replace(
-                    /\\/g,
-                    '\\\\'
-                )
-                .replace(
-                    /'/g,
-                    "\\'"
-                )
-                .replace(
-                    /"/g,
-                    '\\"'
-                )
-                .replace(
-                    /\n/g,
-                    '\\n'
-                )
-                .replace(
-                    /\r/g,
-                    '\\r'
-                );
-        }
-
-
-        /* =========================================
-           KEYBOARD CONTROLS
-        ========================================= */
-
-        document.addEventListener(
-            'keydown',
-            function(event) {
-
-                if (
-                    event.key === 'Escape'
-                ) {
-
-                    const contact =
-                        document.getElementById(
-                            'contactOverlay'
-                        );
-
-                    const preview =
-                        document.getElementById(
-                            'previewOverlay'
-                        );
-
-
-                    if (
-                        contact.classList.contains(
-                            'active'
-                        )
-                    ) {
-
-                        closeContact();
-
-                    }
-
-                    else if (
-                        preview.classList.contains(
-                            'active'
-                        )
-                    ) {
-
-                        closePreview();
-                    }
-                }
-            }
-        );
-
-
-        /* =========================================
-           START
-        ========================================= */
-
-        loadAlumniPage();
-
     </script>
 
 </body>
