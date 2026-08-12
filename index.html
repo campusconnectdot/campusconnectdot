@@ -1,0 +1,6536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Guidance Portal</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#F4F4F4;--orange:#FF7315;--text:#3A3535;--dark:#232020;--border:#D8D2CE;--muted:#746D69;--surface:#FFFFFF;}
+*{box-sizing:border-box;scrollbar-color:var(--orange) var(--bg);}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);}
+body{min-height:100vh;}
+.app-view{display:none!important;min-height:100vh;}
+.app-view.active{display:block!important;}
+.i-login-btn,.i-signup-submit-btn{background:var(--orange)!important;color:#fff!important;border-color:var(--orange)!important;}
+.i-login-btn:hover,.i-signup-submit-btn:hover{background:#e85f0b!important;}
+.d-explore-card:hover{border-color:var(--orange)!important;}
+.d-profile-card:hover .d-arrow,.d-alumni-card:hover .d-arrow{color:var(--orange)!important;}
+.a-view-btn{color:var(--orange)!important;border-color:var(--border)!important;}
+.a-view-btn:hover{border-color:var(--orange)!important;background:var(--bg)!important;}
+.a-contact-btn{background:var(--dark)!important;color:#fff!important;border-color:var(--dark)!important;}
+.a-contact-btn:hover{background:var(--orange)!important;border-color:var(--orange)!important;}
+.p-login-btn{background:var(--orange)!important;color:#fff!important;border-color:var(--orange)!important;}
+.p-login-btn:hover{background:#e85f0b!important;}
+.d-dashboard-box,.a-alumni-container,.p-auth-box,.i-auth-box{border-color:var(--border)!important;}
+.d-topbar,.d-settings-item,.i-auth-box,.i-secondary-box,.p-auth-box,.a-alumni-container,.a-preview-box,.a-contact-box{background:var(--surface)!important;}
+.p-form-control,.i-form-control{border-color:var(--border)!important;}
+.i-form-control:focus,.p-form-control:focus{border-color:var(--orange)!important;box-shadow:0 0 0 3px rgba(255,115,21,.16)!important;}
+.d-welcome h1,.d-explore-title,.d-explore-card h2,.d-activity-header h2,.d-info-value,.d-settings-item strong,.d-subview h1,.d-subview h2,.d-profile-preview h2,.i-logo h1,.i-form-label,.p-form-label,.p-scope h1,.a-heading h1,.a-person-name,.a-preview-header h2,.a-profile-top h3{color:var(--text)!important;}
+.a-profile-top{display:flex;align-items:center;gap:16px;margin-bottom:25px}.a-large-avatar{width:70px;height:70px;border-radius:50%;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center}.a-profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}.a-profile-item{border:1px solid var(--border);border-radius:6px;padding:12px;background:var(--bg)}.a-profile-section{margin-top:20px}.a-profile-value{font-size:14px;line-height:1.6;color:var(--text)}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+        }
+
+        
+
+        
+
+        .i-portal-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 900px;
+            height: calc(100vh - 100px);
+            margin: auto;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .i-main-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            gap: 40px;
+        }
+
+        .i-illustration-container {
+            display: none;
+        }
+
+        @media (min-width: 875px) {
+            .i-illustration-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                flex: 1;
+                max-width: 440px;
+                padding: 20px;
+            }
+
+            .i-portal-brand {
+                font-size: 24px;
+                font-weight: 600;
+                color: #f0f6fc;
+                margin-bottom: 12px;
+                letter-spacing: -0.5px;
+            }
+
+            .i-illustration-text {
+                color: #8b949e;
+                font-size: 15px;
+                line-height: 1.6;
+            }
+        }
+
+        .i-right-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 340px;
+            flex-shrink: 0;
+        }
+
+        .i-auth-box {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 20px;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .i-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .i-logo h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+
+        .i-form-group {
+            margin-bottom: 16px;
+        }
+
+        .i-form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+        }
+
+        .i-form-control {
+            width: 100%;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #f0f6fc;
+            font-size: 14px;
+            outline: none;
+            padding: 8px 12px;
+            transition: border-color 0.2s;
+        }
+
+        .i-form-control:focus {
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+
+        .i-login-btn, .i-signup-submit-btn {
+            background-color: #238636;
+            border: 1px solid rgba(240, 246, 252, 0.1);
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            width: 100%;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+        .i-login-btn:hover, .i-signup-submit-btn:hover {
+            background-color: #2ea043;
+        }
+
+        .i-forgot-password {
+            color: #58a6ff;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .i-forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .i-auth-section {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .i-auth-section.i-active {
+            display: flex;
+        }
+
+        .i-secondary-box {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            font-size: 13px;
+            color: #8b949e;
+        }
+
+        .i-secondary-box a {
+            color: #58a6ff;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .i-secondary-box a:hover {
+            text-decoration: underline;
+        }
+
+        .i-terms-text {
+            color: #8b949e;
+            font-size: 12px;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        .i-terms-text a {
+            color: #58a6ff;
+            text-decoration: none;
+        }
+
+        .i-lock-icon-container {
+            width: 48px;
+            height: 48px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 16px auto;
+        }
+
+        footer {
+            width: 100%;
+            max-width: 900px;
+            padding: 0 15px;
+            flex-shrink: 0;
+            border-top: 1px solid #21262d;
+            padding-top: 16px;
+        }
+
+        .i-footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            list-style: none;
+            gap: 16px;
+            margin-bottom: 0;
+        }
+
+        .i-footer-links a {
+            color: #8b949e;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .i-footer-links a:hover {
+            color: #58a6ff;
+            text-decoration: underline;
+        }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        
+
+        /* =====================================================
+           MAIN DASHBOARD BOX
+        ===================================================== */
+
+        .d-dashboard-box {
+            width: 100%;
+            max-width: 760px;
+            background: #ffffff;
+            border: 1px solid #d8dee4;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(31, 35, 40, 0.06);
+        }
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .d-topbar {
+            height: 58px;
+            padding: 0 18px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            border-bottom: 1px solid #eaeef2;
+            background: #ffffff;
+        }
+
+        .d-profile-button {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid #d0d7de;
+            background: #f6f8fa;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.15s ease;
+            padding: 0;
+        }
+
+        .d-profile-button:hover {
+            border-color: #0969da;
+            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.10);
+        }
+
+        .d-profile-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .d-default-avatar {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #57606a;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* =====================================================
+           DASHBOARD VIEW
+        ===================================================== */
+
+        .d-view {
+            padding: 28px;
+        }
+
+        .d-welcome {
+            margin-bottom: 26px;
+        }
+
+        .d-welcome h1 {
+            font-size: 23px;
+            font-weight: 600;
+            color: #1f2328;
+            margin-bottom: 6px;
+        }
+
+        .d-welcome p {
+            color: #656d76;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           TWO MAIN OPTIONS
+        ===================================================== */
+
+        .d-explore-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1f2328;
+        }
+
+        .d-explore-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .d-explore-card {
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            padding: 18px;
+            min-height: 145px;
+            background: #ffffff;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.15s ease;
+            position: relative;
+        }
+
+        .d-explore-card:hover {
+            border-color: #0969da;
+            box-shadow: 0 2px 8px rgba(31, 35, 40, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .d-card-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 13px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .d-profile-card .d-card-icon {
+            background: #ddf4ff;
+            color: #0969da;
+        }
+
+        .d-alumni-card .d-card-icon {
+            background: #dafbe1;
+            color: #1a7f37;
+        }
+
+        .d-explore-card h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1f2328;
+            margin-bottom: 5px;
+        }
+
+        .d-explore-card p {
+            color: #656d76;
+            font-size: 13px;
+            line-height: 1.45;
+            max-width: 250px;
+        }
+
+        .d-arrow {
+            position: absolute;
+            right: 17px;
+            bottom: 16px;
+            font-size: 19px;
+            color: #57606a;
+        }
+
+        .d-profile-card:hover .d-arrow {
+            color: #0969da;
+        }
+
+        .d-alumni-card:hover .d-arrow {
+            color: #1a7f37;
+        }
+
+        /* =====================================================
+           RECENT ACTIVITY
+        ===================================================== */
+
+        .d-activity {
+            margin-top: 28px;
+        }
+
+        .d-activity-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .d-activity-header h2 {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .d-activity-header span {
+            font-size: 12px;
+            color: #656d76;
+        }
+
+        .d-activity-box {
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .d-activity-row {
+            display: grid;
+            grid-template-columns: 1fr 120px 100px;
+            align-items: center;
+            min-height: 48px;
+            padding: 0 14px;
+            border-bottom: 1px solid #eaeef2;
+            font-size: 13px;
+        }
+
+        .d-activity-row:last-child {
+            border-bottom: none;
+        }
+
+        .d-activity-name {
+            color: #1f2328;
+            font-weight: 500;
+        }
+
+        .d-activity-degree {
+            color: #656d76;
+        }
+
+        .status {
+            justify-self: start;
+            font-size: 12px;
+            border-radius: 20px;
+            padding: 3px 8px;
+        }
+
+        .status.student {
+            background: #ddf4ff;
+            color: #0969da;
+        }
+
+        .status.alumni {
+            background: #dafbe1;
+            color: #1a7f37;
+        }
+
+        /* =====================================================
+           BOTTOM ACTIONS
+        ===================================================== */
+
+        .d-bottom-actions {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 1px solid #eaeef2;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .d-secondary-button,
+        .d-danger-button {
+            border-radius: 6px;
+            padding: 7px 13px;
+            font-size: 13px;
+            cursor: pointer;
+            background: #ffffff;
+        }
+
+        .d-secondary-button {
+            border: 1px solid #d0d7de;
+            color: #1f2328;
+        }
+
+        .d-secondary-button:hover {
+            background: #f6f8fa;
+        }
+
+        .d-danger-button {
+            border: 1px solid #d0d7de;
+            color: #cf222e;
+        }
+
+        .d-danger-button:hover {
+            background: #fff1f2;
+            border-color: #cf222e;
+        }
+
+        /* =====================================================
+           PROFILE / SETTINGS VIEW
+        ===================================================== */
+
+        .d-settings-view {
+            display: none;
+        }
+
+        .d-settings-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 26px;
+        }
+
+        .d-back-button {
+            border: 1px solid #d0d7de;
+            background: #ffffff;
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            color: #1f2328;
+            font-size: 17px;
+        }
+
+        .d-back-button:hover {
+            background: #f6f8fa;
+        }
+
+        .d-settings-header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        /* =====================================================
+           PROFILE PREVIEW
+        ===================================================== */
+
+        .d-profile-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid #eaeef2;
+            margin-bottom: 22px;
+        }
+
+        .d-large-avatar {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: #f6f8fa;
+            border: 1px solid #d0d7de;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .d-large-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .d-large-avatar-fallback {
+            color: #57606a;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .d-profile-preview h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .d-profile-preview p {
+            font-size: 13px;
+            color: #656d76;
+        }
+
+        /* =====================================================
+           PROFILE INFORMATION
+        ===================================================== */
+
+        .d-profile-information {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 22px;
+        }
+
+        .d-info-item {
+            padding: 14px;
+            border-bottom: 1px solid #eaeef2;
+        }
+
+        .d-info-item:nth-child(odd) {
+            border-right: 1px solid #eaeef2;
+        }
+
+        .d-info-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        .d-info-label {
+            display: block;
+            font-size: 11px;
+            color: #656d76;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .d-info-value {
+            font-size: 13px;
+            color: #1f2328;
+            word-break: break-word;
+        }
+
+        /* =====================================================
+           SETTINGS OPTIONS
+        ===================================================== */
+
+        .d-settings-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #656d76;
+            margin-bottom: 8px;
+        }
+
+        .d-settings-list {
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .d-settings-item {
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #eaeef2;
+            background: #ffffff;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .d-settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .d-settings-item:hover {
+            background: #f6f8fa;
+        }
+
+        .d-settings-item strong {
+            display: block;
+            font-size: 13px;
+            color: #1f2328;
+            margin-bottom: 2px;
+        }
+
+        .d-settings-item span {
+            font-size: 12px;
+            color: #656d76;
+        }
+
+        .d-settings-arrow {
+            color: #8c959f;
+            font-size: 17px;
+        }
+
+        /* =====================================================
+           ACCOUNT / INTERFACE SUBVIEW
+        ===================================================== */
+
+        .d-subview {
+            display: none;
+        }
+
+        .d-subview h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .d-subview-row {
+            padding: 15px 0;
+            border-bottom: 1px solid #eaeef2;
+        }
+
+        .d-subview-row:last-child {
+            border-bottom: none;
+        }
+
+        .d-subview-label {
+            font-size: 12px;
+            color: #656d76;
+            margin-bottom: 5px;
+        }
+
+        .d-subview-value {
+            font-size: 14px;
+            color: #1f2328;
+        }
+
+        .d-verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #1a7f37;
+            font-size: 12px;
+            margin-left: 7px;
+        }
+
+        .d-edit-profile-button {
+            margin-top: 20px;
+            border: 1px solid #d0d7de;
+            background: #ffffff;
+            color: #1f2328;
+            border-radius: 6px;
+            padding: 8px 14px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .d-edit-profile-button:hover {
+            background: #f6f8fa;
+        }
+
+        /* =====================================================
+           INTERFACE OPTIONS
+        ===================================================== */
+
+        .d-interface-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #eaeef2;
+        }
+
+        .d-interface-option:last-child {
+            border-bottom: none;
+        }
+
+        .d-interface-option strong {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .d-interface-option span {
+            color: #656d76;
+            font-size: 12px;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 600px) {
+            
+
+            .d-dashboard-box {
+                max-width: 100%;
+            }
+
+            .d-view {
+                padding: 20px;
+            }
+
+            .d-explore-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .d-activity-row {
+                grid-template-columns: 1fr;
+                gap: 4px;
+                padding: 10px 14px;
+            }
+
+            .status {
+                margin-top: 2px;
+            }
+
+            .d-profile-information {
+                grid-template-columns: 1fr;
+            }
+
+            .d-info-item:nth-child(odd) {
+                border-right: none;
+            }
+
+            .d-info-item:nth-last-child(-n+2) {
+                border-bottom: 1px solid #eaeef2;
+            }
+
+            .d-info-item:last-child {
+                border-bottom: none;
+            }
+
+            .d-bottom-actions {
+                justify-content: stretch;
+            }
+
+            .d-secondary-button,
+            .d-danger-button {
+                flex: 1;
+            }
+        }
+    
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        
+        .p-auth-box { background-color: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 24px; width: 100%; max-width: 600px; position: relative; }
+        .p-scope h1 { font-size: 20px; color: #f0f6fc; margin-bottom: 8px; text-align: center; }
+        .p-subtitle { font-size: 13px; color: #8b949e; text-align: center; margin-bottom: 20px; }
+        
+        /* Avatar Section Styles */
+        .p-avatar-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 20px; }
+        .p-avatar-preview-wrapper { position: relative; display: inline-block; margin-bottom: 12px; }
+        .p-avatar-preview { width: 96px; height: 96px; border-radius: 50%; border: 2px solid #30363d; object-fit: cover; background: #0d1117; display: block; }
+        
+        /* Verified Student Badge on Avatar/Preview */
+        .p-verified-badge { position: absolute; bottom: 0; right: 0; background-color: #238636; color: #fff; font-size: 10px; font-weight: bold; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #161b22; box-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .p-verified-badge span { font-size: 8px; line-height: 1; transform: scale(0.75); }
+
+        .p-avatar-actions { display: flex; gap: 8px; }
+        .p-avatar-btn { background-color: #21262d; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; cursor: pointer; font-size: 12px; font-weight: 500; padding: 6px 12px; }
+        .p-avatar-btn:hover { background-color: #30363d; color: #f0f6fc; }
+        
+        .p-form-group { margin-bottom: 16px; }
+        .p-form-label { display: block; font-size: 13px; font-weight: 500; color: #c9d1d9; margin-bottom: 8px; }
+        .p-form-control { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #f0f6fc; font-size: 14px; outline: none; padding: 8px 12px; }
+        .p-form-control:disabled { background: #161b22; color: #8b949e; cursor: not-allowed; }
+        textarea.p-form-control { resize: vertical; min-height: 120px; }
+        
+        /* Email Verified Label Style */
+        .p-label-with-badge { display: flex; justify-content: space-between; align-items: center; }
+        .p-verified-text-badge { font-size: 12px; font-weight: bold; color: #3fb950; display: flex; align-items: center; gap: 4px; }
+        .p-verified-text-badge span { font-weight: 300; opacity: 0.85; }
+
+        /* Multi-column layouts */
+        .p-name-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .p-address-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .p-social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .p-donation-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        
+        /* Toolbar for Bio */
+        .p-bio-toolbar { display: flex; gap: 6px; margin-bottom: 6px; background: #21262d; padding: 4px; border-radius: 4px; border: 1px solid #30363d; }
+        .p-tool-btn { background: transparent; border: none; color: #c9d1d9; cursor: pointer; font-size: 12px; padding: 4px 8px; border-radius: 4px; }
+        .p-tool-btn:hover { background: #30363d; color: #f0f6fc; }
+
+        /* Featured Website Special Box Style */
+        .p-featured-website-box { background-color: #1f242c; border: 1px dashed #388bfd; border-radius: 6px; padding: 14px; margin-bottom: 20px; }
+        .p-featured-website-box .p-form-label { color: #58a6ff; display: flex; align-items: center; gap: 6px; }
+
+        .p-login-btn { background-color: #238636; border: none; border-radius: 6px; color: #fff; cursor: pointer; font-size: 14px; font-weight: 500; padding: 10px 16px; width: 100%; margin-top: 10px; }
+        .p-login-btn:hover { background-color: #2ea043; }
+        .p-hint { font-size: 11px; color: #8b949e; text-align: center; margin-top: 4px; }
+
+        /* Preview Footer Link */
+        .p-preview-footer-link { text-align: center; margin-top: 15px; font-size: 13px; }
+        .p-preview-footer-link a { color: #58a6ff; text-decoration: none; }
+        .p-preview-footer-link a:hover { text-decoration: underline; }
+        
+        /* Modal Preview Overlay */
+        #previewModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; padding: 20px; overflow-y: auto; }
+        .p-modal-content { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 24px; width: 100%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto; }
+        .p-close-modal { position: absolute; top: 12px; right: 16px; color: #8b949e; font-size: 18px; cursor: pointer; background: transparent; border: none; }
+        .p-close-modal:hover { color: #f0f6fc; }
+
+        /* Success Screen Styles */
+        #successScreen { display: none; text-align: center; }
+        #successScreen h2 { color: #3fb950; margin-bottom: 16px; }
+        .p-success-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .p-dashboard-link-red { color: #f85149; font-weight: bold; text-decoration: underline; display: inline-block; margin-top: 15px; font-size: 14px; }
+        .p-video-help { margin-top: 15px; font-size: 13px; }
+        .p-video-help a { color: #58a6ff; text-decoration: none; }
+        .p-video-help a:hover { text-decoration: underline; }
+    
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .a-main {
+            width: 100%;
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 32px 24px 60px;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .a-main-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            border: 1px solid #d0d7de;
+            background: #ffffff;
+            color: #24292f;
+
+            border-radius: 6px;
+
+            padding: 7px 11px;
+
+            font-size: 13px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            margin-bottom: 26px;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+        .a-main-back-btn:hover {
+            background: #f6f8fa;
+            border-color: #8c959f;
+        }
+
+        .a-main-back-btn .a-arrow {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        /* =========================
+           HEADING
+        ========================= */
+
+        .a-heading-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+
+            gap: 20px;
+
+            margin-bottom: 22px;
+        }
+
+        .a-heading h1 {
+            font-size: 25px;
+            font-weight: 600;
+            color: #24292f;
+            margin-bottom: 5px;
+        }
+
+        .a-heading p {
+            color: #57606a;
+            font-size: 14px;
+        }
+
+        /* =========================
+           SEARCH
+        ========================= */
+
+        .a-search-box {
+            width: 280px;
+
+            border: 1px solid #d0d7de;
+            background: #ffffff;
+            border-radius: 6px;
+
+            height: 38px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 11px;
+        }
+
+        .a-search-box span {
+            color: #57606a;
+            margin-right: 8px;
+            font-size: 17px;
+        }
+
+        .a-search-box input {
+            width: 100%;
+
+            border: none;
+            outline: none;
+
+            font-size: 14px;
+
+            background: transparent;
+            color: #24292f;
+        }
+
+        .a-search-box input::placeholder {
+            color: #8c959f;
+        }
+
+        /* =========================
+           ALUMNI LIST
+        ========================= */
+
+        .a-alumni-container {
+            background: #ffffff;
+
+            border: 1px solid #d8dee4;
+            border-radius: 8px;
+
+            overflow: hidden;
+        }
+
+        .a-list-header {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1.2fr 120px;
+
+            padding: 13px 18px;
+
+            background: #f6f8fa;
+
+            border-bottom: 1px solid #d8dee4;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            color: #57606a;
+        }
+
+        .a-alumni-row {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1.2fr 120px;
+
+            align-items: center;
+
+            min-height: 72px;
+
+            padding: 10px 18px;
+
+            border-bottom: 1px solid #eaeef2;
+
+            transition: background 0.15s ease;
+        }
+
+        .a-alumni-row:last-child {
+            border-bottom: none;
+        }
+
+        .a-alumni-row:hover {
+            background: #f6f8fa;
+        }
+
+        /* =========================
+           PERSON
+        ========================= */
+
+        .a-person {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            min-width: 0;
+        }
+
+        .a-avatar {
+            width: 40px;
+            height: 40px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            background: #eaeef2;
+
+            overflow: hidden;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            color: #57606a;
+        }
+
+        .a-avatar img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .a-person-info {
+            min-width: 0;
+        }
+
+        .a-person-name {
+            font-size: 14px;
+            font-weight: 600;
+
+            color: #24292f;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .a-person-email {
+            font-size: 12px;
+
+            color: #57606a;
+
+            margin-top: 3px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .a-degree,
+        .a-department {
+            font-size: 13px;
+            color: #57606a;
+        }
+
+        /* =========================
+           VIEW BUTTON
+        ========================= */
+
+        .a-view-btn {
+            border: 1px solid #d0d7de;
+
+            background: #ffffff;
+
+            color: #0969da;
+
+            border-radius: 6px;
+
+            padding: 6px 11px;
+
+            font-size: 12px;
+            font-weight: 500;
+
+            cursor: pointer;
+
+            transition:
+                background 0.15s ease,
+                border-color 0.15s ease;
+        }
+
+        .a-view-btn:hover {
+            background: #f6f8fa;
+            border-color: #0969da;
+        }
+
+        /* =========================
+           EMPTY / LOADING
+        ========================= */
+
+        .a-empty {
+            padding: 50px 20px;
+
+            text-align: center;
+
+            color: #57606a;
+
+            font-size: 14px;
+        }
+
+        .a-loading {
+            padding: 50px 20px;
+
+            text-align: center;
+
+            color: #57606a;
+
+            font-size: 14px;
+        }
+
+        /* =========================
+           PROFILE PREVIEW
+        ========================= */
+
+        .a-preview-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(27, 31, 36, 0.35);
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 100;
+        }
+
+        .a-preview-overlay.active {
+            display: flex;
+        }
+
+        .a-preview-box {
+            width: 100%;
+
+            max-width: 600px;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            background: #ffffff;
+
+            border: 1px solid #d8dee4;
+
+            border-radius: 8px;
+
+            box-shadow:
+                0 8px 24px rgba(140, 149, 159, 0.25);
+
+            animation: popup 0.16s ease;
+        }
+
+        @keyframes popup {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .a-preview-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 16px 20px;
+
+            border-bottom: 1px solid #d8dee4;
+        }
+
+        .a-preview-header-left {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .a-preview-back {
+            border: none;
+
+            background: transparent;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            color: #57606a;
+        }
+
+        .a-preview-back:hover {
+            color: #24292f;
+        }
+
+        .a-preview-header h2 {
+            font-size: 16px;
+
+            font-weight: 600;
+        }
+
+        .a-close-btn {
+            width: 30px;
+            height: 30px;
+
+            border: none;
+
+            background: transparent;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 20px;
+
+            color: #57606a;
+        }
+
+        .a-close-btn:hover {
+            background: #f6f8fa;
+        }
+
+        .a-preview-content {
+            padding: 26px;
+        }
+
+        /* =========================
+           PROFILE TOP
+        ========================= */
+
+        .a-profile-top {
+            display: flex;
+
+            align-items: center;
+
+            gap: 16px;
+
+            margin-bottom: 25px;
+        }
+
+        .a-large-avatar {
+            width: 70px;
+            height: 70px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            overflow: hidden;
+
+            background: #eaeef2;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 22px;
+
+            font-weight: 600;
+
+            color: #57606a;
+        }
+
+        .a-large-avatar img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .a-profile-top h3 {
+            font-size: 20px;
+
+            font-weight: 600;
+
+            color: #24292f;
+
+            margin-bottom: 4px;
+        }
+
+        .a-profile-top p {
+            font-size: 13px;
+
+            color: #57606a;
+        }
+
+        /* =========================
+           PROFILE SECTION
+        ========================= */
+
+        .a-profile-section {
+            margin-top: 20px;
+        }
+
+        .a-profile-section h4 {
+            font-size: 12px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.04em;
+
+            color: #57606a;
+
+            margin-bottom: 8px;
+        }
+
+        .a-profile-value {
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            color: #24292f;
+        }
+
+        /* =========================
+           PROFILE GRID
+        ========================= */
+
+        .a-profile-grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+
+            margin-top: 20px;
+        }
+
+        .a-profile-item {
+            border: 1px solid #eaeef2;
+
+            border-radius: 6px;
+
+            padding: 12px;
+
+            background: #f6f8fa;
+        }
+
+        .a-profile-item span {
+            display: block;
+
+            font-size: 11px;
+
+            color: #57606a;
+
+            margin-bottom: 4px;
+        }
+
+        .a-profile-item strong {
+            font-size: 13px;
+
+            font-weight: 500;
+
+            color: #24292f;
+
+            word-break: break-word;
+        }
+
+        /* =========================
+           PREVIEW FOOTER
+        ========================= */
+
+        .a-preview-footer {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 8px;
+
+            padding: 16px 20px;
+
+            border-top: 1px solid #d8dee4;
+        }
+
+        .a-contact-btn {
+            background: #24292f;
+
+            color: #ffffff;
+
+            border: 1px solid #24292f;
+
+            border-radius: 6px;
+
+            padding: 8px 16px;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+        .a-contact-btn:hover {
+            background: #32383f;
+        }
+
+        .a-secondary-btn {
+            background: #ffffff;
+
+            color: #24292f;
+
+            border: 1px solid #d0d7de;
+
+            border-radius: 6px;
+
+            padding: 8px 16px;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+        .a-secondary-btn:hover {
+            background: #f6f8fa;
+        }
+
+        /* =========================
+           CONTACT POPUP
+        ========================= */
+
+        .a-contact-overlay {
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(27, 31, 36, 0.4);
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 200;
+        }
+
+        .a-contact-overlay.active {
+            display: flex;
+        }
+
+        .a-contact-box {
+            width: 100%;
+
+            max-width: 450px;
+
+            background: #ffffff;
+
+            border: 1px solid #d8dee4;
+
+            border-radius: 8px;
+
+            box-shadow:
+                0 8px 24px rgba(140, 149, 159, 0.3);
+        }
+
+        .a-contact-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 16px 20px;
+
+            border-bottom: 1px solid #d8dee4;
+        }
+
+        .a-contact-header h3 {
+            font-size: 16px;
+
+            font-weight: 600;
+        }
+
+        .a-contact-
+
+        .a-contact-body label {
+            display: block;
+
+            font-size: 12px;
+
+            font-weight: 500;
+
+            color: #57606a;
+
+            margin-bottom: 6px;
+        }
+
+        .a-contact-body input,
+        .a-contact-body textarea {
+            width: 100%;
+
+            border: 1px solid #d0d7de;
+
+            border-radius: 6px;
+
+            padding: 9px 10px;
+
+            font-size: 13px;
+
+            outline: none;
+
+            margin-bottom: 15px;
+
+            background: #ffffff;
+
+            color: #24292f;
+        }
+
+        .a-contact-body input:focus,
+        .a-contact-body textarea:focus {
+            border-color: #0969da;
+
+            box-shadow:
+                0 0 0 2px rgba(9, 105, 218, 0.1);
+        }
+
+        .a-contact-body textarea {
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+        .a-contact-footer {
+            display: flex;
+
+            justify-content: flex-end;
+
+            gap: 8px;
+
+            padding: 15px 20px;
+
+            border-top: 1px solid #d8dee4;
+        }
+
+        .a-send-btn {
+            background: #0969da;
+
+            color: #ffffff;
+
+            border: 1px solid #0969da;
+
+            border-radius: 6px;
+
+            padding: 8px 16px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+        }
+
+        .a-send-btn:hover {
+            background: #0757b5;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .a-main {
+                padding: 24px 14px 40px;
+            }
+
+            .a-main-back-btn {
+                margin-bottom: 20px;
+            }
+
+            .a-heading-row {
+                align-items: stretch;
+
+                flex-direction: column;
+            }
+
+            .a-search-box {
+                width: 100%;
+            }
+
+            .a-list-header {
+                display: none;
+            }
+
+            .a-alumni-row {
+                grid-template-columns: 1fr auto;
+
+                gap: 12px;
+
+                padding: 14px;
+            }
+
+            .a-degree,
+            .a-department {
+                display: none;
+            }
+
+            .a-view-btn {
+                grid-column: 2;
+
+                grid-row: 1;
+            }
+
+            .a-person {
+                grid-column: 1;
+            }
+
+            .a-profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .a-preview-content {
+                padding: 20px;
+            }
+
+            .a-preview-footer {
+                flex-direction: column-reverse;
+            }
+
+            .a-preview-footer button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body><section id="authView" class="app-view active">
+
+    <div class="i-portal-wrapper">
+        <div class="i-main-container">
+            <div class="i-illustration-container">
+                <div class="i-portal-brand">Student Guidance Portal</div>
+                <p class="i-illustration-text">A streamlined, secure environment designed for student mentorship, alumni connections, and comprehensive academic insights.</p>
+            </div>
+
+            <div class="i-right-container">
+                <!-- 1. LOGIN SECTION -->
+                <div id="loginSection" class="i-auth-section i-active">
+                    <div class="i-auth-box">
+                        <div class="i-logo">
+                            <h1>Sign in to Portal</h1>
+                        </div>
+                        
+                        <form onsubmit="handleLogin(event)">
+                            <div class="i-form-group">
+                                <label class="i-form-label">Email address</label>
+                                <input type="email" id="loginEmail" class="i-form-control" required>
+                            </div>
+                            <div class="i-form-group">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <label class="i-form-label">Password</label>
+                                    <a class="i-forgot-password" onclick="switchView('forgotSection')">Forgot?</a>
+                                </div>
+                                <input type="password" id="loginPassword" class="i-form-control" required>
+                            </div>
+                            <button type="submit" class="i-login-btn">Sign in</button>
+                        </form>
+                    </div>
+
+                    <div class="i-secondary-box">
+                        New to the portal? <a onclick="switchView('signupSection')">Create an account</a>
+                    </div>
+                </div>
+
+                <!-- 2. SIGNUP SECTION -->
+                <div id="signupSection" class="i-auth-section">
+                    <div class="i-auth-box">
+                        <div class="i-logo">
+                            <h1>Create an account</h1>
+                        </div>
+                        
+                        <form onsubmit="handleSignup(event)">
+                            <div class="i-form-group">
+                                <label class="i-form-label">Email address</label>
+                                <input type="email" id="signupEmail" class="i-form-control" required>
+                            </div>
+                            <div class="i-form-group">
+                                <label class="i-form-label">Full Name</label>
+                                <input type="text" id="signupFullname" class="i-form-control" required>
+                            </div>
+                            <div class="i-form-group">
+                                <label class="i-form-label">Password</label>
+                                <input type="password" id="signupPassword" class="i-form-control" required>
+                            </div>
+                            <p class="i-terms-text">
+                                By registering, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+                            </p>
+                            <button type="submit" class="i-signup-submit-btn">Create account</button>
+                        </form>
+                    </div>
+
+                    <div class="i-secondary-box">
+                        Already have an account? <a onclick="switchView('loginSection')">Sign in</a>
+                    </div>
+                </div>
+
+                <!-- 3. FORGOT PASSWORD SECTION -->
+                <div id="forgotSection" class="i-auth-section">
+                    <div class="i-auth-box">
+                        <div class="i-lock-icon-container">
+                            <svg fill="#8b949e" height="20" role="img" viewBox="0 0 24 24" width="20"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        </div>
+                        <div class="i-logo" style="margin-bottom: 12px;">
+                            <h1 style="font-size: 16px;">Reset your password</h1>
+                        </div>
+                        
+                        <form onsubmit="handleForgot(event)">
+                            <div class="i-form-group">
+                                <label class="i-form-label">Enter your email address</label>
+                                <input type="email" id="forgotEmail" class="i-form-control" required>
+                            </div>
+                            <button type="submit" class="i-login-btn" style="margin-top: 8px;">Send reset email</button>
+                        </form>
+                    </div>
+
+                    <div class="i-secondary-box">
+                        <a onclick="switchView('loginSection')">← Return to sign in</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <ul class="i-footer-links">
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Privacy</a></li>
+            <li><a href="#">Security</a></li>
+            <li><a href="#">Status</a></li>
+            <li><a href="#">Docs</a></li>
+            <li><a href="#">Contact Support</a></li>
+        </ul>
+    </footer>
+
+    <!-- Supabase Configuration & Logic -->
+    <script>
+        const SUPABASE_URL = 'https://kksarduvycfebklmhxfb.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imtrc2FyZHV2eWNmZWJrbG1oeGZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYzMzU2MjQsImV4cCI6MjEwMTkxMTYyNH0.NlnHnEBqDX_sPJEK1evlYznhyWjTyANMn95QqrVARI0';
+        
+        let supabaseClient;
+        try {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        } catch (err) {
+            console.error("Supabase initialization error:", err);
+        }
+
+        function switchView(targetId) {
+            const sections = document.querySelectorAll('.auth-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.classList.add('active');
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const fullname = document.getElementById('signupFullname').value;
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: { full_name: fullname },
+                    // Update this link to point to profile.html
+                    emailRedirectTo: window.location.href 
+                }
+            });
+
+            if (error) {
+                alert(error.message);
+            } else {
+                alert('Account registered successfully! Check your email for confirmation.');
+                switchView('loginSection');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+        
+            // 1. Authenticate user via Supabase Auth
+            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+        
+            if (authError) {
+                alert(authError.message);
+                return;
+            }
+        
+            const user = authData.user;
+        
+            // 2. Query the profiles table for the required fields using the user's UUID
+            const { data: profileData, error: profileError } = await supabaseClient
+                .from('profiles')
+                .select('account_type, legal_name, date_of_birth, gender')
+                .eq('id', user.id)
+                .single();
+        
+            if (profileError && profileError.code !== 'PGRST116') {
+                // PGRST116 means row not found, which is normal if they haven't saved a profile yet
+                console.error("Error fetching profile:", profileError.message);
+            }
+        
+            // 3. Check if all required mandatory fields exist and are filled out
+            const isProfileComplete = 
+                profileData && 
+                profileData.account_type && 
+                profileData.legal_name && 
+                profileData.date_of_birth && 
+                profileData.gender;
+        
+            // 4. Conditional redirection based on completeness
+            if (isProfileComplete) {
+                showView('dashboard');
+            } else {
+                showView('profile');
+            }
+        }
+
+        async function handleForgot(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://campusconnectdot.github.io/campusconnectdot/'
+            });
+
+            if (error) {
+                alert(error.message);
+            } else {
+                alert('Password reset link sent to your email!');
+            }
+        }
+    </script>
+</section><section id="dashboardViewShell" class="app-view">
+
+<div class="d-dashboard-box">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="d-topbar">
+
+        <button
+            class="d-profile-button"
+            onclick="openProfilePanel()"
+            aria-label="Open profile"
+            title="Profile"
+        >
+            <img id="headerAvatar" alt="Profile">
+
+            <div id="headerAvatarFallback" class="d-default-avatar">
+                U
+            </div>
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD
+    ====================================================== -->
+
+    <div id="dashboardView" class="d-view">
+
+        <div class="d-welcome">
+            <h1 id="welcomeName">Welcome to your Dashboard</h1>
+            <p>
+                Your student guidance space for profiles, alumni connections
+                and academic resources.
+            </p>
+        </div>
+
+
+        <div class="d-explore-title">
+            Explore
+        </div>
+
+
+        <div class="d-explore-grid">
+
+            <!-- MY PROFILE -->
+
+            <button
+                class="d-explore-card d-profile-card"
+                onclick="openProfilePanel()"
+            >
+
+                <div class="d-card-icon">
+                    👤
+                </div>
+
+                <h2>My Profile</h2>
+
+                <p>
+                    View your complete academic and personal profile.
+                </p>
+
+                <span class="d-arrow">→</span>
+
+            </button>
+
+
+            <!-- ALUMNI -->
+
+            <button
+                class="d-explore-card d-alumni-card"
+                onclick="openAlumni()"
+            >
+
+                <div class="d-card-icon">
+                    👥
+                </div>
+
+                <h2>Alumni</h2>
+
+                <p>
+                    Connect with experienced alumni and explore their profiles.
+                </p>
+
+                <span class="d-arrow">→</span>
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             RECENT ACTIVITY
+        ================================================== -->
+
+        <div class="d-activity">
+
+            <div class="d-activity-header">
+                <h2>Recent Activity</h2>
+                <span id="activityStatus">Latest profiles</span>
+            </div>
+
+            <div class="d-activity-box">
+
+                <div class="d-activity-row">
+                    <span class="d-activity-name">Student / Alumni</span>
+                    <span class="d-activity-degree">Degree</span>
+                    <span>Status</span>
+                </div>
+
+                <div id="activityRows">
+
+                    <div class="d-activity-row">
+                        <span class="d-activity-name">Loading...</span>
+                        <span class="d-activity-degree">—</span>
+                        <span>—</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             DASHBOARD ACTIONS
+        ================================================== -->
+
+        <div class="d-bottom-actions">
+
+            <button
+                class="d-secondary-button"
+                onclick="openProfilePanel()"
+            >
+                Settings
+            </button>
+
+            <button
+                class="d-danger-button"
+                onclick="handleLogout()"
+            >
+                Sign out
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         PROFILE / SETTINGS PANEL
+    ====================================================== -->
+
+    <div id="profileView" class="d-view d-settings-view">
+
+        <div class="d-settings-header">
+
+            <button
+                class="d-back-button"
+                onclick="showDashboard()"
+                aria-label="Go back"
+            >
+                ←
+            </button>
+
+            <h1>Profile</h1>
+
+        </div>
+
+
+        <!-- PROFILE PREVIEW -->
+
+        <div class="d-profile-preview">
+
+            <div class="d-large-avatar">
+
+                <img id="profileAvatar" alt="Profile">
+
+                <div
+                    id="profileAvatarFallback"
+                    class="d-large-avatar-fallback"
+                >
+                    U
+                </div>
+
+            </div>
+
+            <div>
+
+                <h2 id="profileName">
+                    Loading...
+                </h2>
+
+                <p id="profileRole">
+                    —
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- PROFILE INFORMATION -->
+
+        <div class="d-profile-information">
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Full name
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoName"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Account type
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoAccountType"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Email
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoEmail"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Degree
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoDegree"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Employment
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoEmployment"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Department
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoDepartment"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Bio
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoBio"
+                >
+                    —
+                </span>
+
+            </div>
+
+
+            <div class="d-info-item">
+
+                <span class="d-info-label">
+                    Email status
+                </span>
+
+                <span
+                    class="d-info-value"
+                    id="infoVerification"
+                >
+                    —
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- SETTINGS -->
+
+        <div class="d-settings-section-title">
+            Settings
+        </div>
+
+
+        <div class="d-settings-list">
+
+            <button
+                class="d-settings-item"
+                onclick="editProfile()"
+            >
+
+                <div>
+                    <strong>Edit profile</strong>
+                    <span>
+                        Change your saved profile information
+                    </span>
+                </div>
+
+                <span class="d-settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <button
+                class="d-settings-item"
+                onclick="openAccountSettings()"
+            >
+
+                <div>
+                    <strong>Account</strong>
+                    <span>
+                        Email and account information
+                    </span>
+                </div>
+
+                <span class="d-settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+
+            <button
+                class="d-settings-item"
+                onclick="openInterfaceSettings()"
+            >
+
+                <div>
+                    <strong>Interface</strong>
+                    <span>
+                        Simple display preferences
+                    </span>
+                </div>
+
+                <span class="d-settings-arrow">
+                    →
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACCOUNT SUBVIEW
+    ====================================================== -->
+
+    <div id="accountView" class="d-view d-subview">
+
+        <div class="d-settings-header">
+
+            <button
+                class="d-back-button"
+                onclick="openProfilePanel()"
+            >
+                ←
+            </button>
+
+            <h1>Account</h1>
+
+        </div>
+
+
+        <h2>Account information</h2>
+
+
+        <div class="d-subview-row">
+
+            <div class="d-subview-label">
+                Email
+            </div>
+
+            <div class="d-subview-value">
+                <span id="accountEmail">
+                    —
+                </span>
+
+                <span
+                    id="verifiedBadge"
+                    class="d-verified"
+                >
+                    ✓ Verified
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="d-subview-row">
+
+            <div class="d-subview-label">
+                Account type
+            </div>
+
+            <div
+                class="d-subview-value"
+                id="accountType"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <div class="d-subview-row">
+
+            <div class="d-subview-label">
+                User ID
+            </div>
+
+            <div
+                class="d-subview-value"
+                id="accountUserId"
+                style="font-size:12px;color:#656d76;"
+            >
+                —
+            </div>
+
+        </div>
+
+
+        <button
+            class="d-edit-profile-button"
+            onclick="editProfile()"
+        >
+            Edit profile
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         INTERFACE SUBVIEW
+    ====================================================== -->
+
+    <div id="interfaceView" class="d-view d-subview">
+
+        <div class="d-settings-header">
+
+            <button
+                class="d-back-button"
+                onclick="openProfilePanel()"
+            >
+                ←
+            </button>
+
+            <h1>Interface</h1>
+
+        </div>
+
+
+        <h2>Interface preferences</h2>
+
+
+        <div class="d-interface-option">
+
+            <div>
+
+                <strong>Appearance</strong>
+
+                <br>
+
+                <span>
+                    Your dashboard currently uses the default light interface.
+                </span>
+
+            </div>
+
+            <span>
+                Light
+            </span>
+
+        </div>
+
+
+        <div class="d-interface-option">
+
+            <div>
+
+                <strong>Layout</strong>
+
+                <br>
+
+                <span>
+                    Simple dashboard layout
+                </span>
+
+            </div>
+
+            <span>
+                Default
+            </span>
+
+        </div>
+
+
+        <div class="d-interface-option">
+
+            <div>
+
+                <strong>Profile display</strong>
+
+                <br>
+
+                <span>
+                    Show your saved profile information
+                </span>
+
+            </div>
+
+            <span>
+                On
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =========================================================
+       SUPABASE
+    ========================================================== */
+
+
+    let currentUser = null;
+    let currentProfile = null;
+
+
+    /* =========================================================
+       SAFE TEXT
+    ========================================================== */
+
+    function safe(value) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ''
+        ) {
+            return 'N/A';
+        }
+
+        return String(value);
+
+    }
+
+
+    /* =========================================================
+       LOAD DASHBOARD
+    ========================================================== */
+
+    async function loadDashboard() {
+
+        try {
+
+            const userResponse =
+                await supabaseClient.auth.getUser();
+
+            const user =
+                userResponse.data.user;
+
+            if (!user) {
+
+                showView('auth');
+
+                return;
+            }
+
+
+            currentUser = user;
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from('profiles')
+
+                .select('*')
+
+                .eq('id', user.id)
+
+                .single();
+
+
+            if (
+                error ||
+                !data ||
+                !data.account_type
+            ) {
+
+                showView('profile');
+
+                return;
+            }
+
+
+            currentProfile = data;
+
+
+            populateProfile(data, user);
+
+            populateActivity(data);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                'Dashboard loading error:',
+                error
+            );
+
+            /*
+             * Do not immediately redirect here.
+             * This prevents temporary Supabase/network
+             * problems from throwing the user back to login.
+             */
+
+            document.getElementById(
+                'welcomeName'
+            ).textContent =
+                'Welcome to your Dashboard';
+
+        }
+
+    }
+
+
+    /* =========================================================
+       POPULATE PROFILE
+    ========================================================== */
+
+    function populateProfile(
+        data,
+        user
+    ) {
+
+        const name =
+            safe(data.full_name);
+
+        const role =
+            safe(data.account_type);
+
+        const degree =
+            safe(data.degree);
+
+        const employment =
+            safe(data.current_employment);
+
+        const department =
+            safe(
+                data.department ||
+                data.dept ||
+                data.branch
+            );
+
+        const bio =
+            safe(data.bio);
+
+        const email =
+            safe(user.email);
+
+
+        /* Dashboard greeting */
+
+        document.getElementById(
+            'welcomeName'
+        ).textContent =
+            `Welcome, ${name}`;
+
+
+        /* Profile preview */
+
+        document.getElementById(
+            'profileName'
+        ).textContent =
+            name;
+
+        document.getElementById(
+            'profileRole'
+        ).textContent =
+            role;
+
+
+        /* Profile information */
+
+        document.getElementById(
+            'infoName'
+        ).textContent =
+            name;
+
+        document.getElementById(
+            'infoAccountType'
+        ).textContent =
+            role;
+
+        document.getElementById(
+            'infoEmail'
+        ).textContent =
+            email;
+
+        document.getElementById(
+            'infoDegree'
+        ).textContent =
+            degree;
+
+        document.getElementById(
+            'infoEmployment'
+        ).textContent =
+            employment;
+
+        document.getElementById(
+            'infoDepartment'
+        ).textContent =
+            department;
+
+        document.getElementById(
+            'infoBio'
+        ).textContent =
+            bio;
+
+
+        /* Email verification */
+
+        const verified =
+            Boolean(user.email_confirmed_at);
+
+        document.getElementById(
+            'infoVerification'
+        ).textContent =
+            verified
+                ? '✓ Verified'
+                : 'Not verified';
+
+        document.getElementById(
+            'accountEmail'
+        ).textContent =
+            email;
+
+        document.getElementById(
+            'accountType'
+        ).textContent =
+            role;
+
+        document.getElementById(
+            'accountUserId'
+        ).textContent =
+            user.id;
+
+
+        const badge =
+            document.getElementById(
+                'verifiedBadge'
+            );
+
+        badge.style.display =
+            verified
+                ? 'inline-flex'
+                : 'none';
+
+
+        /* Avatar */
+
+        /*
+         * This checks several common column names.
+         * If your profile.html stores the avatar
+         * under one of these names, it will be shown.
+         */
+
+        const avatar =
+            data.avatar_url ||
+            data.avatar ||
+            data.profile_image ||
+            data.profile_image_url ||
+            data.image_url ||
+            data.photo_url ||
+            null;
+
+
+        if (avatar) {
+
+            showAvatar(
+                avatar
+            );
+
+        }
+
+        else {
+
+            createFallbackAvatar(
+                name
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       AVATAR
+    ========================================================== */
+
+    function showAvatar(url) {
+
+        const headerImage =
+            document.getElementById(
+                'headerAvatar'
+            );
+
+        const headerFallback =
+            document.getElementById(
+                'headerAvatarFallback'
+            );
+
+        const profileImage =
+            document.getElementById(
+                'profileAvatar'
+            );
+
+        const profileFallback =
+            document.getElementById(
+                'profileAvatarFallback'
+            );
+
+
+        headerImage.src = url;
+
+        headerImage.style.display =
+            'block';
+
+        headerFallback.style.display =
+            'none';
+
+
+        profileImage.src = url;
+
+        profileImage.style.display =
+            'block';
+
+        profileFallback.style.display =
+            'none';
+
+
+        headerImage.onerror =
+            function () {
+
+                headerImage.style.display =
+                    'none';
+
+                headerFallback.style.display =
+                    'flex';
+
+            };
+
+
+        profileImage.onerror =
+            function () {
+
+                profileImage.style.display =
+                    'none';
+
+                profileFallback.style.display =
+                    'flex';
+
+            };
+
+    }
+
+
+    function createFallbackAvatar(name) {
+
+        const letter =
+            name &&
+            name !== 'N/A'
+                ? name.charAt(0).toUpperCase()
+                : 'U';
+
+
+        document.getElementById(
+            'headerAvatarFallback'
+        ).textContent =
+            letter;
+
+        document.getElementById(
+            'profileAvatarFallback'
+        ).textContent =
+            letter;
+
+    }
+
+
+    /* =========================================================
+       ACTIVITY
+    ========================================================== */
+
+    function populateActivity(
+        ownProfile
+    ) {
+
+        /*
+         * For now this intentionally shows
+         * the current user's information.
+         *
+         * We do NOT query current students here.
+         * Alumni exploration can be connected
+         * separately later.
+         */
+
+        const rows =
+            document.getElementById(
+                'activityRows'
+            );
+
+
+        rows.innerHTML = '';
+
+
+        const row =
+            document.createElement(
+                'div'
+            );
+
+        row.className =
+            'activity-row';
+
+
+        const name =
+            safe(
+                ownProfile.full_name
+            );
+
+        const degree =
+            safe(
+                ownProfile.degree
+            );
+
+        const type =
+            safe(
+                ownProfile.account_type
+            );
+
+
+        const nameElement =
+            document.createElement(
+                'span'
+            );
+
+        nameElement.className =
+            'activity-name';
+
+        nameElement.textContent =
+            name;
+
+
+        const degreeElement =
+            document.createElement(
+                'span'
+            );
+
+        degreeElement.className =
+            'activity-degree';
+
+        degreeElement.textContent =
+            degree;
+
+
+        const statusElement =
+            document.createElement(
+                'span'
+            );
+
+        statusElement.className =
+            `status ${
+                type.toLowerCase() === 'alumni'
+                    ? 'alumni'
+                    : 'student'
+            }`;
+
+        statusElement.textContent =
+            type;
+
+
+        row.appendChild(
+            nameElement
+        );
+
+        row.appendChild(
+            degreeElement
+        );
+
+        row.appendChild(
+            statusElement
+        );
+
+
+        rows.appendChild(
+            row
+        );
+
+    }
+
+
+    /* =========================================================
+       OPEN PROFILE PANEL
+    ========================================================== */
+
+    function openProfilePanel() {
+
+        document.getElementById(
+            'dashboardView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       BACK TO DASHBOARD
+    ========================================================== */
+
+    function showDashboard() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'dashboardView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       ACCOUNT
+    ========================================================== */
+
+    function openAccountSettings() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       INTERFACE
+    ========================================================== */
+
+    function openInterfaceSettings() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       EDIT PROFILE
+    ========================================================== */
+
+    function editProfile() {
+
+        showView('profile');
+
+    }
+
+
+    /* =========================================================
+       ALUMNI
+    ========================================================== */
+
+    function openAlumni() {
+
+        /*
+         * Replace this with your alumni page
+         * when you create it.
+         */
+
+        showView('alumni');
+
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================== */
+
+    async function handleLogout() {
+
+        try {
+
+            await supabaseClient.auth.signOut();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                'Logout error:',
+                error
+            );
+
+        }
+
+        showView('auth');
+
+    }
+
+
+    /* =========================================================
+       START
+    ========================================================== */
+
+</script>
+
+</section><section id="profileViewShell" class="app-view p-scope">
+    <div class="p-auth-box">
+        <!-- Profile Form View -->
+        <div id="formScreen">
+            <h1>Complete Your Profile</h1>
+            <div class="p-subtitle">Please provide your official account details below</div>
+            
+            <form onsubmit="saveProfile(event)">
+                <!-- Avatar Section -->
+                <div class="p-avatar-container">
+                    <div class="p-avatar-preview-wrapper">
+                        <img id="avatarPreview" class="p-avatar-preview" src="" alt="Avatar Preview">
+                        <div class="p-verified-badge" title="Verified Student"><span>*</span></div>
+                    </div>
+                    <div class="p-avatar-actions">
+                        <button type="button" class="p-avatar-btn" onclick="generateRandomAvatar()">Randomize Pattern</button>
+                        <button type="button" class="p-avatar-btn" onclick="document.getElementById('avatarUpload').click()">Upload Image</button>
+                        <input type="file" id="avatarUpload" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageUpload(event)">
+                    </div>
+                    <div class="p-hint">Recommended: 512x512px square image</div>
+                </div>
+
+                <!-- Email Address Section -->
+                <div class="p-form-group">
+                    <div class="p-label-with-badge">
+                        <label class="p-form-label" style="margin-bottom: 0;">Email Address</label>
+                        <div class="p-verified-text-badge">✓ Verified <span>(Account Confirmed)</span></div>
+                    </div>
+                    <input type="email" id="accEmail" class="p-form-control" disabled style="margin-top: 8px;">
+                </div>
+
+                <!-- Legal Name Sections -->
+                <div class="p-form-group">
+                    <label class="p-form-label">Legal Name (As per official records)</label>
+                    <div class="p-name-grid">
+                        <input type="text" id="accLastName" class="p-form-control" placeholder="LAST NAME" required oninput="this.value = this.value.toUpperCase()">
+                        <input type="text" id="accFirstName" class="p-form-control" placeholder="FIRST NAME" required oninput="this.value = this.value.toUpperCase()">
+                        <input type="text" id="accMiddleName" class="p-form-control" placeholder="MIDDLE NAME" oninput="this.value = this.value.toUpperCase()">
+                    </div>
+                </div>
+
+                <!-- Official IDs -->
+                <div class="p-form-group">
+                    <label class="p-form-label">Aadhaar Number</label>
+                    <input type="text" id="accAadhaar" class="p-form-control" placeholder="Enter 12-digit Aadhaar number" maxlength="12" pattern="\d{12}">
+                </div>
+
+                <div class="p-form-group">
+                    <label class="p-form-label">ABC ID (Academic Bank of Credits)</label>
+                    <input type="text" id="accAbcid" class="p-form-control" placeholder="Enter ABC ID">
+                </div>
+
+                <div class="p-form-group">
+                    <label class="p-form-label">Phone Number</label>
+                    <input type="tel" id="accPhone" class="p-form-control" value="+91 " placeholder="+91 Enter phone number">
+                </div>
+
+                <!-- Address Section -->
+                <div class="p-form-group">
+                    <label class="p-form-label">Address Details</label>
+                    <textarea id="accStreet" class="p-form-control" placeholder="Street Address / House No / Landmark" style="margin-bottom: 8px; min-height: 70px;"></textarea>
+                    <div class="p-address-grid" style="margin-bottom: 8px;">
+                        <input type="text" id="accCity" class="p-form-control" placeholder="City">
+                        <input type="text" id="accState" class="p-form-control" placeholder="State">
+                    </div>
+                    <div class="p-address-grid">
+                        <input type="text" id="accZip" class="p-form-control" placeholder="ZIP Code">
+                        <input type="text" id="accCountry" class="p-form-control" value="India" placeholder="Country">
+                    </div>
+                </div>
+
+                <div class="p-form-group">
+                    <label class="p-form-label">Address Type</label>
+                    <select id="accAddressType" class="p-form-control">
+                        <option value="">Select address type...</option>
+                        <option value="Permanent / Residential">Permanent / Residential</option>
+                        <option value="Business / Office">Business / Office</option>
+                        <option value="Mailing / Postal">Mailing / Postal</option>
+                        <option value="Billing">Billing</option>
+                        <option value="Shipping">Shipping</option>
+                    </select>
+                </div>
+
+                <div class="p-form-group">
+                    <label class="p-form-label">Account Type</label>
+                    <select id="accType" class="p-form-control" required onchange="toggleEmploymentSection()">
+                        <option value="">Select type...</option>
+                        <option value="Current Student">Current Student</option>
+                        <option value="Alumni">Alumni</option>
+                    </select>
+                </div>
+                
+                <!-- Academic Field Selector & Degree / Field Text Box -->
+                <div class="p-form-group">
+                    <label class="p-form-label">Field of Study (Select to append or type manually)</label>
+                    <select id="academic-field-select" class="p-form-control" style="margin-bottom: 8px;" onchange="appendFieldValue('academic-field-select', 'accDegree')">
+                        <option value="" disabled selected>-- Select your field of study --</option>
+                        <optgroup label="Engineering & Technology">
+                            <option value="Mechanical Engineering">Mechanical Engineering</option>
+                            <option value="Civil Engineering">Civil Engineering</option>
+                            <option value="Electrical Engineering">Electrical Engineering</option>
+                            <option value="Chemical Engineering">Chemical Engineering</option>
+                            <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                            <option value="Aerospace Engineering">Aerospace Engineering</option>
+                            <option value="Biomedical Engineering">Biomedical Engineering</option>
+                            <option value="Information Technology">Information Technology</option>
+                        </optgroup>
+                        <optgroup label="Business & Commerce">
+                            <option value="Business Administration">Business Administration</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Economics">Economics</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Logistics and Supply Chain Management">Logistics and Supply Chain Management</option>
+                            <option value="Human Resources">Human Resources</option>
+                        </optgroup>
+                        <optgroup label="Medicine & Healthcare">
+                            <option value="Nursing">Nursing</option>
+                            <option value="Medicine (MBBS)">Medicine (MBBS)</option>
+                            <option value="Pharmacy">Pharmacy</option>
+                            <option value="Healthcare Administration">Healthcare Administration</option>
+                            <option value="Public Health">Public Health</option>
+                            <option value="Physical Therapy">Physical Therapy</option>
+                        </optgroup>
+                        <optgroup label="Science & Mathematics">
+                            <option value="Biology">Biology</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Statistics">Statistics</option>
+                            <option value="Data Science & Analytics">Data Science & Analytics</option>
+                            <option value="Environmental Science">Environmental Science</option>
+                        </optgroup>
+                        <optgroup label="Arts, Humanities & Social Sciences">
+                            <option value="Psychology">Psychology</option>
+                            <option value="Sociology">Sociology</option>
+                            <option value="History">History</option>
+                            <option value="English & Literature">English & Literature</option>
+                            <option value="Fine Arts">Fine Arts</option>
+                            <option value="Political Science">Political Science</option>
+                            <option value="Philosophy">Philosophy</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="p-form-group">
+                    <label class="p-form-label">Degree / Field (Type or select above, use commas for multiple)</label>
+                    <input type="text" id="accDegree" class="p-form-control" placeholder="e.g., Computer Science & Engineering, Mathematics" required>
+                </div>
+
+                <div class="p-form-group"><label class="p-form-label">Date of Birth</label><input type="date" id="accDob" class="p-form-control" required></div>
+                
+                <div class="p-form-group">
+                    <label class="p-form-label">Gender</label>
+                    <select id="accGender" class="p-form-control" required>
+                        <option value="">Select gender...</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                
+                <!-- Employment Details Dropdowns -->
+                <div class="p-form-group" id="employmentSection" style="display: none;">
+                    <label class="p-form-label">Current Employment / Professional Classification (Select to append or type manually)</label>
+                    <select id="employment-field-select" class="p-form-control" style="margin-bottom: 8px;" onchange="appendFieldValue('employment-field-select', 'accEmployment')">
+                        <option value="" disabled selected>-- Select professional classification --</option>
+                        <optgroup label="Tax & Legal Relationship">
+                            <option value="W-2 Employee">W-2 Employee (Common Law Employee)</option>
+                            <option value="1099 Independent Contractor">1099 Independent Contractor (Freelancer)</option>
+                            <option value="Statutory Employee">Statutory Employee</option>
+                            <option value="Statutory Non-Employee">Statutory Non-Employee</option>
+                        </optgroup>
+                        <optgroup label="Schedule & Hours">
+                            <option value="Full-Time Employee">Full-Time Employee</option>
+                            <option value="Part-Time Employee">Part-Time Employee</option>
+                            <option value="Casual / Zero-Hours Worker">Casual / Zero-Hours Worker</option>
+                        </optgroup>
+                        <optgroup label="Job Permanency & Duration">
+                            <option value="Permanent Employee">Permanent Employee (Indefinite)</option>
+                            <option value="Temporary / Fixed-Term">Temporary / Fixed-Term Employee</option>
+                            <option value="Probationary Employee">Probationary Employee (Trial Period)</option>
+                            <option value="Seasonal Worker">Seasonal Worker</option>
+                            <option value="Intern / Apprentice">Intern / Apprentice</option>
+                        </optgroup>
+                        <optgroup label="Overtime Protections (FLSA)">
+                            <option value="Exempt Employee">Exempt Employee (Salary / No Overtime)</option>
+                            <option value="Non-Exempt Employee">Non-Exempt Employee (Hourly / Eligible for Overtime)</option>
+                        </optgroup>
+                        <optgroup label="Economic / Labor Force Status">
+                            <option value="Unemployed">Unemployed (Actively seeking work)</option>
+                            <option value="Discouraged Worker">Discouraged Worker (Wants work but stopped searching)</option>
+                            <option value="Retired">Retired</option>
+                            <option value="Full-Time Student">Full-Time Student</option>
+                            <option value="Homemaker / Caregiver">Homemaker / Caregiver</option>
+                            <option value="Permanently Disabled">Permanently Disabled / Unable to Work</option>
+                        </optgroup>
+                    </select>
+                    <input type="text" id="accEmployment" class="p-form-control" placeholder="Type or select above, use commas for multiple (e.g., Full-Time Employee, W-2 Employee)">
+                </div>
+
+                <!-- Short Bio -->
+                <div class="p-form-group">
+                    <label class="p-form-label">Short Bio / GitHub-Style Readme Intro</label>
+                    <div class="p-bio-toolbar">
+                        <button type="button" class="p-tool-btn" onclick="insertMarkdown('**', '**')"><b>B</b></button>
+                        <button type="button" class="p-tool-btn" onclick="insertMarkdown('*', '*')"><i>I</i></button>
+                        <button type="button" class="p-tool-btn" onclick="insertEmoji('🔭 ')">🔭</button>
+                        <button type="button" class="p-tool-btn" onclick="insertEmoji('👯 ')">👯</button>
+                        <button type="button" class="p-tool-btn" onclick="insertEmoji('🌱 ')">🌱</button>
+                        <button type="button" class="p-tool-btn" onclick="insertEmoji('💬 ')">💬</button>
+                        <button type="button" class="p-tool-btn" onclick="insertEmoji('⚡ ')">⚡</button>
+                    </div>
+                    <textarea id="accBio" class="p-form-control" style="min-height: 150px;" placeholder="🔭 I’m currently working on...
+👯 I’m looking to collaborate on...
+🌱 I’m currently learning..."></textarea>
+                </div>
+
+                <!-- Tech Stack & Skills Unified Box -->
+                <div class="p-form-group">
+                    <label class="p-form-label">Tech Stack & Skills (Select to append or type manually)</label>
+                    <select id="tech-field-select" class="p-form-control" style="margin-bottom: 8px;" onchange="appendFieldValue('tech-field-select', 'accTechStack')">
+                        <option value="" disabled selected>-- Select tech or skill --</option>
+                        <optgroup label="Languages">
+                            <option value="JavaScript">JavaScript</option>
+                            <option value="Python">Python</option>
+                            <option value="C++">C++</option>
+                            <option value="Java">Java</option>
+                        </optgroup>
+                        <optgroup label="Frameworks & Libraries">
+                            <option value="React">React</option>
+                            <option value="Next.js">Next.js</option>
+                            <option value="Django">Django</option>
+                        </optgroup>
+                        <optgroup label="Databases">
+                            <option value="PostgreSQL">PostgreSQL</option>
+                            <option value="Supabase">Supabase</option>
+                            <option value="Prisma">Prisma</option>
+                        </optgroup>
+                        <optgroup label="Hosting & DevOps">
+                            <option value="Vercel">Vercel</option>
+                            <option value="AWS">AWS</option>
+                            <option value="Docker">Docker</option>
+                        </optgroup>
+                    </select>
+                    <input type="text" id="accTechStack" class="p-form-control" placeholder="Type or select above, use commas for multiple (e.g., JavaScript, Python, React)">
+                </div>
+
+                <!-- Additional Custom Skills Box -->
+                <div class="p-form-group">
+                    <label class="p-form-label">Additional Custom Skills / Custom Interests Box</label>
+                    <input type="text" id="customSkillsBox" class="p-form-control" placeholder="Add any extra tags or skills that differ from the standard categories...">
+                </div>
+
+                <!-- Social Links Section -->
+                <label class="p-form-label" style="margin-top: 20px; margin-bottom: 8px;">Social Profiles</label>
+                <div class="p-social-grid">
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="socialTwitter" class="p-form-control" placeholder="Twitter URL"></div>
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="socialInstagram" class="p-form-control" placeholder="Instagram URL"></div>
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="socialLinkedin" class="p-form-control" placeholder="LinkedIn URL"></div>
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="socialTiktok" class="p-form-control" placeholder="TikTok URL"></div>
+                    <div class="p-form-group" style="margin-bottom: 0; grid-column: span 2;"><input type="url" id="socialYoutube" class="p-form-control" placeholder="YouTube URL"></div>
+                </div>
+
+                <!-- Donation Links Section -->
+                <label class="p-form-label" style="margin-top: 20px; margin-bottom: 8px;">Let People Help You via Donations</label>
+                <div class="p-donation-grid">
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="donateBuymeacoffee" class="p-form-control" placeholder="Buy Me a Coffee URL"></div>
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="donatePaypal" class="p-form-control" placeholder="PayPal URL"></div>
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="donatePatreon" class="p-form-control" placeholder="Patreon URL"></div>
+                    <div class="p-form-group" style="margin-bottom: 0;"><input type="url" id="donateKofi" class="p-form-control" placeholder="Ko-fi URL"></div>
+                </div>
+
+                <!-- Featured Personal Website Special Box -->
+                <div class="p-featured-website-box">
+                    <div class="p-form-group" style="margin-bottom: 0;">
+                        <label class="p-form-label">🌐 Showcase Your Personal Website</label>
+                        <input type="url" id="featuredWebsite" class="p-form-control" placeholder="https://yourwebsite.com">
+                        <div class="p-hint" style="text-align: left; margin-top: 6px;">Have a portfolio, blog, or project site? Link it here to feature it with a special badge on your profile.</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="p-login-btn" id="submitBtn">Save and Go to Dashboard</button>
+
+                <!-- Preview Link at the Bottom -->
+                <div class="p-preview-footer-link">
+                    <a href="#" onclick="openPreviewModal(event)">Preview your profile</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Success Screen View -->
+        <div id="successScreen">
+            <h2>Your Awesome Profile is Ready!</h2>
+            <p class="p-subtitle">All changes have been successfully saved.</p>
+            
+            <div class="p-success-actions">
+                <button type="button" class="p-avatar-btn" style="padding: 10px;" onclick="copyProfileCode()">Copy Code</button>
+                <button type="button" class="p-avatar-btn" style="padding: 10px;" onclick="downloadMarkdownFile()">Download Markdown File</button>
+                <button type="button" class="p-avatar-btn" style="padding: 10px;" onclick="editChanges()">Edit Changes</button>
+            </div>
+
+            <div>
+                <a href="#" onclick="showView('dashboard'); return false;" class="p-dashboard-link-red">Go to Dashboard</a>
+            </div>
+
+            <div class="p-video-help">
+                Need help regarding this? <a href="#" target="_blank">Click here to watch Video.</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal">
+        <div class="p-modal-content">
+            <button class="p-close-modal" onclick="closePreviewModal()">&times;</button>
+            <h2 style="font-size: 18px; color: #f0f6fc; margin-bottom: 16px; text-align: center;">Profile Preview</h2>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+                <div class="p-avatar-preview-wrapper">
+                    <img id="modalAvatarPreview" class="p-avatar-preview" src="" alt="Avatar">
+                    <div class="p-verified-badge" title="Verified Student" style="background-color: #238636;"><span>*</span></div>
+                </div>
+                <div style="text-align: center;">
+                    <div id="modalFullName" style="font-size: 14px; font-weight: bold; color: #f0f6fc; margin-top: 2px;">FULL NAME</div>
+                    <div style="font-size: 12px; color: #3fb950; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                        ✓ <span id="modalEmail" style="font-weight: 500; color: #c9d1d9;">email@domain.com</span> <span style="font-weight: 300; font-size: 11px; opacity: 0.85;">(Verified)</span>
+                    </div>
+                </div>
+                <div style="width: 100%; background: #0d1117; padding: 10px; border-radius: 6px; border: 1px solid #30363d; font-size: 13px; display: flex; flex-direction: column; gap: 6px;">
+                    <div><strong>Degree:</strong> <span id="modalDegree">-</span></div>
+                    <div><strong>Tech Stack:</strong> <span id="modalTech">-</span></div>
+                    <div><strong>Bio:</strong> <span id="modalBio" style="white-space: pre-wrap; color: #8b949e;">-</span></div>
+                    <div><strong>Website:</strong> <a id="modalWebsite" href="#" target="_blank" style="color: #58a6ff; display: none;">-</a></div>
+                </div>
+                <div style="width: 100%; background: #0d1117; padding: 10px; border-radius: 6px; border: 1px solid #30363d; font-size: 13px;">
+                    <div style="font-weight: bold; margin-bottom: 6px; color: #f0f6fc;">Social Profiles:</div>
+                    <div id="modalSocials" style="display: flex; flex-wrap: wrap; gap: 8px;">
+                        <span id="modalTwitter" style="display: none;"><a href="#" target="_blank" style="color: #58a6ff; text-decoration: none;">Twitter</a></span>
+                        <span id="modalInstagram" style="display: none;"><a href="#" target="_blank" style="color: #58a6ff; text-decoration: none;">Instagram</a></span>
+                        <span id="modalLinkedin" style="display: none;"><a href="#" target="_blank" style="color: #58a6ff; text-decoration: none;">LinkedIn</a></span>
+                        <span id="modalTiktok" style="display: none;"><a href="#" target="_blank" style="color: #58a6ff; text-decoration: none;">TikTok</a></span>
+                        <span id="modalYoutube" style="display: none;"><a href="#" target="_blank" style="color: #58a6ff; text-decoration: none;">YouTube</a></span>
+                    </div>
+                    <div id="modalNoSocials" style="color: #8b949e; font-style: italic;">No social links provided</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentAvatarUrl = '';
+        let uploadedFile = null;
+        let savedProfileData = {};
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user) {
+                generateRandomAvatar(user.id);
+                
+                // Fetch and lock email from the authenticated user session
+                if (user.email) {
+                    document.getElementById('accEmail').value = user.email;
+                }
+
+                if (user.user_metadata?.full_name) {
+                    const parts = user.user_metadata.full_name.split(' ');
+                    if (parts.length > 1) {
+                        document.getElementById('accFirstName').value = parts[0].toUpperCase();
+                        document.getElementById('accLastName').value = parts.slice(1).join(' ').toUpperCase();
+                    } else {
+                        document.getElementById('accFirstName').value = user.user_metadata.full_name.toUpperCase();
+                    }
+                }
+            } else {
+                generateRandomAvatar();
+            }
+            document.getElementById('accCountry').value = 'India';
+            
+            const phoneInput = document.getElementById('accPhone');
+            if (!phoneInput.value.startsWith('+91')) {
+                phoneInput.value = '+91 ';
+            }
+        });
+
+        function generateRandomAvatar(seed = Math.random().toString()) {
+            currentAvatarUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}&backgroundColor=0d1117`;
+            uploadedFile = null;
+            document.getElementById('avatarPreview').src = currentAvatarUrl;
+        }
+
+        async function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            uploadedFile = file;
+            document.getElementById('avatarPreview').src = URL.createObjectURL(file);
+        }
+
+        function insertMarkdown(startTag, endTag) {
+            const textarea = document.getElementById('accBio');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            textarea.value = text.substring(0, start) + startTag + text.substring(start, end) + endTag + text.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + startTag.length, end + startTag.length);
+        }
+
+        function insertEmoji(emoji) {
+            const textarea = document.getElementById('accBio');
+            const start = textarea.selectionStart;
+            const text = textarea.value;
+            textarea.value = text.substring(0, start) + emoji + text.substring(start);
+            textarea.focus();
+            textarea.setSelectionRange(start + emoji.length, start + emoji.length);
+        }
+
+        function toggleEmploymentSection() {
+            const accountType = document.getElementById('accType').value;
+            const employmentSection = document.getElementById('employmentSection');
+            
+            if (accountType === 'Alumni') {
+                employmentSection.style.display = 'block';
+            } else {
+                employmentSection.style.display = 'none';
+                document.getElementById('accEmployment').value = '';
+                const selectEl = document.getElementById('employment-field-select');
+                if (selectEl) selectEl.selectedIndex = 0;
+            }
+        }
+
+        function appendFieldValue(selectId, inputId) {
+            const selectElement = document.getElementById(selectId);
+            const inputElement = document.getElementById(inputId);
+            const selectedValue = selectElement.value;
+            
+            if (!selectedValue) return;
+
+            if (inputElement.value.trim() === '') {
+                inputElement.value = selectedValue;
+            } else {
+                const existingValues = inputElement.value.split(',').map(s => s.trim());
+                if (!existingValues.includes(selectedValue)) {
+                    inputElement.value = inputElement.value.trim() + ', ' + selectedValue;
+                }
+            }
+            
+            selectElement.selectedIndex = 0;
+        }
+
+        function openPreviewModal(e) {
+            e.preventDefault();
+            document.getElementById('modalAvatarPreview').src = document.getElementById('avatarPreview').src;
+            
+            const lastName = document.getElementById('accLastName').value.trim();
+            const firstName = document.getElementById('accFirstName').value.trim();
+            const fullName = `${lastName} ${firstName}`.trim();
+            document.getElementById('modalFullName').textContent = fullName || 'FULL NAME';
+
+            const emailVal = document.getElementById('accEmail').value.trim();
+            document.getElementById('modalEmail').textContent = emailVal || 'email@domain.com';
+
+            document.getElementById('modalDegree').textContent = document.getElementById('accDegree').value || '-';
+            document.getElementById('modalTech').textContent = document.getElementById('accTechStack').value || '-';
+            document.getElementById('modalBio').textContent = document.getElementById('accBio').value || '-';
+
+            const website = document.getElementById('featuredWebsite').value.trim();
+            const websiteLink = document.getElementById('modalWebsite');
+            if (website) {
+                websiteLink.href = website;
+                websiteLink.textContent = website;
+                websiteLink.style.display = 'inline';
+            } else {
+                websiteLink.style.display = 'none';
+            }
+
+            const socialFields = [
+                { inputId: 'socialTwitter', elemId: 'modalTwitter' },
+                { inputId: 'socialInstagram', elemId: 'modalInstagram' },
+                { inputId: 'socialLinkedin', elemId: 'modalLinkedin' },
+                { inputId: 'socialTiktok', elemId: 'modalTiktok' },
+                { inputId: 'socialYoutube', elemId: 'modalYoutube' }
+            ];
+
+            let hasSocials = false;
+            socialFields.forEach(item => {
+                const val = document.getElementById(item.inputId).value.trim();
+                const container = document.getElementById(item.elemId);
+                if (val) {
+                    container.querySelector('a').href = val;
+                    container.style.display = 'inline-block';
+                    hasSocials = true;
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+
+            document.getElementById('modalNoSocials').style.display = hasSocials ? 'none' : 'block';
+
+            document.getElementById('previewModal').style.display = 'flex';
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) {
+                alert('You must be logged in to save your profile.');
+                showView('auth');
+                return;
+            }
+            let finalAvatarUrl = currentAvatarUrl;
+            if (uploadedFile) {
+                const fileExt = uploadedFile.name.split('.').pop();
+                const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+                const { error: uploadError } = await supabaseClient.storage
+                    .from('avatars')
+                    .upload(fileName, uploadedFile, { upsert: true });
+
+                if (!uploadError) {
+                    const { data: publicURLData } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
+                    finalAvatarUrl = publicURLData.publicUrl;
+                }
+            }
+
+            const lastName = document.getElementById('accLastName').value.trim();
+            const firstName = document.getElementById('accFirstName').value.trim();
+            const middleName = document.getElementById('accMiddleName').value.trim();
+            const fullLegalName = `${lastName}, ${firstName} ${middleName}`.trim();
+
+            const street = document.getElementById('accStreet').value.trim();
+            const city = document.getElementById('accCity').value.trim();
+            const state = document.getElementById('accState').value.trim();
+            const zip = document.getElementById('accZip').value.trim();
+            const country = document.getElementById('accCountry').value.trim();
+            const fullAddress = `${street}, ${city}, ${state} - ${zip}, ${country}`;
+
+            savedProfileData = {
+                id: user.id,
+                email: user.email,
+                legal_name: fullLegalName,
+                full_name: fullLegalName,
+                aadhaar_number: document.getElementById('accAadhaar').value,
+                abc_id: document.getElementById('accAbcid').value,
+                phone: document.getElementById('accPhone').value,
+                address: fullAddress,
+                address_type: document.getElementById('accAddressType').value,
+                account_type: document.getElementById('accType').value,
+                degree: document.getElementById('accDegree').value,
+                date_of_birth: document.getElementById('accDob').value,
+                gender: document.getElementById('accGender').value,
+                current_employment: document.getElementById('accEmployment').value,
+                bio: document.getElementById('accBio').value,
+                avatar_url: finalAvatarUrl,
+                tech_stack: document.getElementById('accTechStack').value,
+                custom_skills: document.getElementById('customSkillsBox').value,
+                social_twitter: document.getElementById('socialTwitter').value,
+                social_instagram: document.getElementById('socialInstagram').value,
+                social_linkedin: document.getElementById('socialLinkedin').value,
+                social_tiktok: document.getElementById('socialTiktok').value,
+                social_youtube: document.getElementById('socialYoutube').value,
+                donate_buymeacoffee: document.getElementById('donateBuymeacoffee').value,
+                donate_paypal: document.getElementById('donatePaypal').value,
+                donate_patreon: document.getElementById('donatePatreon').value,
+                donate_kofi: document.getElementById('donateKofi').value,
+                featured_website: document.getElementById('featuredWebsite').value
+            };
+
+            const { error } = await supabaseClient.from('profiles').upsert(savedProfileData);
+
+            if (error) {
+                alert(error.message);
+            } else {
+                document.getElementById('formScreen').style.display = 'none';
+                document.getElementById('successScreen').style.display = 'block';
+            }
+        }
+
+        function copyProfileCode() {
+            navigator.clipboard.writeText(JSON.stringify(savedProfileData, null, 2));
+            alert('Profile configuration code copied to clipboard!');
+        }
+
+        function downloadMarkdownFile() {
+            let mdContent = `# User Profile
+
+`;
+            for (const [key, value] of Object.entries(savedProfileData)) {
+                if (value) mdContent += `- **${key}**: ${value}
+`;
+            }
+            const blob = new Blob([mdContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `user-profile.md`;
+            a.click();
+        }
+
+        function editChanges() {
+            document.getElementById('successScreen').style.display = 'none';
+            document.getElementById('formScreen').style.display = 'block';
+        }
+    </script>
+</section><section id="alumniViewShell" class="app-view">
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <main class="a-main">
+
+        <!-- Back to Dashboard -->
+
+        <button
+            class="a-main-back-btn"
+            onclick="goDashboard()"
+        >
+            <span class="a-arrow">←</span>
+            Back to Dashboard
+        </button>
+
+
+        <!-- Heading -->
+
+        <div class="a-heading-row">
+
+            <div class="a-heading">
+
+                <h1>Alumni</h1>
+
+                <p>
+                    Explore alumni profiles and connect with them.
+                </p>
+
+            </div>
+
+
+            <!-- Search -->
+
+            <div class="a-search-box">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search alumni..."
+                    oninput="filterAlumni()"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- Alumni list -->
+
+        <section class="a-alumni-container">
+
+            <div class="a-list-header">
+
+                <div>Alumni</div>
+
+                <div>Degree</div>
+
+                <div>Department</div>
+
+                <div></div>
+
+            </div>
+
+
+            <div id="alumniList">
+
+                <div class="a-loading">
+                    Loading alumni...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         PROFILE PREVIEW
+    ========================= -->
+
+    <div
+        class="a-preview-overlay"
+        id="previewOverlay"
+        onclick="closePreviewFromBackground(event)"
+    >
+
+        <div class="a-preview-box">
+
+            <div class="a-preview-header">
+
+                <div class="a-preview-header-left">
+
+                    <button
+                        class="a-preview-back"
+                        onclick="closePreview()"
+                        title="Back"
+                    >
+                        ←
+                    </button>
+
+                    <h2>Profile</h2>
+
+                </div>
+
+
+                <button
+                    class="a-close-btn"
+                    onclick="closePreview()"
+                    title="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                class="a-preview-content"
+                id="previewContent"
+            >
+            </div>
+
+
+            <div class="a-preview-footer">
+
+                <button
+                    class="a-secondary-btn"
+                    onclick="closePreview()"
+                >
+                    Back
+                </button>
+
+                <button
+                    class="a-contact-btn"
+                    onclick="openContact()"
+                >
+                    Contact
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         CONTACT POPUP
+    ========================= -->
+
+    <div
+        class="a-contact-overlay"
+        id="contactOverlay"
+        onclick="closeContactFromBackground(event)"
+    >
+
+        <div class="a-contact-box">
+
+            <div class="a-contact-header">
+
+                <h3>
+                    Contact
+                    <span id="contactName">Alumni</span>
+                </h3>
+
+                <button
+                    class="a-close-btn"
+                    onclick="closeContact()"
+                    title="Close"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="a-contact-body">
+
+                <label for="contactSubject">
+                    Subject
+                </label>
+
+                <input
+                    type="text"
+                    id="contactSubject"
+                    placeholder="What would you like to discuss?"
+                >
+
+
+                <label for="contactMessage">
+                    Message
+                </label>
+
+                <textarea
+                    id="contactMessage"
+                    placeholder="Write your message..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="a-contact-footer">
+
+                <button
+                    class="a-secondary-btn"
+                    onclick="closeContact()"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    class="a-send-btn"
+                    onclick="sendContactMessage()"
+                >
+                    Send Message
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================================
+           SUPABASE
+        ========================================= */
+
+
+        /* =========================================
+           VARIABLES
+        ========================================= */
+
+        let currentUser = null;
+
+        let currentProfile = null;
+
+        let alumniData = [];
+
+        let selectedAlumni = null;
+
+
+        /* =========================================
+           LOAD PAGE
+        ========================================= */
+
+        async function loadAlumniPage() {
+
+            try {
+
+                const {
+                    data: userData,
+                    error: userError
+                } = await supabaseClient.auth.getUser();
+
+
+                currentUser = userData.user;
+
+
+                /*
+                 * User must be logged in.
+                 */
+
+                if (userError || !currentUser) {
+
+                    showView('auth');
+
+                    return;
+                }
+
+
+                /*
+                 * Load current user's profile.
+                 */
+
+                const {
+                    data: profile,
+                    error: profileError
+                } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+
+
+                if (!profileError && profile) {
+
+                    currentProfile = profile;
+                }
+
+
+                /*
+                 * Load alumni.
+                 *
+                 * Current user is excluded.
+                 */
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('account_type', 'alumni')
+                    .neq('id', currentUser.id)
+                    .order('full_name', {
+                        ascending: true
+                    });
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    document.getElementById(
+                        'alumniList'
+                    ).innerHTML = `
+                        <div class="a-empty">
+                            Unable to load alumni right now.
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                alumniData = data || [];
+
+                renderAlumni(alumniData);
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    'alumniList'
+                ).innerHTML = `
+                    <div class="a-empty">
+                        Something went wrong while loading alumni.
+                    </div>
+                `;
+            }
+        }
+
+
+        /* =========================================
+           RENDER ALUMNI
+        ========================================= */
+
+        function renderAlumni(list) {
+
+            const container =
+                document.getElementById(
+                    'alumniList'
+                );
+
+
+            if (!list.length) {
+
+                container.innerHTML = `
+                    <div class="a-empty">
+                        No alumni profiles found.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            container.innerHTML =
+                list.map(alumni => {
+
+                    const name =
+                        alumni.full_name ||
+                        'Unnamed Alumni';
+
+
+                    const degree =
+                        alumni.degree ||
+                        '—';
+
+
+                    const department =
+                        alumni.department ||
+                        alumni.field_of_study ||
+                        '—';
+
+
+                    const image =
+                        alumni.avatar_url ||
+                        alumni.profile_image ||
+                        alumni.profile_photo ||
+                        alumni.image_url ||
+                        alumni.photo_url;
+
+
+                    let avatarHTML = '';
+
+
+                    if (image) {
+
+                        avatarHTML = `
+                            <img
+                                src="${escapeHtml(image)}"
+                                alt="${escapeHtml(name)}"
+                            >
+                        `;
+
+                    }
+
+                    else {
+
+                        avatarHTML =
+                            escapeHtml(
+                                name
+                                    .charAt(0)
+                                    .toUpperCase()
+                            );
+                    }
+
+
+                    return `
+
+                        <div class="a-alumni-row">
+
+                            <div class="a-person">
+
+                                <div class="a-avatar">
+                                    ${avatarHTML}
+                                </div>
+
+
+                                <div class="a-person-info">
+
+                                    <div class="a-person-name">
+                                        ${escapeHtml(name)}
+                                    </div>
+
+                                    <div class="a-person-email">
+                                        ${escapeHtml(
+                                            alumni.email || ''
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="a-degree">
+                                ${escapeHtml(degree)}
+                            </div>
+
+
+                            <div class="a-department">
+                                ${escapeHtml(department)}
+                            </div>
+
+
+                            <div>
+
+                                <button
+                                    class="a-view-btn"
+                                    onclick="viewProfile('${escapeHtml(alumni.id)}')"
+                                >
+                                    View Profile
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join('');
+        }
+
+
+        /* =========================================
+           SEARCH
+        ========================================= */
+
+        function filterAlumni() {
+
+            const query =
+                document
+                    .getElementById('searchInput')
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            if (!query) {
+
+                renderAlumni(alumniData);
+
+                return;
+            }
+
+
+            const filtered =
+                alumniData.filter(alumni => {
+
+                    const name =
+                        alumni.full_name ||
+                        '';
+
+
+                    const degree =
+                        alumni.degree ||
+                        '';
+
+
+                    const department =
+                        alumni.department ||
+                        alumni.field_of_study ||
+                        '';
+
+
+                    const employment =
+                        alumni.current_employment ||
+                        '';
+
+
+                    return (
+                        name
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        degree
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        department
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        employment
+                            .toLowerCase()
+                            .includes(query)
+                    );
+
+                });
+
+
+            renderAlumni(filtered);
+        }
+
+
+        /* =========================================
+           VIEW PROFILE
+        ========================================= */
+
+        function viewProfile(id) {
+
+            const alumni =
+                alumniData.find(
+                    person => person.id === id
+                );
+
+
+            if (!alumni) return;
+
+
+            selectedAlumni = alumni;
+
+
+            const name =
+                alumni.full_name ||
+                'Unnamed Alumni';
+
+
+            const image =
+                alumni.avatar_url ||
+                alumni.profile_image ||
+                alumni.profile_photo ||
+                alumni.image_url ||
+                alumni.photo_url;
+
+
+            let avatarHTML = '';
+
+
+            if (image) {
+
+                avatarHTML = `
+                    <img
+                        src="${escapeHtml(image)}"
+                        alt="${escapeHtml(name)}"
+                    >
+                `;
+
+            }
+
+            else {
+
+                avatarHTML =
+                    escapeHtml(
+                        name
+                            .charAt(0)
+                            .toUpperCase()
+                    );
+            }
+
+
+            document.getElementById(
+                'previewContent'
+            ).innerHTML = `
+
+                <div class="a-profile-top">
+
+                    <div class="a-large-avatar">
+                        ${avatarHTML}
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            ${escapeHtml(name)}
+                        </h3>
+
+                        <p>
+                            Alumni
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="a-profile-grid">
+
+                    <div class="a-profile-item">
+
+                        <span>Email</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.email ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="a-profile-item">
+
+                        <span>Degree</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.degree ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="a-profile-item">
+
+                        <span>Department</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.department ||
+                                alumni.field_of_study ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="a-profile-item">
+
+                        <span>Employment</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.current_employment ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="a-profile-section">
+
+                    <h4>
+                        About
+                    </h4>
+
+                    <div class="a-profile-value">
+                        ${escapeHtml(
+                            alumni.bio ||
+                            'No biography has been added yet.'
+                        )}
+                    </div>
+
+                </div>
+
+
+                ${
+                    alumni.skills
+                    ? `
+
+                        <div class="a-profile-section">
+
+                            <h4>
+                                Skills
+                            </h4>
+
+                            <div class="a-profile-value">
+                                ${escapeHtml(
+                                    alumni.skills
+                                )}
+                            </div>
+
+                        </div>
+
+                    `
+                    : ''
+                }
+
+
+                ${
+                    alumni.location
+                    ? `
+
+                        <div class="a-profile-section">
+
+                            <h4>
+                                Location
+                            </h4>
+
+                            <div class="a-profile-value">
+                                ${escapeHtml(
+                                    alumni.location
+                                )}
+                            </div>
+
+                        </div>
+
+                    `
+                    : ''
+                }
+
+            `;
+
+
+            document
+                .getElementById('previewOverlay')
+                .classList.add('active');
+
+
+            document.body.style.overflow =
+                'hidden';
+        }
+
+
+        /* =========================================
+           CLOSE PROFILE
+        ========================================= */
+
+        function closePreview() {
+
+            document
+                .getElementById('previewOverlay')
+                .classList.remove('active');
+
+
+            document.body.style.overflow = '';
+
+
+            selectedAlumni = null;
+        }
+
+
+        function closePreviewFromBackground(event) {
+
+            if (
+                event.target.id ===
+                'previewOverlay'
+            ) {
+
+                closePreview();
+            }
+        }
+
+
+        /* =========================================
+           CONTACT
+        ========================================= */
+
+        function openContact() {
+
+            if (!selectedAlumni) return;
+
+
+            document.getElementById(
+                'contactName'
+            ).textContent =
+                selectedAlumni.full_name ||
+                'Alumni';
+
+
+            document.getElementById(
+                'contactSubject'
+            ).value = '';
+
+
+            document.getElementById(
+                'contactMessage'
+            ).value = '';
+
+
+            document
+                .getElementById('contactOverlay')
+                .classList.add('active');
+        }
+
+
+        function closeContact() {
+
+            document
+                .getElementById('contactOverlay')
+                .classList.remove('active');
+        }
+
+
+        function closeContactFromBackground(event) {
+
+            if (
+                event.target.id ===
+                'contactOverlay'
+            ) {
+
+                closeContact();
+            }
+        }
+
+
+        /* =========================================
+           SEND CONTACT MESSAGE
+        ========================================= */
+
+        async function sendContactMessage() {
+
+            const subject =
+                document
+                    .getElementById(
+                        'contactSubject'
+                    )
+                    .value
+                    .trim();
+
+
+            const message =
+                document
+                    .getElementById(
+                        'contactMessage'
+                    )
+                    .value
+                    .trim();
+
+
+            if (!subject || !message) {
+
+                alert(
+                    'Please enter a subject and message.'
+                );
+
+                return;
+            }
+
+
+            if (!selectedAlumni) return;
+
+
+            /*
+             * For now this creates a simple local
+             * confirmation.
+             *
+             * Later we can connect this button to
+             * a messages table in Supabase.
+             */
+
+            alert(
+                'Your message is ready to be sent to ' +
+                selectedAlumni.full_name +
+                '.'
+            );
+
+
+            closeContact();
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        function goDashboard() {
+
+            showView('dashboard');
+        }
+
+
+        function goProfile() {
+
+            showView('profile');
+        }
+
+
+        /* =========================================
+           SECURITY HELPER
+        ========================================= */
+
+        function escapeHtml(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return '';
+            }
+
+
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+
+        /* =========================================
+           START
+        ========================================= */
+
+    </script>
+
+</section>
+<script>
+
+
+
+let appCurrentView='auth';
+function showView(view){
+ const views={auth:document.getElementById('authView'),dashboard:document.getElementById('dashboardViewShell'),profile:document.getElementById('profileViewShell'),alumni:document.getElementById('alumniViewShell')};
+ Object.values(views).forEach(v=>v&&v.classList.remove('active'));
+ if(views[view]) views[view].classList.add('active');
+ appCurrentView=view; window.scrollTo(0,0);
+ if(view==='dashboard'&&typeof loadDashboard==='function') loadDashboard();
+ if(view==='alumni'&&typeof loadAlumniPage==='function') loadAlumniPage();
+ if(view==='profile'&&typeof loadProfileForm==='function') loadProfileForm();
+}
+async function initializeApp(){
+ try{
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){showView('auth');return;}
+  const {data:profile}=await supabaseClient.from('profiles').select('account_type,legal_name,date_of_birth,gender').eq('id',user.id).single();
+  const complete=profile&&profile.account_type&&profile.legal_name&&profile.date_of_birth&&profile.gender;
+  showView(complete?'dashboard':'profile');
+ }catch(e){console.error(e);showView('auth');}
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(typeof closeContact==='function')closeContact();if(typeof closePreview==='function')closePreview();if(typeof closePreviewModal==='function')closePreviewModal();}});
+
+/* AUTH */
+
+function switchView(targetId) {
+            const sections = document.querySelectorAll('.i-auth-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById(targetId);
+            if (target) {
+                target.classList.add('active');
+            }
+        }
+
+        async function handleSignup(e) {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const fullname = document.getElementById('signupFullname').value;
+
+            const { data, error } = await supabaseClient.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    data: { full_name: fullname },
+                    // Update this link to point to profile.html
+                    emailRedirectTo: window.location.href 
+                }
+            });
+
+            if (error) {
+                alert(error.message);
+            } else {
+                alert('Account registered successfully! Check your email for confirmation.');
+                switchView('loginSection');
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+        
+            // 1. Authenticate user via Supabase Auth
+            const { data: authData, error: authError } = await supabaseClient.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+        
+            if (authError) {
+                alert(authError.message);
+                return;
+            }
+        
+            const user = authData.user;
+        
+            // 2. Query the profiles table for the required fields using the user's UUID
+            const { data: profileData, error: profileError } = await supabaseClient
+                .from('profiles')
+                .select('account_type, legal_name, date_of_birth, gender')
+                .eq('id', user.id)
+                .single();
+        
+            if (profileError && profileError.code !== 'PGRST116') {
+                // PGRST116 means row not found, which is normal if they haven't saved a profile yet
+                console.error("Error fetching profile:", profileError.message);
+            }
+        
+            // 3. Check if all required mandatory fields exist and are filled out
+            const isProfileComplete = 
+                profileData && 
+                profileData.account_type && 
+                profileData.legal_name && 
+                profileData.date_of_birth && 
+                profileData.gender;
+        
+            // 4. Conditional redirection based on completeness
+            if (isProfileComplete) {
+                showView('dashboard');
+            } else {
+                showView('profile');
+            }
+        }
+
+        async function handleForgot(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgotEmail').value;
+
+            const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.href
+            });
+
+            if (error) {
+                alert(error.message);
+            } else {
+                alert('Password reset link sent to your email!');
+            }
+        }
+    
+/* DASHBOARD */
+
+
+    let currentUser = null;
+    let currentProfile = null;
+
+
+    /* =========================================================
+       SAFE TEXT
+    ========================================================== */
+
+    function safe(value) {
+
+        if (
+            value === null ||
+            value === undefined ||
+            value === ''
+        ) {
+            return 'N/A';
+        }
+
+        return String(value);
+
+    }
+
+
+    /* =========================================================
+       LOAD DASHBOARD
+    ========================================================== */
+
+    async function loadDashboard() {
+
+        try {
+
+            const userResponse =
+                await supabaseClient.auth.getUser();
+
+            const user =
+                userResponse.data.user;
+
+            if (!user) {
+
+                showView('auth');
+
+                return;
+            }
+
+
+            currentUser = user;
+
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from('profiles')
+
+                .select('*')
+
+                .eq('id', user.id)
+
+                .single();
+
+
+            if (
+                error ||
+                !data ||
+                !data.account_type
+            ) {
+
+                showView('profile');
+
+                return;
+            }
+
+
+            currentProfile = data;
+
+
+            populateProfile(data, user);
+
+            populateActivity(data);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                'Dashboard loading error:',
+                error
+            );
+
+            /*
+             * Do not immediately redirect here.
+             * This prevents temporary Supabase/network
+             * problems from throwing the user back to login.
+             */
+
+            document.getElementById(
+                'welcomeName'
+            ).textContent =
+                'Welcome to your Dashboard';
+
+        }
+
+    }
+
+
+    /* =========================================================
+       POPULATE PROFILE
+    ========================================================== */
+
+    function populateProfile(
+        data,
+        user
+    ) {
+
+        const name =
+            safe(data.full_name);
+
+        const role =
+            safe(data.account_type);
+
+        const degree =
+            safe(data.degree);
+
+        const employment =
+            safe(data.current_employment);
+
+        const department =
+            safe(
+                data.department ||
+                data.dept ||
+                data.branch
+            );
+
+        const bio =
+            safe(data.bio);
+
+        const email =
+            safe(user.email);
+
+
+        /* Dashboard greeting */
+
+        document.getElementById(
+            'welcomeName'
+        ).textContent =
+            `Welcome, ${name}`;
+
+
+        /* Profile preview */
+
+        document.getElementById(
+            'profileName'
+        ).textContent =
+            name;
+
+        document.getElementById(
+            'profileRole'
+        ).textContent =
+            role;
+
+
+        /* Profile information */
+
+        document.getElementById(
+            'infoName'
+        ).textContent =
+            name;
+
+        document.getElementById(
+            'infoAccountType'
+        ).textContent =
+            role;
+
+        document.getElementById(
+            'infoEmail'
+        ).textContent =
+            email;
+
+        document.getElementById(
+            'infoDegree'
+        ).textContent =
+            degree;
+
+        document.getElementById(
+            'infoEmployment'
+        ).textContent =
+            employment;
+
+        document.getElementById(
+            'infoDepartment'
+        ).textContent =
+            department;
+
+        document.getElementById(
+            'infoBio'
+        ).textContent =
+            bio;
+
+
+        /* Email verification */
+
+        const verified =
+            Boolean(user.email_confirmed_at);
+
+        document.getElementById(
+            'infoVerification'
+        ).textContent =
+            verified
+                ? '✓ Verified'
+                : 'Not verified';
+
+        document.getElementById(
+            'accountEmail'
+        ).textContent =
+            email;
+
+        document.getElementById(
+            'accountType'
+        ).textContent =
+            role;
+
+        document.getElementById(
+            'accountUserId'
+        ).textContent =
+            user.id;
+
+
+        const badge =
+            document.getElementById(
+                'verifiedBadge'
+            );
+
+        badge.style.display =
+            verified
+                ? 'inline-flex'
+                : 'none';
+
+
+        /* Avatar */
+
+        /*
+         * This checks several common column names.
+         * If your profile.html stores the avatar
+         * under one of these names, it will be shown.
+         */
+
+        const avatar =
+            data.avatar_url ||
+            data.avatar ||
+            data.profile_image ||
+            data.profile_image_url ||
+            data.image_url ||
+            data.photo_url ||
+            null;
+
+
+        if (avatar) {
+
+            showAvatar(
+                avatar
+            );
+
+        }
+
+        else {
+
+            createFallbackAvatar(
+                name
+            );
+
+        }
+
+    }
+
+
+    /* =========================================================
+       AVATAR
+    ========================================================== */
+
+    function showAvatar(url) {
+
+        const headerImage =
+            document.getElementById(
+                'headerAvatar'
+            );
+
+        const headerFallback =
+            document.getElementById(
+                'headerAvatarFallback'
+            );
+
+        const profileImage =
+            document.getElementById(
+                'profileAvatar'
+            );
+
+        const profileFallback =
+            document.getElementById(
+                'profileAvatarFallback'
+            );
+
+
+        headerImage.src = url;
+
+        headerImage.style.display =
+            'block';
+
+        headerFallback.style.display =
+            'none';
+
+
+        profileImage.src = url;
+
+        profileImage.style.display =
+            'block';
+
+        profileFallback.style.display =
+            'none';
+
+
+        headerImage.onerror =
+            function () {
+
+                headerImage.style.display =
+                    'none';
+
+                headerFallback.style.display =
+                    'flex';
+
+            };
+
+
+        profileImage.onerror =
+            function () {
+
+                profileImage.style.display =
+                    'none';
+
+                profileFallback.style.display =
+                    'flex';
+
+            };
+
+    }
+
+
+    function createFallbackAvatar(name) {
+
+        const letter =
+            name &&
+            name !== 'N/A'
+                ? name.charAt(0).toUpperCase()
+                : 'U';
+
+
+        document.getElementById(
+            'headerAvatarFallback'
+        ).textContent =
+            letter;
+
+        document.getElementById(
+            'profileAvatarFallback'
+        ).textContent =
+            letter;
+
+    }
+
+
+    /* =========================================================
+       ACTIVITY
+    ========================================================== */
+
+    function populateActivity(
+        ownProfile
+    ) {
+
+        /*
+         * For now this intentionally shows
+         * the current user's information.
+         *
+         * We do NOT query current students here.
+         * Alumni exploration can be connected
+         * separately later.
+         */
+
+        const rows =
+            document.getElementById(
+                'activityRows'
+            );
+
+
+        rows.innerHTML = '';
+
+
+        const row =
+            document.createElement(
+                'div'
+            );
+
+        row.className =
+            'activity-row';
+
+
+        const name =
+            safe(
+                ownProfile.full_name
+            );
+
+        const degree =
+            safe(
+                ownProfile.degree
+            );
+
+        const type =
+            safe(
+                ownProfile.account_type
+            );
+
+
+        const nameElement =
+            document.createElement(
+                'span'
+            );
+
+        nameElement.className =
+            'activity-name';
+
+        nameElement.textContent =
+            name;
+
+
+        const degreeElement =
+            document.createElement(
+                'span'
+            );
+
+        degreeElement.className =
+            'activity-degree';
+
+        degreeElement.textContent =
+            degree;
+
+
+        const statusElement =
+            document.createElement(
+                'span'
+            );
+
+        statusElement.className =
+            `status ${
+                type.toLowerCase() === 'alumni'
+                    ? 'alumni'
+                    : 'student'
+            }`;
+
+        statusElement.textContent =
+            type;
+
+
+        row.appendChild(
+            nameElement
+        );
+
+        row.appendChild(
+            degreeElement
+        );
+
+        row.appendChild(
+            statusElement
+        );
+
+
+        rows.appendChild(
+            row
+        );
+
+    }
+
+
+    /* =========================================================
+       OPEN PROFILE PANEL
+    ========================================================== */
+
+    function openProfilePanel() {
+
+        document.getElementById(
+            'dashboardView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       BACK TO DASHBOARD
+    ========================================================== */
+
+    function showDashboard() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'dashboardView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       ACCOUNT
+    ========================================================== */
+
+    function openAccountSettings() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'accountView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       INTERFACE
+    ========================================================== */
+
+    function openInterfaceSettings() {
+
+        document.getElementById(
+            'profileView'
+        ).style.display =
+            'none';
+
+        document.getElementById(
+            'interfaceView'
+        ).style.display =
+            'block';
+
+    }
+
+
+    /* =========================================================
+       EDIT PROFILE
+    ========================================================== */
+
+    function editProfile() {
+
+        showView('profile');
+
+    }
+
+
+    /* =========================================================
+       ALUMNI
+    ========================================================== */
+
+    function openAlumni() {
+
+        /*
+         * Replace this with your alumni page
+         * when you create it.
+         */
+
+        showView('alumni');
+
+    }
+
+
+    /* =========================================================
+       LOGOUT
+    ========================================================== */
+
+    async function handleLogout() {
+
+        try {
+
+            await supabaseClient.auth.signOut();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                'Logout error:',
+                error
+            );
+
+        }
+
+        showView('auth');
+
+    }
+
+
+    /* =========================================================
+       START
+    ========================================================== */
+
+/* PROFILE */
+
+
+
+        let currentAvatarUrl = '';
+        let uploadedFile = null;
+        let savedProfileData = {};
+
+        async function loadProfileForm() {
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (user) {
+                generateRandomAvatar(user.id);
+                
+                // Fetch and lock email from the authenticated user session
+                if (user.email) {
+                    document.getElementById('accEmail').value = user.email;
+                }
+
+                if (user.user_metadata?.full_name) {
+                    const parts = user.user_metadata.full_name.split(' ');
+                    if (parts.length > 1) {
+                        document.getElementById('accFirstName').value = parts[0].toUpperCase();
+                        document.getElementById('accLastName').value = parts.slice(1).join(' ').toUpperCase();
+                    } else {
+                        document.getElementById('accFirstName').value = user.user_metadata.full_name.toUpperCase();
+                    }
+                }
+            } else {
+                generateRandomAvatar();
+            }
+            document.getElementById('accCountry').value = 'India';
+            
+            const phoneInput = document.getElementById('accPhone');
+            if (!phoneInput.value.startsWith('+91')) {
+                phoneInput.value = '+91 ';
+            }
+        }
+
+        function generateRandomAvatar(seed = Math.random().toString()) {
+            currentAvatarUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${seed}&backgroundColor=0d1117`;
+            uploadedFile = null;
+            document.getElementById('avatarPreview').src = currentAvatarUrl;
+        }
+
+        async function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            uploadedFile = file;
+            document.getElementById('avatarPreview').src = URL.createObjectURL(file);
+        }
+
+        function insertMarkdown(startTag, endTag) {
+            const textarea = document.getElementById('accBio');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            textarea.value = text.substring(0, start) + startTag + text.substring(start, end) + endTag + text.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + startTag.length, end + startTag.length);
+        }
+
+        function insertEmoji(emoji) {
+            const textarea = document.getElementById('accBio');
+            const start = textarea.selectionStart;
+            const text = textarea.value;
+            textarea.value = text.substring(0, start) + emoji + text.substring(start);
+            textarea.focus();
+            textarea.setSelectionRange(start + emoji.length, start + emoji.length);
+        }
+
+        function toggleEmploymentSection() {
+            const accountType = document.getElementById('accType').value;
+            const employmentSection = document.getElementById('employmentSection');
+            
+            if (accountType === 'Alumni') {
+                employmentSection.style.display = 'block';
+            } else {
+                employmentSection.style.display = 'none';
+                document.getElementById('accEmployment').value = '';
+                const selectEl = document.getElementById('employment-field-select');
+                if (selectEl) selectEl.selectedIndex = 0;
+            }
+        }
+
+        function appendFieldValue(selectId, inputId) {
+            const selectElement = document.getElementById(selectId);
+            const inputElement = document.getElementById(inputId);
+            const selectedValue = selectElement.value;
+            
+            if (!selectedValue) return;
+
+            if (inputElement.value.trim() === '') {
+                inputElement.value = selectedValue;
+            } else {
+                const existingValues = inputElement.value.split(',').map(s => s.trim());
+                if (!existingValues.includes(selectedValue)) {
+                    inputElement.value = inputElement.value.trim() + ', ' + selectedValue;
+                }
+            }
+            
+            selectElement.selectedIndex = 0;
+        }
+
+        function openPreviewModal(e) {
+            e.preventDefault();
+            document.getElementById('modalAvatarPreview').src = document.getElementById('avatarPreview').src;
+            
+            const lastName = document.getElementById('accLastName').value.trim();
+            const firstName = document.getElementById('accFirstName').value.trim();
+            const fullName = `${lastName} ${firstName}`.trim();
+            document.getElementById('modalFullName').textContent = fullName || 'FULL NAME';
+
+            const emailVal = document.getElementById('accEmail').value.trim();
+            document.getElementById('modalEmail').textContent = emailVal || 'email@domain.com';
+
+            document.getElementById('modalDegree').textContent = document.getElementById('accDegree').value || '-';
+            document.getElementById('modalTech').textContent = document.getElementById('accTechStack').value || '-';
+            document.getElementById('modalBio').textContent = document.getElementById('accBio').value || '-';
+
+            const website = document.getElementById('featuredWebsite').value.trim();
+            const websiteLink = document.getElementById('modalWebsite');
+            if (website) {
+                websiteLink.href = website;
+                websiteLink.textContent = website;
+                websiteLink.style.display = 'inline';
+            } else {
+                websiteLink.style.display = 'none';
+            }
+
+            const socialFields = [
+                { inputId: 'socialTwitter', elemId: 'modalTwitter' },
+                { inputId: 'socialInstagram', elemId: 'modalInstagram' },
+                { inputId: 'socialLinkedin', elemId: 'modalLinkedin' },
+                { inputId: 'socialTiktok', elemId: 'modalTiktok' },
+                { inputId: 'socialYoutube', elemId: 'modalYoutube' }
+            ];
+
+            let hasSocials = false;
+            socialFields.forEach(item => {
+                const val = document.getElementById(item.inputId).value.trim();
+                const container = document.getElementById(item.elemId);
+                if (val) {
+                    container.querySelector('a').href = val;
+                    container.style.display = 'inline-block';
+                    hasSocials = true;
+                } else {
+                    container.style.display = 'none';
+                }
+            });
+
+            document.getElementById('modalNoSocials').style.display = hasSocials ? 'none' : 'block';
+
+            document.getElementById('previewModal').style.display = 'flex';
+        }
+
+        function closePreviewModal() {
+            document.getElementById('previewModal').style.display = 'none';
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) {
+                alert('You must be logged in to save your profile.');
+                showView('auth');
+                return;
+            }
+            let finalAvatarUrl = currentAvatarUrl;
+            if (uploadedFile) {
+                const fileExt = uploadedFile.name.split('.').pop();
+                const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+                const { error: uploadError } = await supabaseClient.storage
+                    .from('avatars')
+                    .upload(fileName, uploadedFile, { upsert: true });
+
+                if (!uploadError) {
+                    const { data: publicURLData } = supabaseClient.storage.from('avatars').getPublicUrl(fileName);
+                    finalAvatarUrl = publicURLData.publicUrl;
+                }
+            }
+
+            const lastName = document.getElementById('accLastName').value.trim();
+            const firstName = document.getElementById('accFirstName').value.trim();
+            const middleName = document.getElementById('accMiddleName').value.trim();
+            const fullLegalName = `${lastName}, ${firstName} ${middleName}`.trim();
+
+            const street = document.getElementById('accStreet').value.trim();
+            const city = document.getElementById('accCity').value.trim();
+            const state = document.getElementById('accState').value.trim();
+            const zip = document.getElementById('accZip').value.trim();
+            const country = document.getElementById('accCountry').value.trim();
+            const fullAddress = `${street}, ${city}, ${state} - ${zip}, ${country}`;
+
+            savedProfileData = {
+                id: user.id,
+                email: user.email,
+                legal_name: fullLegalName,
+                full_name: fullLegalName,
+                aadhaar_number: document.getElementById('accAadhaar').value,
+                abc_id: document.getElementById('accAbcid').value,
+                phone: document.getElementById('accPhone').value,
+                address: fullAddress,
+                address_type: document.getElementById('accAddressType').value,
+                account_type: document.getElementById('accType').value,
+                degree: document.getElementById('accDegree').value,
+                date_of_birth: document.getElementById('accDob').value,
+                gender: document.getElementById('accGender').value,
+                current_employment: document.getElementById('accEmployment').value,
+                bio: document.getElementById('accBio').value,
+                avatar_url: finalAvatarUrl,
+                tech_stack: document.getElementById('accTechStack').value,
+                custom_skills: document.getElementById('customSkillsBox').value,
+                social_twitter: document.getElementById('socialTwitter').value,
+                social_instagram: document.getElementById('socialInstagram').value,
+                social_linkedin: document.getElementById('socialLinkedin').value,
+                social_tiktok: document.getElementById('socialTiktok').value,
+                social_youtube: document.getElementById('socialYoutube').value,
+                donate_buymeacoffee: document.getElementById('donateBuymeacoffee').value,
+                donate_paypal: document.getElementById('donatePaypal').value,
+                donate_patreon: document.getElementById('donatePatreon').value,
+                donate_kofi: document.getElementById('donateKofi').value,
+                featured_website: document.getElementById('featuredWebsite').value
+            };
+
+            const { error } = await supabaseClient.from('profiles').upsert(savedProfileData);
+
+            if (error) {
+                alert(error.message);
+            } else {
+                document.getElementById('formScreen').style.display = 'none';
+                document.getElementById('successScreen').style.display = 'block';
+            }
+        }
+
+        function copyProfileCode() {
+            navigator.clipboard.writeText(JSON.stringify(savedProfileData, null, 2));
+            alert('Profile configuration code copied to clipboard!');
+        }
+
+        function downloadMarkdownFile() {
+            let mdContent = `# User Profile
+
+`;
+            for (const [key, value] of Object.entries(savedProfileData)) {
+                if (value) mdContent += `- **${key}**: ${value}
+`;
+            }
+            const blob = new Blob([mdContent], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `user-profile.md`;
+            a.click();
+        }
+
+        function editChanges() {
+            document.getElementById('successScreen').style.display = 'none';
+            document.getElementById('formScreen').style.display = 'block';
+        }
+    
+/* ALUMNI */
+
+
+        let alumniCurrentUser = null;
+
+        let alumniCurrentProfile = null;
+
+        let alumniData = [];
+
+        let selectedAlumni = null;
+
+
+        /* =========================================
+           LOAD PAGE
+        ========================================= */
+
+        async function loadAlumniPage() {
+
+            try {
+
+                const {
+                    data: userData,
+                    error: userError
+                } = await supabaseClient.auth.getUser();
+
+
+                alumniCurrentUser = userData.user;
+
+
+                /*
+                 * User must be logged in.
+                 */
+
+                if (userError || !alumniCurrentUser) {
+
+                    showView('auth');
+
+                    return;
+                }
+
+
+                /*
+                 * Load current user's profile.
+                 */
+
+                const {
+                    data: profile,
+                    error: profileError
+                } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', alumniCurrentUser.id)
+                    .single();
+
+
+                if (!profileError && profile) {
+
+                    alumniCurrentProfile = profile;
+                }
+
+
+                /*
+                 * Load alumni.
+                 *
+                 * Current user is excluded.
+                 */
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient
+                    .from('profiles')
+                    .select('*')
+                    .neq('id', alumniCurrentUser.id)
+                    .order('full_name', {
+                        ascending: true
+                    });
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    document.getElementById(
+                        'alumniList'
+                    ).innerHTML = `
+                        <div class="a-empty">
+                            Unable to load alumni right now.
+                        </div>
+                    `;
+
+                    return;
+                }
+
+
+                alumniData = (data || []).filter(person => String(person.account_type || '').toLowerCase() === 'alumni');
+
+                renderAlumni(alumniData);
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                document.getElementById(
+                    'alumniList'
+                ).innerHTML = `
+                    <div class="a-empty">
+                        Something went wrong while loading alumni.
+                    </div>
+                `;
+            }
+        }
+
+
+        /* =========================================
+           RENDER ALUMNI
+        ========================================= */
+
+        function renderAlumni(list) {
+
+            const container =
+                document.getElementById(
+                    'alumniList'
+                );
+
+
+            if (!list.length) {
+
+                container.innerHTML = `
+                    <div class="a-empty">
+                        No alumni profiles found.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            container.innerHTML =
+                list.map(alumni => {
+
+                    const name =
+                        alumni.full_name ||
+                        'Unnamed Alumni';
+
+
+                    const degree =
+                        alumni.degree ||
+                        '—';
+
+
+                    const department =
+                        alumni.department ||
+                        alumni.field_of_study ||
+                        '—';
+
+
+                    const image =
+                        alumni.avatar_url ||
+                        alumni.profile_image ||
+                        alumni.profile_photo ||
+                        alumni.image_url ||
+                        alumni.photo_url;
+
+
+                    let avatarHTML = '';
+
+
+                    if (image) {
+
+                        avatarHTML = `
+                            <img
+                                src="${escapeHtml(image)}"
+                                alt="${escapeHtml(name)}"
+                            >
+                        `;
+
+                    }
+
+                    else {
+
+                        avatarHTML =
+                            escapeHtml(
+                                name
+                                    .charAt(0)
+                                    .toUpperCase()
+                            );
+                    }
+
+
+                    return `
+
+                        <div class="alumni-row">
+
+                            <div class="person">
+
+                                <div class="avatar">
+                                    ${avatarHTML}
+                                </div>
+
+
+                                <div class="person-info">
+
+                                    <div class="person-name">
+                                        ${escapeHtml(name)}
+                                    </div>
+
+                                    <div class="person-email">
+                                        ${escapeHtml(
+                                            alumni.email || ''
+                                        )}
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="degree">
+                                ${escapeHtml(degree)}
+                            </div>
+
+
+                            <div class="department">
+                                ${escapeHtml(department)}
+                            </div>
+
+
+                            <div>
+
+                                <button
+                                    class="view-btn"
+                                    onclick="viewProfile('${escapeHtml(alumni.id)}')"
+                                >
+                                    View Profile
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }).join('');
+        }
+
+
+        /* =========================================
+           SEARCH
+        ========================================= */
+
+        function filterAlumni() {
+
+            const query =
+                document
+                    .getElementById('searchInput')
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            if (!query) {
+
+                renderAlumni(alumniData);
+
+                return;
+            }
+
+
+            const filtered =
+                alumniData.filter(alumni => {
+
+                    const name =
+                        alumni.full_name ||
+                        '';
+
+
+                    const degree =
+                        alumni.degree ||
+                        '';
+
+
+                    const department =
+                        alumni.department ||
+                        alumni.field_of_study ||
+                        '';
+
+
+                    const employment =
+                        alumni.current_employment ||
+                        '';
+
+
+                    return (
+                        name
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        degree
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        department
+                            .toLowerCase()
+                            .includes(query) ||
+
+                        employment
+                            .toLowerCase()
+                            .includes(query)
+                    );
+
+                });
+
+
+            renderAlumni(filtered);
+        }
+
+
+        /* =========================================
+           VIEW PROFILE
+        ========================================= */
+
+        function viewProfile(id) {
+
+            const alumni =
+                alumniData.find(
+                    person => person.id === id
+                );
+
+
+            if (!alumni) return;
+
+
+            selectedAlumni = alumni;
+
+
+            const name =
+                alumni.full_name ||
+                'Unnamed Alumni';
+
+
+            const image =
+                alumni.avatar_url ||
+                alumni.profile_image ||
+                alumni.profile_photo ||
+                alumni.image_url ||
+                alumni.photo_url;
+
+
+            let avatarHTML = '';
+
+
+            if (image) {
+
+                avatarHTML = `
+                    <img
+                        src="${escapeHtml(image)}"
+                        alt="${escapeHtml(name)}"
+                    >
+                `;
+
+            }
+
+            else {
+
+                avatarHTML =
+                    escapeHtml(
+                        name
+                            .charAt(0)
+                            .toUpperCase()
+                    );
+            }
+
+
+            document.getElementById(
+                'previewContent'
+            ).innerHTML = `
+
+                <div class="a-profile-top">
+
+                    <div class="a-large-avatar">
+                        ${avatarHTML}
+                    </div>
+
+
+                    <div>
+
+                        <h3>
+                            ${escapeHtml(name)}
+                        </h3>
+
+                        <p>
+                            Alumni
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="a-profile-grid">
+
+                    <div class="a-profile-item">
+
+                        <span>Email</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.email ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="a-profile-item">
+
+                        <span>Degree</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.degree ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="a-profile-item">
+
+                        <span>Department</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.department ||
+                                alumni.field_of_study ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="a-profile-item">
+
+                        <span>Employment</span>
+
+                        <strong>
+                            ${escapeHtml(
+                                alumni.current_employment ||
+                                'Not provided'
+                            )}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="a-profile-section">
+
+                    <h4>
+                        About
+                    </h4>
+
+                    <div class="a-profile-value">
+                        ${escapeHtml(
+                            alumni.bio ||
+                            'No biography has been added yet.'
+                        )}
+                    </div>
+
+                </div>
+
+
+                ${
+                    alumni.skills
+                    ? `
+
+                        <div class="a-profile-section">
+
+                            <h4>
+                                Skills
+                            </h4>
+
+                            <div class="a-profile-value">
+                                ${escapeHtml(
+                                    alumni.skills
+                                )}
+                            </div>
+
+                        </div>
+
+                    `
+                    : ''
+                }
+
+
+                ${
+                    alumni.location
+                    ? `
+
+                        <div class="a-profile-section">
+
+                            <h4>
+                                Location
+                            </h4>
+
+                            <div class="a-profile-value">
+                                ${escapeHtml(
+                                    alumni.location
+                                )}
+                            </div>
+
+                        </div>
+
+                    `
+                    : ''
+                }
+
+            `;
+
+
+            document
+                .getElementById('previewOverlay')
+                .classList.add('active');
+
+
+            document.body.style.overflow =
+                'hidden';
+        }
+
+
+        /* =========================================
+           CLOSE PROFILE
+        ========================================= */
+
+        function closePreview() {
+
+            document
+                .getElementById('previewOverlay')
+                .classList.remove('active');
+
+
+            document.body.style.overflow = '';
+
+
+            selectedAlumni = null;
+        }
+
+
+        function closePreviewFromBackground(event) {
+
+            if (
+                event.target.id ===
+                'previewOverlay'
+            ) {
+
+                closePreview();
+            }
+        }
+
+
+        /* =========================================
+           CONTACT
+        ========================================= */
+
+        function openContact() {
+
+            if (!selectedAlumni) return;
+
+
+            document.getElementById(
+                'contactName'
+            ).textContent =
+                selectedAlumni.full_name ||
+                'Alumni';
+
+
+            document.getElementById(
+                'contactSubject'
+            ).value = '';
+
+
+            document.getElementById(
+                'contactMessage'
+            ).value = '';
+
+
+            document
+                .getElementById('contactOverlay')
+                .classList.add('active');
+        }
+
+
+        function closeContact() {
+
+            document
+                .getElementById('contactOverlay')
+                .classList.remove('active');
+        }
+
+
+        function closeContactFromBackground(event) {
+
+            if (
+                event.target.id ===
+                'contactOverlay'
+            ) {
+
+                closeContact();
+            }
+        }
+
+
+        /* =========================================
+           SEND CONTACT MESSAGE
+        ========================================= */
+
+        async function sendContactMessage() {
+
+            const subject =
+                document
+                    .getElementById(
+                        'contactSubject'
+                    )
+                    .value
+                    .trim();
+
+
+            const message =
+                document
+                    .getElementById(
+                        'contactMessage'
+                    )
+                    .value
+                    .trim();
+
+
+            if (!subject || !message) {
+
+                alert(
+                    'Please enter a subject and message.'
+                );
+
+                return;
+            }
+
+
+            if (!selectedAlumni) return;
+
+
+            /*
+             * For now this creates a simple local
+             * confirmation.
+             *
+             * Later we can connect this button to
+             * a messages table in Supabase.
+             */
+
+            alert(
+                'Your message is ready to be sent to ' +
+                selectedAlumni.full_name +
+                '.'
+            );
+
+
+            closeContact();
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        function goDashboard() {
+
+            showView('dashboard');
+        }
+
+
+        function goProfile() {
+
+            showView('profile');
+        }
+
+
+        /* =========================================
+           SECURITY HELPER
+        ========================================= */
+
+        function escapeHtml(value) {
+
+            if (
+                value === null ||
+                value === undefined
+            ) {
+
+                return '';
+            }
+
+
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+
+        /* =========================================
+           START
+        ========================================= */
+
+initializeApp();
+</script>
+</body>
+</html>
